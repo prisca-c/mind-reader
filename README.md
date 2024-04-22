@@ -3,5 +3,4 @@
 ## Description
 Website that allows users to play a mind reader game.
 
-The game is simple, the user will have a word shown to them and they will to make 
-the other person guess the word using other words.
+The game is simple, one user have a word given and the other person have to guess the word using other words.
