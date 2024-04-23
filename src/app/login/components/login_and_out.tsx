@@ -3,12 +3,13 @@ import { signIn, signOut, useSession } from 'next-auth/react';
 
 export const LoginAndOut = () => {
 	const { data: session } = useSession();
+
 	const onSignIn = async () => {
-		return await signIn('twitch');
+		return await signIn('twitch', { callbackUrl: '/game' });
 	};
 
 	const onSignOut = async () => {
-		return await signOut();
+		return await signOut({ callbackUrl: '/' });
 	};
 
 	const signInButton = (
