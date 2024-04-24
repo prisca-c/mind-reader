@@ -16,7 +16,12 @@ void app.prepare().then(() => {
 
 	const io = new Server(httpServer);
 
-	io.on('connection', (socket) => {});
+	io.on('connection', (socket) => {
+		socket.on('user_count', () => {
+			const count = io.engine.clientsCount;
+			io.emit('user_count', count);
+		});
+	});
 
 	httpServer
 		.once('error', (err) => {
