@@ -7,10 +7,10 @@
     "build": "next build",
     "db:push": "prisma db push",
     "db:studio": "prisma studio",
-    "dev": "node server.ts",
+    "dev": "node server.js",
     "postinstall": "prisma generate",
     "lint": "next lint",
-    "start": "NODE_ENV=production node server.ts"
+    "start": "NODE_ENV=production node server.js"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^1.4.0",
