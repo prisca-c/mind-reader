@@ -23,7 +23,7 @@ export default function RootLayout({
 }) {
 	return (
 		<html lang={locale}>
-			<body className={`font-sans ${inter.variable}`}>
+			<body className={`relative font-sans ${inter.variable}`}>
 				<NextAuthProvider>{children}</NextAuthProvider>
 			</body>
 		</html>

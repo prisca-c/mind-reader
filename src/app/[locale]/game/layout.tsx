@@ -15,7 +15,13 @@ export const metadata = {
 	icons: [{ rel: 'icon', url: '/favicon.ico' }],
 };
 
-export default async function GameLayout({ children }: { children: React.ReactNode }) {
+export default async function GameLayout({
+	children,
+	params: { locale },
+}: {
+	children: React.ReactNode;
+	params: { locale: string };
+}) {
 	const session = await getServerAuthSession();
 
 	if (!session) {
@@ -23,7 +29,7 @@ export default async function GameLayout({ children }: { children: React.ReactNo
 	}
 
 	return (
-		<html lang="en">
+		<html lang={locale}>
 			<body className={`relative font-sans ${inter.variable}`}>
 				<div className="w-fully absolute left-0 top-0 m-2 rounded-sm bg-black bg-opacity-35 p-2 text-white">
 					<Stats />
