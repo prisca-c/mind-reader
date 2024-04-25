@@ -3,11 +3,13 @@ import { signIn, signOut, useSession } from 'next-auth/react';
 
 interface LoginAndOutProps {
 	locale: string;
+	signInLabel: string;
+	signOutLabel: string;
 }
 
 export const LoginAndOut = (props: LoginAndOutProps) => {
 	const { data: session } = useSession();
-	const { locale } = props;
+	const { locale, signInLabel, signOutLabel } = props;
 
 	const onSignIn = async () => {
 		return await signIn('twitch', { callbackUrl: `/${locale}/game` });
@@ -19,13 +21,13 @@ export const LoginAndOut = (props: LoginAndOutProps) => {
 
 	const signInButton = (
 		<button className="btn" onClick={onSignIn}>
-			Login with Twitch
+			{signInLabel}
 		</button>
 	);
 
 	const signOutButton = (
 		<button className="btn" onClick={onSignOut}>
-			Logout
+			{signOutLabel}
 		</button>
 	);
 

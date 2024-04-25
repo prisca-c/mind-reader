@@ -2,10 +2,16 @@
 import { socket } from '~/socket';
 import { useEffect, useState } from 'react';
 
-export default function Stats() {
+interface StatsProps {
+	infosLabels: Record<string, string>;
+}
+
+export function Stats(props: StatsProps) {
 	const [userCount, setUserCount] = useState(0);
 	const [isConnected, setIsConnected] = useState(false);
 	const [transport, setTransport] = useState<string>('N/A');
+
+	const { infosLabels } = props;
 
 	useEffect(() => {
 		if (socket.connected) {
@@ -41,15 +47,17 @@ export default function Stats() {
 		setUserCount(count);
 	});
 
-	const status = isConnected ? 'connected' : 'disconnected';
+	const status = isConnected ? infosLabels.connected : infosLabels.disconnected;
 
 	return (
 		<div className="flex gap-2 text-xs">
 			<p>
-				Status :&nbsp;
+				{infosLabels.status} :&nbsp;
 				<span className={`${isConnected ? 'text-green-500' : 'text-red-500'}`}>{status}</span>
 			</p>
-			<p>Users : {userCount}</p>
+			<p>
+				{infosLabels.users} : {userCount}
+			</p>
 		</div>
 	);
 }

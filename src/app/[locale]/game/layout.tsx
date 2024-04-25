@@ -2,7 +2,6 @@ import NextAuthProvider from '~/app/[locale]/next_auth_provider';
 import { Inter } from 'next/font/google';
 import { getServerAuthSession } from '~/server/auth';
 import { redirect } from 'next/navigation';
-import Stats from './components/stats';
 
 const inter = Inter({
 	subsets: ['latin'],
@@ -31,9 +30,6 @@ export default async function GameLayout({
 	return (
 		<html lang={locale}>
 			<body className={`relative font-sans ${inter.variable}`}>
-				<div className="w-fully absolute left-0 top-0 m-2 rounded-sm bg-black bg-opacity-35 p-2 text-white">
-					<Stats />
-				</div>
 				<NextAuthProvider>{children}</NextAuthProvider>
 			</body>
 		</html>
