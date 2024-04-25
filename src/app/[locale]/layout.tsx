@@ -1,7 +1,7 @@
 import '~/styles/globals.css';
 
 import { Inter } from 'next/font/google';
-import NextAuthProvider from '~/app/next_auth_provider';
+import NextAuthProvider from '~/app/[locale]/next_auth_provider';
 
 const inter = Inter({
 	subsets: ['latin'],
@@ -14,9 +14,15 @@ export const metadata = {
 	icons: [{ rel: 'icon', url: '/favicon.ico' }],
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+	children,
+	params: { locale },
+}: {
+	children: React.ReactNode;
+	params: { locale: string };
+}) {
 	return (
-		<html lang="en">
+		<html lang={locale}>
 			<body className={`font-sans ${inter.variable}`}>
 				<NextAuthProvider>{children}</NextAuthProvider>
 			</body>

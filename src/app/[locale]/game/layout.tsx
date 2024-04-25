@@ -1,8 +1,8 @@
-import NextAuthProvider from '~/app/next_auth_provider';
+import NextAuthProvider from '~/app/[locale]/next_auth_provider';
 import { Inter } from 'next/font/google';
 import { getServerAuthSession } from '~/server/auth';
 import { redirect } from 'next/navigation';
-import Stats from '~/app/game/components/stats';
+import Stats from './components/stats';
 
 const inter = Inter({
 	subsets: ['latin'],
