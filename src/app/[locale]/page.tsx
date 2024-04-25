@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 
-export default function HomePage() {
+export default function HomePage({ params }: { params: { locale: string } }) {
 	const t = useTranslations('home');
 	return (
 		<main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-primary to-secondary text-white">
@@ -11,7 +11,7 @@ export default function HomePage() {
 				</h1>
 				<p className="text-center text-lg">{t('description')}</p>
 				<button className="btn">
-					<Link href="login">Start Mind Reading</Link>
+					<Link href={`/${params.locale}/login`}>Start Mind Reading</Link>
 				</button>
 			</div>
 		</main>

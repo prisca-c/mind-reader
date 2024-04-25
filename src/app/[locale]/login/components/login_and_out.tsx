@@ -1,11 +1,16 @@
 'use client';
 import { signIn, signOut, useSession } from 'next-auth/react';
 
-export const LoginAndOut = () => {
+interface LoginAndOutProps {
+	locale: string;
+}
+
+export const LoginAndOut = (props: LoginAndOutProps) => {
 	const { data: session } = useSession();
+	const { locale } = props;
 
 	const onSignIn = async () => {
-		return await signIn('twitch', { callbackUrl: '/game' });
+		return await signIn('twitch', { callbackUrl: `/${locale}/game` });
 	};
 
 	const onSignOut = async () => {
