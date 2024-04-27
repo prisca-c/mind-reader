@@ -1,13 +1,11 @@
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { Stats } from '~/app/[locale]/game/components/stats';
+import { unstable_setRequestLocale } from 'next-intl/server';
 
-interface GamePageProps {
-	locale: string;
-}
+export default function GamePage({ params: { locale } }: { params: { locale: string } }) {
+	unstable_setRequestLocale(locale);
 
-export default function GamePage(props: GamePageProps) {
-	const { locale } = props;
 	const t = useTranslations('game');
 
 	const infosLabels = {
@@ -29,7 +27,7 @@ export default function GamePage(props: GamePageProps) {
 					})}
 				</h1>
 				<button className="btn">
-					<Link href={`${locale}/game/training`}>{t('training-button')}</Link>
+					<Link href={`/${locale}/game/training`}>{t('training-button')}</Link>
 				</button>
 			</div>
 		</main>
