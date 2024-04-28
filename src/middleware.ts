@@ -1,6 +1,7 @@
 import createMiddleware from 'next-intl/middleware';
 import { withAuth } from 'next-auth/middleware';
 import { type NextRequest } from 'next/server';
+import { redirect } from 'next/navigation';
 
 const locales = ['en', 'fr'];
 const publicPages = ['/', '/en', '/fr', '/en/login', '/fr/login'];
@@ -15,6 +16,11 @@ const intlMiddleware = createMiddleware({
 
 const authMiddleware = withAuth(
 	function onSuccess(req) {
+		const { token } = req.nextauth;
+		if (req.nextUrl.pathname.includes('admin') && token?.name?.toLowerCase() !== 'nheirah') {
+			return redirect('/');
+		}
+
 		return intlMiddleware(req);
 	},
 	{
