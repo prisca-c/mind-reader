@@ -2,6 +2,7 @@ import '~/styles/globals.css';
 
 import { Inter } from 'next/font/google';
 import NextAuthProvider from '~/app/[locale]/next_auth_provider';
+import type React from 'react';
 
 const inter = Inter({
 	subsets: ['latin'],
@@ -23,8 +24,10 @@ export default function RootLayout({
 }) {
 	return (
 		<html lang={locale}>
-			<body className={`relative font-sans ${inter.variable}`}>
-				<NextAuthProvider>{children}</NextAuthProvider>
+			<body className={`font-sans ${inter.variable}`}>
+				<main className="relative flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-primary to-secondary text-white">
+					<NextAuthProvider>{children}</NextAuthProvider>
+				</main>
 			</body>
 		</html>
 	);

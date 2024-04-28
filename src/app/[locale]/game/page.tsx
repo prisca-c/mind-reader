@@ -16,7 +16,7 @@ export default function GamePage({ params: { locale } }: { params: { locale: str
 	};
 
 	return (
-		<main className="relative flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-primary to-secondary text-white">
+		<>
 			<div className="w-fully absolute left-0 top-0 m-2 rounded-sm bg-black bg-opacity-35 p-2 text-white">
 				<Stats infosLabels={infosLabels} />
 			</div>
@@ -30,6 +30,6 @@ export default function GamePage({ params: { locale } }: { params: { locale: str
 					<Link href={`/${locale}/game/training`}>{t('training-button')}</Link>
 				</button>
 			</div>
-		</main>
+		</>
 	);
 }

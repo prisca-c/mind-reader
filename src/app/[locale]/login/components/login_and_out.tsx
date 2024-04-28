@@ -31,7 +31,5 @@ export const LoginAndOut = (props: LoginAndOutProps) => {
 		</button>
 	);
 
-	console.log({ session });
-
 	return <> {session ? signOutButton : signInButton} </>;
 };
