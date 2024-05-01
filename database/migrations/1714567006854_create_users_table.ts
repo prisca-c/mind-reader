@@ -5,10 +5,24 @@ export default class extends BaseSchema {
 
   async up() {
     this.schema.createTable(this.tableName, (table) => {
-      table.increments('id').notNullable()
-      table.string('full_name').nullable()
+      table.uuid('id').defaultTo(this.raw('gen_random_uuid()')).primary()
+      table.string('username').notNullable()
       table.string('email', 254).notNullable().unique()
+      table.timestamp('email_verified_at').nullable()
       table.string('password').notNullable()
+      table.string('avatar_url').nullable()
+      table
+        .smallint('provider_id')
+        .unsigned()
+        .notNullable()
+        .unsigned()
+        .references('id')
+        .inTable('providers')
+        .onDelete('CASCADE')
+        .onUpdate('CASCADE')
+
+      table.string('last_session_id').nullable()
+      table.timestamp('last_session_at', { useTz: true }).nullable()
 
       table.timestamp('created_at').notNullable()
       table.timestamp('updated_at').nullable()

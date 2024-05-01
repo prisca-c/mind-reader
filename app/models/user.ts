@@ -1,26 +1,44 @@
-import { DateTime } from 'luxon'
+import type { DateTime } from 'luxon'
 import hash from '@adonisjs/core/services/hash'
 import { compose } from '@adonisjs/core/helpers'
 import { BaseModel, column } from '@adonisjs/lucid/orm'
 import { withAuthFinder } from '@adonisjs/auth/mixins/lucid'
+import type { Opaque } from '@poppinss/utils/types'
 
 const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
-  uids: ['email'],
+  uids: ['username', 'email'],
   passwordColumnName: 'password',
 })
 
+export type UserId = Opaque<string, 'UserId'>
+
 export default class User extends compose(BaseModel, AuthFinder) {
   @column({ isPrimary: true })
-  declare id: number
+  declare id: UserId
 
   @column()
-  declare fullName: string | null
+  declare username: string
 
   @column()
   declare email: string
 
   @column()
-  declare password: string
+  declare emailVerifiedAt: DateTime | null
+
+  @column()
+  declare avatarUrl: string | null
+
+  @column()
+  declare providerId: number
+
+  @column()
+  declare password: string | null
+
+  @column()
+  declare lastSessionId: string | null
+
+  @column()
+  declare lastSessionAt: DateTime | null
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
