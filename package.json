@@ -63,6 +63,7 @@
     "@adonisjs/i18n": "^2.1.0",
     "@adonisjs/inertia": "1.0.0-25",
     "@adonisjs/lucid": "^20.5.1",
+    "@adonisjs/redis": "^8.0.1",
     "@adonisjs/session": "^7.4.0",
     "@adonisjs/shield": "^8.1.1",
     "@adonisjs/static": "^1.1.1",
