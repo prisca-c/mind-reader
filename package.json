@@ -57,6 +57,7 @@
     "vite": "^5.2.10"
   },
   "dependencies": {
+    "@adonisjs/ally": "^5.0.2",
     "@adonisjs/auth": "^9.2.0",
     "@adonisjs/core": "^6.8.0",
     "@adonisjs/cors": "^2.2.1",
@@ -69,6 +70,7 @@
     "@adonisjs/static": "^1.1.1",
     "@adonisjs/vite": "^3.0.0-11",
     "@inertiajs/react": "^1.0.16",
+    "@rlanz/ally-twitch": "^0.1.2",
     "@vinejs/vine": "^2.0.0",
     "edge.js": "^6.0.2",
     "luxon": "^3.4.4",
