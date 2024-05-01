@@ -1,6 +1,6 @@
 # Change Log
 
-## [Unreleased]
+## [0.2.0] - 2024-05-01
 ### Added
 - ~~Add i18n handling to the project with `next-intl`.~~
 - Switch project from `NextJS` to `AdonisJS`.
