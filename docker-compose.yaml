@@ -1,0 +1,25 @@
+services:
+  postgres:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    ports:
+      - "${DB_PORT}:5432"
+    volumes:
+      - psql_data:/data/postgres
+      - ./data/psql:/data/psql
+
+  redis:
+    image: redis:latest
+    command: redis-server --requirepass ${REDIS_PASSWORD}
+    ports:
+      - "${REDIS_PORT}:6379"
+    volumes:
+      - redis_cache:/data
+      - ./data/redis:/data/redis
+
+volumes:
+  psql_data:
+  redis_cache:
