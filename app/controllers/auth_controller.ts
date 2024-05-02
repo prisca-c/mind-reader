@@ -22,20 +22,21 @@ export default class AuthController {
       return response.redirect('/login')
     }
 
-    const user = await socialProvider.user()
+    const socialUser = await socialProvider.user()
 
-    if (user) {
+    if (socialUser) {
       const provider = await Provider.findByOrFail('name', providerParams)
       await User.firstOrCreate(
-        { email: user.email },
+        { email: socialUser.email },
         {
-          email: user.email,
-          username: user.nickName,
-          avatarUrl: user.avatarUrl,
+          email: socialUser.email,
+          username: socialUser.nickName,
+          avatarUrl: socialUser.avatarUrl,
           providerId: provider.id,
         }
       )
 
+      const user = await User.findByOrFail('email', socialUser.email)
       await auth.use('web').login(user)
 
       user.lastSessionId = session.sessionId
