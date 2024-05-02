@@ -4,6 +4,12 @@ import Provider from '#models/provider'
 import { DateTime } from 'luxon'
 
 export default class AuthController {
+  async redirect({ ally, params }: HttpContext) {
+    const providerParams = params.provider
+    const socialProvider = ally.use(providerParams)
+    return await socialProvider.redirect()
+  }
+
   async callback({ ally, auth, response, params, session }: HttpContext) {
     const providerParams = params.provider
     const socialProvider = ally.use(providerParams)
