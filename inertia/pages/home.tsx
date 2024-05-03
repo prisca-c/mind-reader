@@ -2,7 +2,6 @@ import { Head, router } from '@inertiajs/react'
 
 export default function Home() {
   return (
-    // center page content
     <div className={'flex justify-center items-center h-screen w-screen'}>
       <Head title="Homepage" />
 
