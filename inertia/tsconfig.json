@@ -4,9 +4,10 @@
     "baseUrl": ".",
     "module": "ESNext",
     "jsx": "react-jsx",
+    "resolveJsonModule": true,
     "paths": {
       "~/*": ["./*"]
     }
   },
-  "include": ["./**/*.ts", "./**/*.tsx"]
+  "include": ["./**/*.ts", "./**/*.tsx", "../resources/lang/**/*.json"],
 }
