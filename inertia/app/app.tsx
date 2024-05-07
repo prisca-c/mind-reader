@@ -1,7 +1,8 @@
-import '../css/app.css';
+import '../css/app.css'
 import { hydrateRoot } from 'react-dom/client'
-import { createInertiaApp } from '@inertiajs/react';
-import { resolvePageComponent } from '@adonisjs/inertia/helpers'
+import { createInertiaApp } from '@inertiajs/react'
+import '~/services/i18n'
+import { Layout } from '~/components/layout'
 
 const appName = import.meta.env.VITE_APP_NAME || 'AdonisJS'
 
@@ -11,15 +12,15 @@ createInertiaApp({
   title: (title) => `${title} - ${appName}`,
 
   resolve: (name) => {
-    return resolvePageComponent(
-      `../pages/${name}.tsx`,
-      import.meta.glob('../pages/**/*.tsx'),
-    )
+    const pages = import.meta.glob('../pages/**/*.tsx', { eager: true })
+    const page = pages[`../pages/${name}.tsx`]
+    // @ts-ignore
+    // eslint-disable-next-line @typescript-eslint/no-shadow
+    page.default.layout = (page) => <Layout>{page}</Layout>
+    return page
   },
 
   setup({ el, App, props }) {
-    
     hydrateRoot(el, <App {...props} />)
-    
   },
-});
+})

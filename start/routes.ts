@@ -8,5 +8,15 @@
 */
 
 import router from '@adonisjs/core/services/router'
-router.on('/inertia').renderInertia('home', { version: 6 })
+const LoginController = () => import('#controllers/login_controller')
 
+// region Controller's Imports
+const HomeController = () => import('#controllers/home_controller')
+const AuthController = () => import('#controllers/auth_controller')
+// endregion
+
+router.get('/', [HomeController, 'handle']).as('home')
+router.get('/login', [LoginController, 'handle']).as('login')
+
+router.get('/auth/:provider/redirect', [AuthController, 'redirect']).where('provider', /twitch/)
+router.get('/auth/:provider/callback', [AuthController, 'callback']).where('provider', /twitch/)
