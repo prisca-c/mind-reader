@@ -1,0 +1,7 @@
+{
+  "title": "Mind Reader",
+  "description": "Bienvenue dans le jeu du Mind Reader. <span>Êtes-vous prêt à jouer ?</span>",
+  "buttons": {
+    "start": "Lancer une partie"
+  }
+}

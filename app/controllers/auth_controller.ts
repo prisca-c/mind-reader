@@ -43,7 +43,7 @@ export default class AuthController {
       user.lastSessionAt = DateTime.now()
       await user.save()
 
-      return response.redirect('/')
+      return response.redirect('/game')
     }
     return response.redirect('/')
   }
