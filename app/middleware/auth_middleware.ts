@@ -15,11 +15,19 @@ export default class AuthMiddleware {
   async handle(
     ctx: HttpContext,
     next: NextFn,
-    options: {
-      guards?: (keyof Authenticators)[]
-    } = {}
+    options: { guards?: (keyof Authenticators)[] } = {}
   ) {
-    await ctx.auth.authenticateUsing(options.guards, { loginRoute: this.redirectTo })
+    const isAuthenticated = await ctx.auth.authenticateUsing(options.guards)
+    const user = ctx.auth.user
+    const currentSessionId = ctx.session.sessionId
+
+    if (isAuthenticated && user?.lastSessionId !== currentSessionId) {
+      await ctx.auth.use('web').logout()
+      ctx.response.redirect(this.redirectTo)
+    } else if (!isAuthenticated) {
+      ctx.response.redirect(this.redirectTo)
+    }
+
     return next()
   }
 }
