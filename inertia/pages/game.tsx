@@ -1,5 +1,6 @@
 import { Head, router } from '@inertiajs/react'
 import { Trans, useTranslation } from 'react-i18next'
+import { Chat } from '~/components/chat'
 
 export default function Game() {
   const { t } = useTranslation()
@@ -8,6 +9,7 @@ export default function Game() {
       <Head title="Game" />
 
       <div>
+        <Chat />
         <h1 className={'text-4xl font-bold'}>{t('game.title')}</h1>
         <p className={'text-lg'}>
           <Trans
