@@ -68,6 +68,8 @@
     "@adonisjs/session": "^7.4.0",
     "@adonisjs/shield": "^8.1.1",
     "@adonisjs/static": "^1.1.1",
+    "@adonisjs/transmit": "^1.0.0",
+    "@adonisjs/transmit-client": "^1.0.0",
     "@adonisjs/vite": "3.0.0-11",
     "@inertiajs/react": "^1.0.16",
     "@poppinss/utils": "^6.7.3",
