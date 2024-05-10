@@ -24,16 +24,29 @@ export const Chat = () => {
   }
 
   return (
-    <section className={'flex flex-col items-center'}>
-      <h1>Chat</h1>
-      <div className={'flex flex-col chat'}>
-        {messages.map((message, index) => (
-          <div key={index}>{message}</div>
-        ))}
+    <section
+      className={
+        'flex flex-col justify-between items-center gap-2 max-w-[400px] w-auto bg-blue-200 p-4 rounded'
+      }
+    >
+      <div className={'flex flex-col gap-2'}>
+        <h1 className={'text-center'}>Chat</h1>
+        <div className={'flex flex-col chat overflow-y-auto bg-white rounded h-[200px] p-1'}>
+          {messages.map((message, index) => (
+            <div key={index}>{message}</div>
+          ))}
+        </div>
       </div>
-      <form method={'post'} className={'flex'} onSubmit={handleSubmit}>
-        <input type={'text'} name={'message'} />
-        <button type={'submit'}>Send</button>
+      <form method={'post'} className={'flex flex-col gap-2'} onSubmit={handleSubmit}>
+        <input type={'text'} name={'message'} className={'w-full rounded p-2'} />
+        <button
+          type={'submit'}
+          className={
+            'bg-white border-2 border-gray-500 p-2 rounded hover:bg-gray-500 hover:text-white'
+          }
+        >
+          Send
+        </button>
       </form>
     </section>
   )
