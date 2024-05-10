@@ -2,6 +2,11 @@
 
 ## [UNRELEASED]
 
+### Added
+- Add Transmit to handle Server-Side Events.
+- Setup general chat room.
+- Add Api service to handle api requests.
+
 ## [0.3.0] - 2024-05-07
 
 ### Added
