@@ -20,7 +20,7 @@ export default function Game() {
               💬
             </button>
           )}
-          {openChat && <Chat isOpen={openChat} setOpenChat={setOpenChat} />}
+          <Chat isOpen={openChat} setOpenChat={setOpenChat} />
         </div>
         <h1 className={'text-4xl font-bold'}>{t('game.title')}</h1>
         <p className={'text-lg'}>
