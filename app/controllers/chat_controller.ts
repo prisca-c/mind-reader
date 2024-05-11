@@ -15,7 +15,7 @@ export default class ChatsController {
     const sanitizedMessage = replaceURLs(message)
 
     transmit.broadcast('chat', {
-      timestamp: `${DateTime.now().toFormat('DD H:mm:ss')}`,
+      timestamp: `${DateTime.now().toFormat('MM/dd/yyyy HH:mm')}`,
       username,
       message: sanitizedMessage,
     })

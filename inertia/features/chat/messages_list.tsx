@@ -21,7 +21,9 @@ const Message = ({ message, index }: { message: MessageProps; index: number }) =
 )
 
 export const MessagesList = ({ messages }: MessagesListProps) => (
-  <div className={'flex flex-col gap-1 chat overflow-y-auto bg-white w-full rounded h-[200px] p-1'}>
+  <div
+    className={'flex flex-col gap-1 chat overflow-y-scroll bg-white w-full rounded h-[200px] p-1'}
+  >
     {messages.map((message, index) => (
       <Message key={index} message={message} index={index} />
     ))}
