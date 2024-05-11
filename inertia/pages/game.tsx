@@ -1,15 +1,27 @@
 import { Head, router } from '@inertiajs/react'
 import { Trans, useTranslation } from 'react-i18next'
 import { Chat } from '~/features/chat/chat'
+import React from 'react'
 
 export default function Game() {
+  const [openChat, setOpenChat] = React.useState(false)
   const { t } = useTranslation()
   return (
-    <div className={'flex justify-center items-center h-screen w-screen'}>
+    <div className={'relative flex justify-center items-center h-screen w-screen'}>
       <Head title="Game" />
 
       <div>
-        <Chat />
+        <div className={'absolute bottom-0 right-0 m-3'}>
+          {!openChat && (
+            <button
+              className={'border-2 border-gray-500 bg-gray-500 hover:text-white p-2 rounded-md'}
+              onClick={() => setOpenChat(true)}
+            >
+              💬
+            </button>
+          )}
+          {openChat && <Chat isOpen={openChat} setOpenChat={setOpenChat} />}
+        </div>
         <h1 className={'text-4xl font-bold'}>{t('game.title')}</h1>
         <p className={'text-lg'}>
           <Trans

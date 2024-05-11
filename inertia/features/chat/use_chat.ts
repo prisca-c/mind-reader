@@ -25,6 +25,7 @@ export const useChat = () => {
     event.preventDefault()
     const formData = new FormData(event.currentTarget)
     const message = formData.get('message') as string
+    event.currentTarget.reset()
     const api = new Api()
     try {
       await api.post('/chat', { message })
