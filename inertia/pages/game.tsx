@@ -1,6 +1,6 @@
 import { Head, router } from '@inertiajs/react'
 import { Trans, useTranslation } from 'react-i18next'
-import { Chat } from '~/components/chat'
+import { Chat } from '~/features/chat/chat'
 
 export default function Game() {
   const { t } = useTranslation()
