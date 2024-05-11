@@ -29,11 +29,11 @@ export const Chat = () => {
         'flex flex-col justify-between items-center gap-2 max-w-[400px] w-auto bg-blue-200 p-4 rounded'
       }
     >
-      <div className={'flex flex-col gap-2'}>
+      <div className={'flex flex-col items-center justify-center w-full gap-2'}>
         <h1 className={'text-center'}>Chat</h1>
-        <div className={'flex flex-col chat overflow-y-auto bg-white rounded h-[200px] p-1'}>
+        <div className={'flex flex-col chat overflow-y-auto bg-white w-full rounded h-[200px] p-1'}>
           {messages.map((message, index) => (
-            <div key={index}>{message}</div>
+            <p key={index}>{message}</p>
           ))}
         </div>
       </div>
