@@ -20,7 +20,12 @@ export const Chat = () => {
     const formData = new FormData(event.currentTarget)
     const message = formData.get('message') as string
     const api = new Api()
-    await api.post('/chat', { message })
+    try {
+      await api.post('/chat', { message })
+      event.currentTarget.reset()
+    } catch (error) {
+      // handle error
+    }
   }
 
   return (
