@@ -2,15 +2,21 @@ import React, { useEffect } from 'react'
 import { Api } from '~/services/api'
 import { useTransmit } from '~/hooks/use_transmit'
 
+interface MessageProps {
+  timestamp: string
+  username: string
+  message: string
+}
+
 export const Chat = () => {
-  const [messages, setMessages] = React.useState<string[]>([])
+  const [messages, setMessages] = React.useState<MessageProps[]>([])
   const { subscription } = useTransmit({ url: 'chat' })
 
   useEffect(() => {
     if (subscription) {
       subscription.create()
-      subscription.onMessage(({ message }: { message: string }) => {
-        setMessages((value) => [...value, message])
+      subscription.onMessage((data: MessageProps) => {
+        setMessages((prevMessages) => [...prevMessages, data])
       })
     }
   }, [subscription])
@@ -31,14 +37,28 @@ export const Chat = () => {
   return (
     <section
       className={
-        'flex flex-col justify-between items-center gap-2 max-w-[400px] w-auto bg-blue-200 p-4 rounded'
+        'flex flex-col justify-between items-center gap-2 max-w-[400px] w-full bg-blue-200 p-4 rounded'
       }
     >
       <div className={'flex flex-col items-center justify-center w-full gap-2'}>
         <h1 className={'text-center'}>Chat</h1>
-        <div className={'flex flex-col chat overflow-y-auto bg-white w-full rounded h-[200px] p-1'}>
+        <div
+          className={
+            'flex flex-col gap-1 chat overflow-y-auto bg-white w-full rounded h-[200px] p-1'
+          }
+        >
           {messages.map((message, index) => (
-            <p key={index}>{message}</p>
+            <div
+              key={index}
+              className={`flex flex-col p-2 border-2 border-gray-500 rounded ${index % 2 === 0 ? 'bg-gray-200' : 'bg-white-100'}`}
+            >
+              <span className={'flex justify-between text-xs'}>
+                <span className={'truncate font-bold'}>{message.username}</span>
+                <span>{message.timestamp}</span>
+              </span>
+
+              <span>{message.message}</span>
+            </div>
           ))}
         </div>
       </div>

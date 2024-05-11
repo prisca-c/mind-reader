@@ -10,12 +10,14 @@ export default class ChatsController {
     if (!message) {
       return response.redirect().back()
     }
-    const username = auth.user?.username
 
+    const username = auth.user!.username
     const sanitizedMessage = replaceURLs(message)
 
     transmit.broadcast('chat', {
-      message: `[${DateTime.now().toFormat('DD H:mm:ss')}] ${username}: ${sanitizedMessage}`,
+      timestamp: `${DateTime.now().toFormat('DD H:mm:ss')}`,
+      username,
+      message: sanitizedMessage,
     })
 
     return response.ok({ message: 'Message sent' })
