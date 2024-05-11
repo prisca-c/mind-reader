@@ -11,10 +11,16 @@ export default function Game() {
       <Head title="Game" />
 
       <div>
-        <div className={'absolute bottom-0 right-0 m-3'}>
+        <div
+          className={
+            'absolute bottom-0 right-0 m-0 md:m-3 max-w-screen md:max-w-[400px] w-full gap-2 flex flex-col justify-end items-end'
+          }
+        >
           {!openChat && (
             <button
-              className={'border-2 border-gray-500 bg-gray-500 hover:text-white p-2 rounded-md'}
+              className={
+                'border-2 border-gray-500 bg-gray-500 m-3 md:m-0 hover:text-white p-2 rounded-md w-fit'
+              }
               onClick={() => setOpenChat(true)}
             >
               💬

@@ -2,12 +2,11 @@ import React from 'react'
 
 interface ChatFormProps {
   onSubmit: (event: React.FormEvent<HTMLFormElement>) => void
-  isOpen?: boolean
   setOpenChat?: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 export const ChatForm = (props: ChatFormProps) => {
-  const { onSubmit, isOpen, setOpenChat } = props
+  const { onSubmit, setOpenChat } = props
   return (
     <form method={'post'} className={'flex w-full flex-col gap-2'} onSubmit={onSubmit}>
       <input type={'text'} name={'message'} className={'w-full rounded p-2'} />
@@ -21,14 +20,12 @@ export const ChatForm = (props: ChatFormProps) => {
           Send
         </button>
 
-        {isOpen && (
-          <button
-            className={'border-2 border-gray-500 hover:bg-gray-500 hover:text-white rounded px-2'}
-            onClick={() => setOpenChat && setOpenChat(false)}
-          >
-            ❌
-          </button>
-        )}
+        <button
+          className={'border-2 border-gray-500 hover:bg-gray-500 hover:text-white rounded px-2'}
+          onClick={() => setOpenChat && setOpenChat(false)}
+        >
+          ❌
+        </button>
       </div>
     </form>
   )
