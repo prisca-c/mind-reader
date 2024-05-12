@@ -49,6 +49,9 @@ export default class User extends compose(BaseModel, AuthFinder) {
   @column()
   declare lastSessionAt: DateTime | null
 
+  @column.dateTime()
+  declare bannedAt: DateTime | null
+
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
 
