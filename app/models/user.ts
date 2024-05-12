@@ -1,9 +1,12 @@
 import type { DateTime } from 'luxon'
 import hash from '@adonisjs/core/services/hash'
 import { compose } from '@adonisjs/core/helpers'
-import { BaseModel, column } from '@adonisjs/lucid/orm'
+import { BaseModel, belongsTo, column, hasMany } from '@adonisjs/lucid/orm'
 import { withAuthFinder } from '@adonisjs/auth/mixins/lucid'
 import type { Opaque } from '@poppinss/utils/types'
+import type { BelongsTo, HasMany } from '@adonisjs/lucid/types/relations'
+import Role from '#models/role'
+import GameHistory from '#models/game_history'
 
 const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
   uids: ['username', 'email'],
@@ -51,4 +54,17 @@ export default class User extends compose(BaseModel, AuthFinder) {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime | null
+
+  @belongsTo(() => Role)
+  declare role: BelongsTo<typeof Role>
+
+  @hasMany(() => GameHistory, {
+    foreignKey: 'hintGiverId',
+  })
+  declare hintGiverGames: HasMany<typeof GameHistory>
+
+  @hasMany(() => GameHistory, {
+    foreignKey: 'guesserId',
+  })
+  declare guesserGames: HasMany<typeof GameHistory>
 }

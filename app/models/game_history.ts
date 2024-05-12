@@ -11,13 +11,10 @@ export default class GameHistory extends BaseModel {
   declare id: GameHistoryId
 
   @column()
-  declare player1Id: UserId
-
-  @column()
-  declare player2Id: UserId
-
-  @column()
   declare hintGiverId: UserId
+
+  @column()
+  declare guesserId: UserId
 
   @column()
   declare wordId: WordId

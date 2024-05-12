@@ -6,9 +6,8 @@ export default class extends BaseSchema {
   async up() {
     this.schema.createTable(this.tableName, (table) => {
       table.uuid('id').defaultTo(this.raw('gen_random_uuid()')).primary()
-      table.uuid('player_1_id').references('id').inTable('users').onDelete('CASCADE')
-      table.uuid('player_2_id').references('id').inTable('users').onDelete('CASCADE')
       table.uuid('hint_giver_id').references('id').inTable('users').onDelete('CASCADE')
+      table.uuid('guesser_id').references('id').inTable('users').onDelete('CASCADE')
       table.uuid('word_id').references('id').inTable('words').onDelete('CASCADE')
       table.boolean('guessed').notNullable()
       table.dateTime('date').notNullable()
