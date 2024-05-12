@@ -7,7 +7,7 @@ export default function Game() {
   const [openChat, setOpenChat] = React.useState(false)
   const { t } = useTranslation()
   return (
-    <div className={'relative flex justify-center items-center h-screen w-screen'}>
+    <div className={'flex justify-center items-center h-screen w-screen'}>
       <Head title="Game" />
 
       <div>
