@@ -11,6 +11,7 @@ export default class extends BaseSchema {
       table.timestamp('email_verified_at').nullable()
       table.string('password').nullable()
       table.string('avatar_url').nullable()
+      table.integer('elo').defaultTo(500)
       table
         .smallint('provider_id')
         .unsigned()
@@ -23,6 +24,8 @@ export default class extends BaseSchema {
 
       table.string('last_session_id').nullable()
       table.timestamp('last_session_at', { useTz: true }).nullable()
+
+      table.timestamp('banned_at').nullable()
 
       table.timestamp('created_at').notNullable()
       table.timestamp('updated_at').nullable()

@@ -35,6 +35,9 @@ export default class User extends compose(BaseModel, AuthFinder) {
   declare password: string | null
 
   @column()
+  declare elo: number
+
+  @column()
   declare lastSessionId: string | null
 
   @column()
