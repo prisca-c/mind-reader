@@ -30,7 +30,9 @@
     "#tests/*": "./tests/*.js",
     "#start/*": "./start/*.js",
     "#config/*": "./config/*.js",
-    "#helpers/*": "./helpers/*.js"
+    "#helpers/*": "./helpers/*.js",
+    "#types/*": "./types/*.js",
+    "#enums/*": "./enums/*.js"
   },
   "devDependencies": {
     "@adonisjs/assembler": "^7.5.1",

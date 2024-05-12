@@ -1,6 +1,7 @@
 import { DateTime } from 'luxon'
 import { BaseModel, column } from '@adonisjs/lucid/orm'
 import { Opaque } from '@poppinss/utils/types'
+import type { Language } from '#enums/language'
 
 export type WordId = Opaque<string, 'WordId'>
 
@@ -19,6 +20,9 @@ export default class Word extends BaseModel {
 
   @column()
   declare difficulty: number
+
+  @column()
+  declare language: Language
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
