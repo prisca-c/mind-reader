@@ -16,16 +16,12 @@ export default function Game() {
             'absolute bottom-0 right-0 m-0 md:m-3 max-w-screen md:max-w-[400px] w-full gap-2 flex flex-col justify-end items-end'
           }
         >
-          {!openChat && (
-            <button
-              className={
-                'border-2 border-gray-500 bg-gray-500 m-3 md:m-0 hover:text-white p-2 rounded-md w-fit'
-              }
-              onClick={() => setOpenChat(true)}
-            >
-              💬
-            </button>
-          )}
+          <button
+            className={`border-2 border-gray-500 bg-gray-500 m-3 md:m-0 hover:text-white p-2 rounded-md w-fit ${openChat ? 'hidden' : ''}`}
+            onClick={() => setOpenChat(true)}
+          >
+            💬
+          </button>
           <Chat isOpen={openChat} setOpenChat={setOpenChat} />
         </div>
         <h1 className={'text-4xl font-bold'}>{t('game.title')}</h1>
@@ -39,7 +35,7 @@ export default function Game() {
         </p>
         <button
           className={'border-2 border-gray-500 hover:bg-gray-500 hover:text-white p-2 rounded-md'}
-          onClick={() => router.visit('/')}
+          onClick={() => router.visit('/game/search')}
         >
           {t('game.buttons.start')}
         </button>

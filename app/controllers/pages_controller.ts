@@ -16,4 +16,14 @@ export default class PagesController {
 
     return inertia.render('game')
   }
+
+  search({ inertia, auth, response }: HttpContext) {
+    if (!auth.user) {
+      return response.redirect('/login')
+    }
+
+    return inertia.render('search', {
+      user: auth.user,
+    })
+  }
 }
