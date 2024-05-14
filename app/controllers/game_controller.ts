@@ -25,12 +25,10 @@ export default class GameController {
     const players = playersCache ? JSON.parse(playersCache) : []
     const player = { id: user.id, username: user.username, elo: user.elo }
 
-    if (players.find((p: Player) => p.id === user.id)) {
-      return response.ok('Already in queue')
+    if (!players.find((p: Player) => p.id === user.id)) {
+      players.push(player)
+      await redis.set('game:queue:players', JSON.stringify(players))
     }
-
-    players.push(player)
-    await redis.set('game:queue:players', JSON.stringify(players))
 
     const queueCount = players.length
     await redis.set('game:queue:count', queueCount)
@@ -39,6 +37,10 @@ export default class GameController {
       queueCount: queueCount,
     })
 
-    return response.ok('Searching for a game...')
+    return response.ok({
+      message: 'Added to queue',
+      queueCount,
+    })
+  }
   }
 }
