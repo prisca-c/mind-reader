@@ -3,11 +3,13 @@ import transmit from '@adonisjs/transmit/services/main'
 import redis from '@adonisjs/redis/services/main'
 import logger from '@adonisjs/core/services/logger'
 import type { UserId } from '#models/user'
+import { DateTime } from 'luxon'
 
 type Player = {
   id: UserId
   username: string
   elo: number
+  date: DateTime
 }
 
 export default class GameController {
@@ -23,11 +25,21 @@ export default class GameController {
 
     const playersCache = await redis.get('game:queue:players')
     const players = playersCache ? JSON.parse(playersCache) : []
-    const player = { id: user.id, username: user.username, elo: user.elo }
+    const player = { id: user.id, username: user.username, elo: user.elo, date: DateTime.now() }
 
-    if (!players.find((p: Player) => p.id === user.id)) {
+    const playerExists = players.find((p: Player) => p.id === user.id)
+
+    if (!playerExists) {
       players.push(player)
       await redis.set('game:queue:players', JSON.stringify(players))
+    }
+
+    if (playerExists) {
+      players.forEach((p: Player) => {
+        if (p.id === user.id) {
+          p.date = DateTime.now()
+        }
+      })
     }
 
     const queueCount = players.length
