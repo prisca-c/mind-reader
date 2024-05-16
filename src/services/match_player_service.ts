@@ -7,11 +7,14 @@ import Word from '#models/word'
 import logger from '@adonisjs/core/services/logger'
 
 export class MatchPlayerService {
+  #players: Player[] = []
+
   async handle() {
     logger.info('Matching players')
-    const players = await this.getPlayersFromCache()
+    this.#players = await this.getPlayersFromCache()
 
-    while (players.length > 2) {
+    while (this.#players.length >= 2) {
+      const players = this.#players
       const [player1, player2] = this.getRandomPlayers(players)
 
       if (player1.id === player2.id) continue
@@ -61,32 +64,39 @@ export class MatchPlayerService {
 
     const session = await redis.get(`game:session:${sessionId}`)
 
-    if (!session) {
-      await this.removeUnacceptedPlayersFromCache(sessionId, sessionPlayer1, sessionPlayer2)
-    }
+    const status = await this.checkPlayerStatus(sessionId)
 
-    return session ? JSON.parse(session) : null
+    if (!status || !session) return null
+
+    return JSON.parse(session)
   }
 
-  async removeUnacceptedPlayersFromCache(
-    sessionId: string,
-    player1: Player & { accepted: boolean },
-    player2: Player & { accepted: boolean }
-  ) {
-    await redis.del(`game:session:${sessionId}`)
+  async checkPlayerStatus(sessionId: string) {
+    const session = await redis.get(`game:session:${sessionId}`)
+    if (!session) return
+    const { player1, player2 } = JSON.parse(session)
 
     if (!player1.accepted || !player2.accepted) {
-      const players = await this.getPlayersFromCache()
       if (!player1.accepted) {
-        players.filter((p: Player) => p.id !== player1.id)
+        logger.info('Player 1 not accepted')
+        this.#players = this.#players.filter((p: Player) => p.id !== player1.id)
+        transmit.broadcast(`game/user/${player1.id}`, { status: 'removed' })
       }
 
       if (!player2.accepted) {
-        players.filter((p: Player) => p.id !== player2.id)
+        logger.info('Player 2 not accepted')
+        this.#players = this.#players.filter((p: Player) => p.id !== player2.id)
+        transmit.broadcast(`game/user/${player2.id}`, { status: 'removed' })
       }
 
-      await this.updateCachePlayers(players)
+      logger.info('Removing session:', sessionId)
+      await redis.del(`game:session:${sessionId}`)
+
+      await this.updateCachePlayers()
+      return false
     }
+
+    return true
   }
 
   async startGameSession(
@@ -112,15 +122,17 @@ export class MatchPlayerService {
     transmit.broadcast(`game/session/${sessionId}/user/${guesserId}`, gameDataGuesser)
     transmit.broadcast(`game/session/${sessionId}/user/${hintGiverId}`, gameDataHintGiver)
 
-    players = players.filter((p) => p.id !== player1.id && p.id !== player2.id)
+    this.#players = players.filter((p) => p.id !== player1.id && p.id !== player2.id)
 
-    await this.updateCachePlayers(players)
+    await this.updateCachePlayers()
   }
 
-  async updateCachePlayers(players: Player[]) {
+  async updateCachePlayers() {
+    const players = this.#players
     await Promise.all([
       redis.set('game:queue:players', JSON.stringify(players)),
       redis.set('game:queue:count', players.length),
     ])
+    transmit.broadcast('game/search', { queueCount: players.length })
   }
 }
