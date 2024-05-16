@@ -15,7 +15,7 @@ export class ClearSearchJob {
     const now = DateTime.now()
     const minTime = now.minus({ minutes: payload.minTime })
 
-    const newPlayers = players.filter((p: Player) => {
+    const newPlayers = players.filter((p: Player & { date: string }) => {
       const date = DateTime.fromISO(p.date)
       transmit.broadcast(`game/user/${p.id}`, { message: 'Removed from queue' })
       return date > minTime
