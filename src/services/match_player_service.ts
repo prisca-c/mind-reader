@@ -4,9 +4,11 @@ import transmit from '@adonisjs/transmit/services/main'
 import type { Player } from '#types/player'
 import { randomUUID } from 'node:crypto'
 import Word from '#models/word'
+import logger from '@adonisjs/core/services/logger'
 
 export class MatchPlayerService {
   async handle() {
+    logger.info('Matching players')
     const players = await this.getPlayersFromCache()
 
     while (players.length > 2) {
@@ -41,8 +43,9 @@ export class MatchPlayerService {
   }
 
   broadcastGameInvitation(player1: Player, player2: Player, sessionId: string) {
-    transmit.broadcast(`game/user/${player1.id}`, { message: 'Accept game', sessionId })
-    transmit.broadcast(`game/user/${player2.id}`, { message: 'Accept game', sessionId })
+    logger.info(`Broadcasting game invitation to ${player1.id} and ${player2.id}`)
+    transmit.broadcast(`game/user/${player1.id}`, { status: 'accept', sessionId })
+    transmit.broadcast(`game/user/${player2.id}`, { status: 'accept', sessionId })
   }
 
   async createSession(player1: Player, player2: Player, sessionId: string) {
@@ -57,7 +60,33 @@ export class MatchPlayerService {
     await new Promise((resolve) => setTimeout(resolve, 10000))
 
     const session = await redis.get(`game:session:${sessionId}`)
+
+    if (!session) {
+      await this.removeUnacceptedPlayersFromCache(sessionId, sessionPlayer1, sessionPlayer2)
+    }
+
     return session ? JSON.parse(session) : null
+  }
+
+  async removeUnacceptedPlayersFromCache(
+    sessionId: string,
+    player1: Player & { accepted: boolean },
+    player2: Player & { accepted: boolean }
+  ) {
+    await redis.del(`game:session:${sessionId}`)
+
+    if (!player1.accepted || !player2.accepted) {
+      const players = await this.getPlayersFromCache()
+      if (!player1.accepted) {
+        players.filter((p: Player) => p.id !== player1.id)
+      }
+
+      if (!player2.accepted) {
+        players.filter((p: Player) => p.id !== player2.id)
+      }
+
+      await this.updateCachePlayers(players)
+    }
   }
 
   async startGameSession(
