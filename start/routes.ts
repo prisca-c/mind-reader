@@ -23,8 +23,13 @@ router
   .group(() => {
     router.post('/chat', [ChatController, 'store']).as('chat.store')
     router.get('/game', [PagesController, 'game']).as('game')
+
     router.get('/game/search', [PagesController, 'search']).as('search')
     router.post('/game/search', [GameController, 'searchingQueue']).as('game.searchingQueue')
+    router
+      .post('/game/session/:sessionId/accept', [GameController, 'handleAccept'])
+      .as('game.handleAccept')
+      .where('sessionId', router.matchers.uuid())
   })
   .use(middleware.auth())
 

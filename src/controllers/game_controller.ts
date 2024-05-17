@@ -4,6 +4,7 @@ import redis from '@adonisjs/redis/services/main'
 import logger from '@adonisjs/core/services/logger'
 import { DateTime } from 'luxon'
 import type { Player } from '#types/player'
+import { GameSession } from '#types/game_session'
 
 export default class GameController {
   async searchingQueue({ auth, response }: HttpContext) {
@@ -50,6 +51,41 @@ export default class GameController {
     return response.ok({
       message: 'Added to queue',
       queueCount,
+    })
+  }
+
+  async handleAccept({ auth, response, params }: HttpContext) {
+    if (!auth.user) {
+      return response.unauthorized()
+    }
+
+    const sessionId = params.sessionId
+    const session = await redis.get(`game:session:${sessionId}`)
+    const user = auth.user
+    if (!session) {
+      return response.notFound()
+    }
+
+    const { player1, player2 } = JSON.parse(session) as GameSession
+
+    if (player1.id === user.id) {
+      player1.accepted = true
+    }
+
+    if (player2.id === user.id) {
+      player2.accepted = true
+    }
+
+    const updatedSession: GameSession = {
+      ...JSON.parse(session),
+      player1,
+      player2,
+    }
+
+    await redis.set(`game:session:${sessionId}`, JSON.stringify(updatedSession))
+
+    return response.ok({
+      message: 'Accepted',
     })
   }
 }

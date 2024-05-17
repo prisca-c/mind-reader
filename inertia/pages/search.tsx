@@ -2,6 +2,7 @@ import { useTransmit } from '~/hooks/use_transmit'
 import User from '#models/user'
 import { useEffect, useState } from 'react'
 import { Api } from '~/services/api'
+import { router } from '@inertiajs/react'
 
 type Props = {
   user: User
@@ -24,8 +25,18 @@ export default function Search({ user }: Props) {
   userListener?.create()
   queueListener?.create()
 
-  userListener?.onMessage((message) => {
-    console.log(message)
+  userListener?.onMessage(async (message: { status: string; sessionId: string }) => {
+    if (message.status === 'accept') {
+      await new Api().post(`/game/session/${message.sessionId}/accept`)
+      return
+    }
+
+    if (message.status === 'removed') {
+      await queueListener?.delete()
+      await userListener?.delete()
+      router.visit('/game')
+      return
+    }
   })
 
   queueListener?.onMessage((message: { queueCount: number }) => {
