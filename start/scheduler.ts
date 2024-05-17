@@ -1,9 +1,10 @@
 import scheduler from 'adonisjs-scheduler/services/main'
-import { ClearSearchJob } from '#jobs/clear_search_job'
+import { MatchPlayerService } from '../src/services/match_player_service.js'
 
 scheduler
-  .call(() => {
-    new ClearSearchJob().handle({ minTime: 2 })
+  .call(async () => {
+    await new MatchPlayerService().handle()
   })
+  .withoutOverlapping()
   .immediate()
-  .everyMinute()
+  .everySeconds(20)
