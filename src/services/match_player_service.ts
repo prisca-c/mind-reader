@@ -5,6 +5,7 @@ import type { Player } from '#types/player'
 import { randomUUID } from 'node:crypto'
 import Word from '#models/word'
 import logger from '@adonisjs/core/services/logger'
+import type { GameSession } from '#types/game_session'
 
 export class MatchPlayerService {
   #players: Player[] = []
@@ -55,10 +56,16 @@ export class MatchPlayerService {
     const sessionPlayer1 = { ...player1, accepted: false }
     const sessionPlayer2 = { ...player2, accepted: false }
 
-    await redis.set(
-      `game:session:${sessionId}`,
-      JSON.stringify({ player1: sessionPlayer1, player2: sessionPlayer2 })
-    )
+    const initSession: GameSession = {
+      sessionId,
+      player1: sessionPlayer1,
+      player2: sessionPlayer2,
+      hintGiver: null,
+      word: null,
+      startedAt: null,
+    }
+
+    await redis.set(`game:session:${sessionId}`, JSON.stringify(initSession))
 
     await new Promise((resolve) => setTimeout(resolve, 10000))
 
@@ -74,7 +81,7 @@ export class MatchPlayerService {
   async checkPlayerStatus(sessionId: string) {
     const session = await redis.get(`game:session:${sessionId}`)
     if (!session) return
-    const { player1, player2 } = JSON.parse(session)
+    const { player1, player2 } = JSON.parse(session) as GameSession
 
     if (!player1.accepted || !player2.accepted) {
       if (!player1.accepted) {
@@ -106,18 +113,23 @@ export class MatchPlayerService {
     player1: Player,
     player2: Player
   ) {
-    const updatedSession = {
-      word: word.name,
-      startedAt: DateTime.now().toISO(),
-    }
-
-    await redis.set(`game:session:${sessionId}`, JSON.stringify(updatedSession))
-
     const gameDataGuesser = { sessionId }
     const gameDataHintGiver = { sessionId, word: word.name }
 
     const hintGiverId = Math.random() > 0.5 ? player1.id : player2.id
     const guesserId = hintGiverId === player1.id ? player2.id : player1.id
+
+    const currentSession = await redis.get(`game:session:${sessionId}`)
+    if (!currentSession) return
+
+    const updatedSession: GameSession = {
+      ...JSON.parse(currentSession),
+      hintGiver: hintGiverId,
+      word: word.name,
+      startedAt: DateTime.now().toISO(),
+    }
+
+    await redis.set(`game:session:${sessionId}`, JSON.stringify(updatedSession))
 
     transmit.broadcast(`game/session/${sessionId}/user/${guesserId}`, gameDataGuesser)
     transmit.broadcast(`game/session/${sessionId}/user/${hintGiverId}`, gameDataHintGiver)
