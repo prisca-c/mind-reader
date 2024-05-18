@@ -1,6 +1,6 @@
 import redis from '@adonisjs/redis/services/main'
 import { DateTime } from 'luxon'
-import type { Player } from '#types/player'
+import type { Player } from '#features/game_session/types/player'
 import transmit from '@adonisjs/transmit/services/main'
 
 interface ClearSearchPayload {

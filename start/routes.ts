@@ -11,9 +11,9 @@ import router from '@adonisjs/core/services/router'
 import { middleware } from '#start/kernel'
 
 // region Controller's Imports
-const AuthController = () => import('#controllers/auth_controller')
-const PagesController = () => import('#controllers/pages_controller')
-const ChatController = () => import('#controllers/chat_controller')
+const AuthController = () => import('#features/auth/controllers/auth_controller')
+const PagesController = () => import('#features/pages_controller')
+const ChatController = () => import('#features/chat/controllers/chat_controller')
 const GameAnswerController = () =>
   import('#features/game_session/controllers/game_answer_controller')
 const SearchMatchmakingController = () =>

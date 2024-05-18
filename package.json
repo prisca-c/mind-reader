@@ -18,10 +18,8 @@
   },
   "imports": {
     "#config/*": "./config/*.js",
-    "#controllers/*": "./src/controllers/*.js",
     "#core/*": "./src/core/*.js",
     "#database/*": "./database/*.js",
-    "#enums/*": "./src/enums/*.js",
     "#features/*": "./src/features/*.js",
     "#helpers/*": "./src/helpers/*.js",
     "#models/*": "./src/models/*.js",

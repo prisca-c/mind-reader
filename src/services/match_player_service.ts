@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon'
 import redis from '@adonisjs/redis/services/main'
 import transmit from '@adonisjs/transmit/services/main'
-import type { Player } from '#types/player'
+import type { Player } from '#features/game_session/types/player'
 import { randomUUID } from 'node:crypto'
 import Word from '#models/word'
 import logger from '@adonisjs/core/services/logger'

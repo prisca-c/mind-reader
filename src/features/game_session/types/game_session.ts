@@ -1,4 +1,4 @@
-import type { Player } from '#types/player'
+import type { Player } from '#features/game_session/types/player'
 import type { UserId } from '#models/user'
 import type { Opaque } from '@poppinss/utils/types'
 

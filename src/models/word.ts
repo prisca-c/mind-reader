@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon'
 import { BaseModel, column } from '@adonisjs/lucid/orm'
 import { Opaque } from '@poppinss/utils/types'
-import type { Language } from '#enums/language'
+import type { Language } from '#features/i18n/enums/language'
 
 export type WordId = Opaque<string, 'WordId'>
 

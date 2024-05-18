@@ -2,7 +2,7 @@ import type { HttpContext } from '@adonisjs/core/http'
 import redis from '@adonisjs/redis/services/main'
 import logger from '@adonisjs/core/services/logger'
 import { DateTime } from 'luxon'
-import type { Player } from '#types/player'
+import type { Player } from '#features/game_session/types/player'
 import transmit from '@adonisjs/transmit/services/main'
 
 export default class SearchMatchmakingController {
