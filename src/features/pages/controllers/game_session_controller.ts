@@ -1,35 +1,9 @@
 import type { HttpContext } from '@adonisjs/core/http'
-import redis from '@adonisjs/redis/services/main'
 import type { GameSession } from '#features/game_session/types/game_session'
+import redis from '@adonisjs/redis/services/main'
 
-export default class PagesController {
-  login({ inertia }: HttpContext) {
-    return inertia.render('login')
-  }
-
-  home({ inertia }: HttpContext) {
-    return inertia.render('home')
-  }
-
-  game({ inertia, auth, response }: HttpContext) {
-    if (!auth.user) {
-      return response.redirect('/login')
-    }
-
-    return inertia.render('game')
-  }
-
-  search({ inertia, auth, response }: HttpContext) {
-    if (!auth.user) {
-      return response.redirect('/login')
-    }
-
-    return inertia.render('search', {
-      user: auth.user,
-    })
-  }
-
-  async gameSession({ inertia, auth, response, params }: HttpContext) {
+export default class GameSessionController {
+  async render({ inertia, auth, response, params }: HttpContext) {
     if (!auth.user) {
       return response.redirect('/login')
     }
