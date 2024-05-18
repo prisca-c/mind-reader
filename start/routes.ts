@@ -14,7 +14,7 @@ import { middleware } from '#start/kernel'
 const AuthController = () => import('#controllers/auth_controller')
 const PagesController = () => import('#controllers/pages_controller')
 const ChatController = () => import('#controllers/chat_controller')
-const GameController = () => import('#controllers/game_controller')
+const GameAnswerController = () => import('#features/game_session/game_answer_controller')
 const SearchMatchmakingController = () =>
   import('#features/matchmaking/search_matchmaking_controller')
 const AcceptMatchmakingController = () =>
@@ -40,7 +40,7 @@ router
       .as('game.session')
       .where('sessionId', router.matchers.uuid())
     router
-      .post('/game/session/:sessionId/answer', [GameController, 'handleAnswer'])
+      .post('/game/session/:sessionId/answer', [GameAnswerController, 'handle'])
       .as('game.handleAnswer')
       .where('sessionId', router.matchers.uuid())
   })
