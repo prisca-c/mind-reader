@@ -1,5 +1,5 @@
 import scheduler from 'adonisjs-scheduler/services/main'
-import { MatchPlayerService } from '#services/match_player_service'
+import { MatchPlayerService } from '#features/matchmaking/services/match_player_service'
 
 scheduler
   .call(async () => {

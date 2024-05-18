@@ -17,7 +17,6 @@ export function replaceURLs(message: string, replaceMessage?: string) {
   replaceMessage = replaceMessage || '[URL]'
 
   urls.forEach((url) => {
-    console.log(url)
     message = message.replace(url, replaceMessage)
   })
 

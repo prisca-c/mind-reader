@@ -23,7 +23,6 @@
     "#features/*": "./src/features/*.js",
     "#helpers/*": "./src/helpers/*.js",
     "#models/*": "./src/models/*.js",
-    "#services/*": "./src/services/*.js",
     "#start/*": "./start/*.js",
     "#tests/*": "./tests/*.js",
     "#types/*": "./src/types/*.js",
