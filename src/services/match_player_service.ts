@@ -5,7 +5,7 @@ import type { Player } from '#types/player'
 import { randomUUID } from 'node:crypto'
 import Word from '#models/word'
 import logger from '@adonisjs/core/services/logger'
-import type { GameSession, GameSessionId } from '#types/game_session'
+import type { GameSession, GameSessionId } from '#features/game_session/types/game_session'
 
 export class MatchPlayerService {
   #players: Player[] = []

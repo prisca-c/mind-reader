@@ -1,9 +1,9 @@
-import type { GameSessionId, WordList } from '#types/game_session'
+import type { GameSessionId, WordList } from '#features/game_session/types/game_session'
 import { useTransmit } from '~/hooks/use_transmit'
 import type User from '#models/user'
 import React, { useEffect, useState } from 'react'
 import { Api } from '~/services/api'
-import { GameStatus, type GameStatusEnum } from '#enums/game_status'
+import { GameStatus, type GameStatusEnum } from '#features/game_session/enums/game_status'
 import { router } from '@inertiajs/react'
 
 interface GameSessionProps {

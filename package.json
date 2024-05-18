@@ -22,17 +22,14 @@
     "#core/*": "./src/core/*.js",
     "#database/*": "./database/*.js",
     "#enums/*": "./src/enums/*.js",
-    "#exceptions/*": "./src/exceptions/*.js",
     "#features/*": "./src/features/*.js",
     "#helpers/*": "./src/helpers/*.js",
-    "#jobs/*": "./src/jobs/*.js",
-    "#middleware/*": "./src/middleware/*.js",
     "#models/*": "./src/models/*.js",
     "#services/*": "./src/services/*.js",
     "#start/*": "./start/*.js",
     "#tests/*": "./tests/*.js",
     "#types/*": "./src/types/*.js",
-    "#validators/*": "./app/validators/*.js"
+    "#validators/*": "./src/validators/*.js"
   },
   "devDependencies": {
     "@adonisjs/assembler": "^7.5.1",

@@ -1,6 +1,6 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import redis from '@adonisjs/redis/services/main'
-import type { GameSession } from '#types/game_session'
+import type { GameSession } from '#features/game_session/types/game_session'
 
 export default class PagesController {
   login({ inertia }: HttpContext) {

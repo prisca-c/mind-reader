@@ -1,8 +1,8 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import redis from '@adonisjs/redis/services/main'
-import type { GameSession } from '#types/game_session'
+import type { GameSession } from '#features/game_session/types/game_session'
 import transmit from '@adonisjs/transmit/services/main'
-import { GameStatus } from '#enums/game_status'
+import { GameStatus } from '#features/game_session/enums/game_status'
 
 export default class GameAnswerController {
   async handle({ auth, response, params, request }: HttpContext) {
