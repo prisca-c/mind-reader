@@ -30,6 +30,11 @@ router
       .post('/game/session/:sessionId/accept', [GameController, 'handleAccept'])
       .as('game.handleAccept')
       .where('sessionId', router.matchers.uuid())
+
+    router
+      .get('/game/session/:sessionId', [PagesController, 'gameSession'])
+      .as('game.session')
+      .where('sessionId', router.matchers.uuid())
     router
       .post('/game/session/:sessionId/answer', [GameController, 'handleAnswer'])
       .as('game.handleAnswer')
