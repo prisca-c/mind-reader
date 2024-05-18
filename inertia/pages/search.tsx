@@ -34,8 +34,11 @@ export default function Search({ user }: Props) {
     if (message.status === 'removed') {
       await queueListener?.delete()
       await userListener?.delete()
-      router.visit('/game')
-      return
+      return router.visit('/game')
+    }
+
+    if (message.status === 'start') {
+      return router.visit(`/game/session/${message.sessionId}`)
     }
   })
 
