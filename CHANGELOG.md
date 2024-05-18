@@ -2,6 +2,9 @@
 
 ## [UNRELEASED]
 
+### Changed
+- Change project architecture
+
 ## [0.4.0] - 2024-05-18
 
 ### Added
