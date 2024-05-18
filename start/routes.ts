@@ -15,6 +15,10 @@ const AuthController = () => import('#controllers/auth_controller')
 const PagesController = () => import('#controllers/pages_controller')
 const ChatController = () => import('#controllers/chat_controller')
 const GameController = () => import('#controllers/game_controller')
+const SearchMatchmakingController = () =>
+  import('../src/features/matchmaking/search_matchmaking_controller.js')
+const AcceptMatchmakingController = () =>
+  import('../src/features/matchmaking/accept_matchmaking_controller.js')
 // endregion
 
 router.get('/', [PagesController, 'home']).as('home')
@@ -25,9 +29,9 @@ router
     router.get('/game', [PagesController, 'game']).as('game')
 
     router.get('/game/search', [PagesController, 'search']).as('search')
-    router.post('/game/search', [GameController, 'searchingQueue']).as('game.searchingQueue')
+    router.post('/game/search', [SearchMatchmakingController, 'handle']).as('game.searchingQueue')
     router
-      .post('/game/session/:sessionId/accept', [GameController, 'handleAccept'])
+      .post('/game/session/:sessionId/accept', [AcceptMatchmakingController, 'handle'])
       .as('game.handleAccept')
       .where('sessionId', router.matchers.uuid())
 
