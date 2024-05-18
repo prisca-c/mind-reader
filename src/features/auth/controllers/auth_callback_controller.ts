@@ -1,16 +1,10 @@
 import type { HttpContext } from '@adonisjs/core/http'
-import User from '#models/user'
-import Provider from '#models/provider'
 import { DateTime } from 'luxon'
+import Provider from '#models/provider'
+import User from '#models/user'
 
-export default class AuthController {
-  async redirect({ ally, params }: HttpContext) {
-    const providerParams = params.provider
-    const socialProvider = ally.use(providerParams)
-    return await socialProvider.redirect()
-  }
-
-  async callback({ ally, auth, response, params, session }: HttpContext) {
+export default class AuthCallbackController {
+  async handle({ ally, auth, response, params, session }: HttpContext) {
     const providerParams = params.provider
     const socialProvider = ally.use(providerParams)
 

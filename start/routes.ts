@@ -11,7 +11,8 @@ import router from '@adonisjs/core/services/router'
 import { middleware } from '#start/kernel'
 
 // region Controller's Imports
-const AuthController = () => import('#features/auth/controllers/auth_controller')
+const AuthCallbackController = () => import('#features/auth/controllers/auth_callback_controller')
+const AuthRedirectController = () => import('#features/auth/controllers/auth_redirect_controller')
 const ChatController = () => import('#features/chat/controllers/chat_controller')
 const GameSessionController = () => import('#features/pages/controllers/game_session_controller')
 const SearchGameController = () => import('#features/pages/controllers/search_game_controller')
@@ -51,5 +52,9 @@ router
   })
   .use(middleware.auth())
 
-router.get('/auth/:provider/redirect', [AuthController, 'redirect']).where('provider', /twitch/)
-router.get('/auth/:provider/callback', [AuthController, 'callback']).where('provider', /twitch/)
+router
+  .get('/auth/:provider/redirect', [AuthRedirectController, 'handle'])
+  .where('provider', /twitch/)
+router
+  .get('/auth/:provider/callback', [AuthCallbackController, 'handle'])
+  .where('provider', /twitch/)
