@@ -1,0 +1,7 @@
+{
+  "title": "Se connecter",
+  "description": "Utilisez une de vos méthodes de connexion préférées",
+  "buttons": {
+    "twitch": "Se connecter avec Twitch"
+  }
+}

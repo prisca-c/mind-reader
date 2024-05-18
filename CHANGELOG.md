@@ -2,7 +2,19 @@
 
 ## [UNRELEASED]
 
+### Added
+- Add Transmit to handle Server-Side Events.
+- Setup general chat room.
+- Add Api service to handle api requests.
+- Add Scheduler service to handle scheduled tasks :
+  - Matchmaking
+- Add Matchmaking service to handle matchmaking.
+- Add Game Controller to handle game logic.
+- Add Client page to handle view of the game.
+
 ## [0.3.0] - 2024-05-07
+
+### Added
 
 - Add `TailwindCSS` to the project.
 - Setup `Redis` to handle session storage.

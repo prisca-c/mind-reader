@@ -1,0 +1,7 @@
+{
+  "title": "Login",
+  "description": "Login using your favorite method",
+  "buttons": {
+    "twitch": "Login with Twitch"
+  }
+}

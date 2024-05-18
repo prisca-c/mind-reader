@@ -1,9 +1,11 @@
 {
   "name": "mind-reader",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "private": true,
   "type": "module",
-  "license": "UNLICENSED",
+  "engines": {
+    "node": ">=20.12.1"
+  },
   "scripts": {
     "start": "node bin/server.js",
     "build": "node ace build",
@@ -11,25 +13,23 @@
     "test": "node ace test",
     "lint": "eslint .",
     "format": "prettier --write .",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "jobs:run": "node ace scheduler:run"
   },
   "imports": {
-    "#controllers/*": "./app/controllers/*.js",
-    "#exceptions/*": "./app/exceptions/*.js",
-    "#models/*": "./app/models/*.js",
-    "#mails/*": "./app/mails/*.js",
-    "#services/*": "./app/services/*.js",
-    "#listeners/*": "./app/listeners/*.js",
-    "#events/*": "./app/events/*.js",
-    "#middleware/*": "./app/middleware/*.js",
-    "#validators/*": "./app/validators/*.js",
-    "#providers/*": "./providers/*.js",
-    "#policies/*": "./app/policies/*.js",
-    "#abilities/*": "./app/abilities/*.js",
+    "#config/*": "./config/*.js",
+    "#controllers/*": "./src/controllers/*.js",
     "#database/*": "./database/*.js",
-    "#tests/*": "./tests/*.js",
+    "#enums/*": "./src/enums/*.js",
+    "#exceptions/*": "./src/exceptions/*.js",
+    "#helpers/*": "./helpers/*.js",
+    "#jobs/*": "./src/jobs/*.js",
+    "#middleware/*": "./src/middleware/*.js",
+    "#models/*": "./src/models/*.js",
     "#start/*": "./start/*.js",
-    "#config/*": "./config/*.js"
+    "#tests/*": "./tests/*.js",
+    "#types/*": "./src/types/*.js",
+    "#validators/*": "./app/validators/*.js"
   },
   "devDependencies": {
     "@adonisjs/assembler": "^7.5.1",
@@ -68,11 +68,14 @@
     "@adonisjs/session": "^7.4.0",
     "@adonisjs/shield": "^8.1.1",
     "@adonisjs/static": "^1.1.1",
+    "@adonisjs/transmit": "^1.0.0",
+    "@adonisjs/transmit-client": "^1.0.0",
     "@adonisjs/vite": "3.0.0-11",
     "@inertiajs/react": "^1.0.16",
     "@poppinss/utils": "^6.7.3",
     "@rlanz/ally-twitch": "^0.1.2",
     "@vinejs/vine": "^2.0.0",
+    "adonisjs-scheduler": "^1.0.5",
     "edge.js": "^6.0.2",
     "i18next": "^23.11.3",
     "luxon": "^3.4.4",
@@ -84,8 +87,8 @@
   },
   "hotHook": {
     "boundaries": [
-      "./app/controllers/**/*.ts",
-      "./app/middleware/*.ts"
+      "./src/controllers/**/*.ts",
+      "./src/middleware/*.ts"
     ]
   },
   "eslintConfig": {
