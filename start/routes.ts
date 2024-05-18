@@ -30,6 +30,10 @@ router
       .post('/game/session/:sessionId/accept', [GameController, 'handleAccept'])
       .as('game.handleAccept')
       .where('sessionId', router.matchers.uuid())
+    router
+      .post('/game/session/:sessionId/answer', [GameController, 'handleAnswer'])
+      .as('game.handleAnswer')
+      .where('sessionId', router.matchers.uuid())
   })
   .use(middleware.auth())
 
