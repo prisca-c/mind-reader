@@ -5,7 +5,7 @@ import type { Player } from '#types/player'
 import { randomUUID } from 'node:crypto'
 import Word from '#models/word'
 import logger from '@adonisjs/core/services/logger'
-import type { GameSession } from '#types/game_session'
+import type { GameSession, GameSessionId } from '#types/game_session'
 
 export class MatchPlayerService {
   #players: Player[] = []
@@ -20,7 +20,7 @@ export class MatchPlayerService {
 
       if (player1.id === player2.id) continue
 
-      const sessionId = randomUUID()
+      const sessionId = randomUUID() as GameSessionId
       this.broadcastGameInvitation(player1, player2, sessionId)
 
       const session = await this.createSession(player1, player2, sessionId)
@@ -28,10 +28,14 @@ export class MatchPlayerService {
       if (!session) continue
 
       const word = await Word.query().orderByRaw('RANDOM()').first()
-      if (!word) continue
+      if (!word) {
+        logger.error('No word found')
+        return
+      }
 
       await this.startGameSession(sessionId, word, players, player1, player2)
     }
+    logger.info('End of matching players')
   }
 
   async getPlayersFromCache() {
@@ -52,7 +56,13 @@ export class MatchPlayerService {
     transmit.broadcast(`game/user/${player2.id}`, { status: 'accept', sessionId })
   }
 
-  async createSession(player1: Player, player2: Player, sessionId: string) {
+  broadcastGameStart(player1: Player, player2: Player, sessionId: string) {
+    logger.info(`Broadcasting game start to ${player1.id} and ${player2.id}`)
+    transmit.broadcast(`game/user/${player1.id}`, { status: 'start', sessionId })
+    transmit.broadcast(`game/user/${player2.id}`, { status: 'start', sessionId })
+  }
+
+  async createSession(player1: Player, player2: Player, sessionId: GameSessionId) {
     const sessionPlayer1 = { ...player1, accepted: false }
     const sessionPlayer2 = { ...player2, accepted: false }
 
@@ -60,9 +70,12 @@ export class MatchPlayerService {
       sessionId,
       player1: sessionPlayer1,
       player2: sessionPlayer2,
+      turn: null,
+      guessed: false,
       hintGiver: null,
       word: null,
       startedAt: null,
+      wordsList: { hintGiver: [], guesser: [] },
     }
 
     await redis.set(`game:session:${sessionId}`, JSON.stringify(initSession))
@@ -79,11 +92,13 @@ export class MatchPlayerService {
   }
 
   async checkPlayerStatus(sessionId: string) {
+    logger.info('Checking player status')
     const session = await redis.get(`game:session:${sessionId}`)
     if (!session) return
     const { player1, player2 } = JSON.parse(session) as GameSession
 
     if (!player1.accepted || !player2.accepted) {
+      logger.info('One of the players did not accept the game')
       if (!player1.accepted) {
         logger.info('Player 1 not accepted')
         this.#players = this.#players.filter((p: Player) => p.id !== player1.id)
@@ -113,8 +128,7 @@ export class MatchPlayerService {
     player1: Player,
     player2: Player
   ) {
-    const gameDataGuesser = { sessionId }
-    const gameDataHintGiver = { sessionId, word: word.name }
+    logger.info(`Starting game session ${sessionId}`)
 
     const hintGiverId = Math.random() > 0.5 ? player1.id : player2.id
     const guesserId = hintGiverId === player1.id ? player2.id : player1.id
@@ -126,10 +140,17 @@ export class MatchPlayerService {
       ...JSON.parse(currentSession),
       hintGiver: hintGiverId,
       word: word.name,
+      turn: hintGiverId,
       startedAt: DateTime.now().toISO(),
     }
 
     await redis.set(`game:session:${sessionId}`, JSON.stringify(updatedSession))
+
+    const gameDataGuesser = { sessionId, turn: false }
+    const gameDataHintGiver = { sessionId, word: word.name, turn: true }
+
+    this.broadcastGameStart(player1, player2, sessionId)
+    new Promise((resolve) => setTimeout(resolve, 5000))
 
     transmit.broadcast(`game/session/${sessionId}/user/${guesserId}`, gameDataGuesser)
     transmit.broadcast(`game/session/${sessionId}/user/${hintGiverId}`, gameDataHintGiver)
