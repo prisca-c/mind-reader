@@ -2,6 +2,8 @@
 
 ## [UNRELEASED]
 
+## [0.4.0] - 2024-05-18
+
 ### Added
 - Add Transmit to handle Server-Side Events.
 - Setup general chat room.
