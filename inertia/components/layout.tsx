@@ -45,6 +45,20 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
         </select>
       </div>
       {children}
+      <div className={'absolute bottom-4 right-4'}>
+        <a
+          href={'https://github.com/prisca-c/mind-reader'}
+          target={'_blank'}
+          rel={'noreferrer'}
+          className={'text-xs text-gray-500'}
+        >
+          <img
+            src={'/images/github.svg'}
+            alt={'GitHub logo'}
+            className={'h-6 w-auto inline-block'}
+          />
+        </a>
+      </div>
     </div>
   )
 }
