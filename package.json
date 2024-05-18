@@ -22,6 +22,7 @@
     "#database/*": "./database/*.js",
     "#enums/*": "./src/enums/*.js",
     "#exceptions/*": "./src/exceptions/*.js",
+    "#features/*": "./src/features/*.js",
     "#helpers/*": "./helpers/*.js",
     "#jobs/*": "./src/jobs/*.js",
     "#middleware/*": "./src/middleware/*.js",

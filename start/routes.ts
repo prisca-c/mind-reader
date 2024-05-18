@@ -16,9 +16,9 @@ const PagesController = () => import('#controllers/pages_controller')
 const ChatController = () => import('#controllers/chat_controller')
 const GameController = () => import('#controllers/game_controller')
 const SearchMatchmakingController = () =>
-  import('../src/features/matchmaking/search_matchmaking_controller.js')
+  import('#features/matchmaking/search_matchmaking_controller')
 const AcceptMatchmakingController = () =>
-  import('../src/features/matchmaking/accept_matchmaking_controller.js')
+  import('#features/matchmaking/accept_matchmaking_controller')
 // endregion
 
 router.get('/', [PagesController, 'home']).as('home')
