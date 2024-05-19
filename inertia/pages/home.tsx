@@ -35,7 +35,7 @@ export default function Home() {
         </p>
         <button
           className={'border-2 border-gray-500 hover:bg-gray-500 hover:text-white p-2 rounded-md'}
-          onClick={() => router.visit('/home/search')}
+          onClick={() => router.visit('/game/search')}
         >
           {t('home.buttons.start')}
         </button>
