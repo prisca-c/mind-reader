@@ -17,7 +17,7 @@ const ChatController = () => import('#features/chat/controllers/chat_controller'
 const GameSessionController = () => import('#features/pages/controllers/game_session_controller')
 const SearchGameController = () => import('#features/pages/controllers/search_game_controller')
 const GameController = () => import('#features/pages/controllers/game_controller')
-const HomeController = () => import('#features/pages/controllers/home_controller')
+const LandingPageController = () => import('#features/pages/controllers/landing_page_controller')
 const LoginController = () => import('#features/pages/controllers/login_controller')
 const GameAnswerController = () =>
   import('#features/game_session/controllers/game_answer_controller')
@@ -27,7 +27,7 @@ const AcceptMatchmakingController = () =>
   import('#features/matchmaking/controllers/accept_matchmaking_controller')
 // endregion
 
-router.get('/', [HomeController, 'render']).as('home')
+router.get('/', [LandingPageController, 'render']).as('home')
 router.get('/login', [LoginController, 'render']).as('login')
 router
   .group(() => {
