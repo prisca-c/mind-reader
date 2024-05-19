@@ -1,5 +1,5 @@
 import React from 'react'
-import i18n from '~/services/i18n'
+import i18n from '~/features/i18n/i18n'
 
 export const Layout = ({ children }: { children: React.ReactNode }) => {
   const [language, setLanguage] = React.useState<string>('en')
