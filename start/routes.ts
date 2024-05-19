@@ -16,7 +16,7 @@ const AuthRedirectController = () => import('#features/auth/controllers/auth_red
 const ChatController = () => import('#features/chat/controllers/chat_controller')
 const GameSessionController = () => import('#features/pages/controllers/game_session_controller')
 const SearchGameController = () => import('#features/pages/controllers/search_game_controller')
-const GameController = () => import('#features/pages/controllers/game_controller')
+const HomeController = () => import('#features/pages/controllers/home_controller')
 const LandingPageController = () => import('#features/pages/controllers/landing_page_controller')
 const LoginController = () => import('#features/pages/controllers/login_controller')
 const GameAnswerController = () =>
@@ -32,7 +32,7 @@ router.get('/login', [LoginController, 'render']).as('login')
 router
   .group(() => {
     router.post('/chat', [ChatController, 'store']).as('chat.store')
-    router.get('/game', [GameController, 'render']).as('game')
+    router.get('/game', [HomeController, 'render']).as('game')
 
     router.get('/game/search', [SearchGameController, 'render']).as('search')
     router.post('/game/search', [SearchMatchmakingController, 'handle']).as('game.searchingQueue')

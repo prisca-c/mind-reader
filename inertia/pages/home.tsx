@@ -3,12 +3,12 @@ import { Trans, useTranslation } from 'react-i18next'
 import { Chat } from '~/features/chat/chat'
 import React from 'react'
 
-export default function Game() {
+export default function Home() {
   const [openChat, setOpenChat] = React.useState(false)
   const { t } = useTranslation()
   return (
     <div className={'flex justify-center items-center h-screen w-screen'}>
-      <Head title="Game" />
+      <Head title="Home" />
 
       <div>
         <div
@@ -24,20 +24,20 @@ export default function Game() {
           </button>
           <Chat isOpen={openChat} setOpenChat={setOpenChat} />
         </div>
-        <h1 className={'text-4xl font-bold'}>{t('game.title')}</h1>
+        <h1 className={'text-4xl font-bold'}>{t('home.title')}</h1>
         <p className={'text-lg'}>
           <Trans
-            i18nKey="game.description"
+            i18nKey="home.description"
             components={{ span: <span className={'font-bold block'}></span> }}
           >
-            {t('game.description')}
+            {t('home.description')}
           </Trans>
         </p>
         <button
           className={'border-2 border-gray-500 hover:bg-gray-500 hover:text-white p-2 rounded-md'}
-          onClick={() => router.visit('/game/search')}
+          onClick={() => router.visit('/home/search')}
         >
-          {t('game.buttons.start')}
+          {t('home.buttons.start')}
         </button>
       </div>
     </div>
