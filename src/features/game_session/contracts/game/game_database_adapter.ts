@@ -3,6 +3,9 @@ import transmit from '@adonisjs/transmit/services/main'
 import type { GameSession } from '#features/game_session/types/game_session'
 import { GamePort } from '#features/game_session/contracts/game/game_port'
 import { GameStatus } from '#features/game_session/enums/game_status'
+import GameHistory from '#models/game_history'
+import { DateTime } from 'luxon'
+import Word from '#models/word'
 
 export class GameDatabaseAdapter implements GamePort {
   async getSession(sessionId: string): Promise<GameSession | null> {
@@ -43,5 +46,22 @@ export class GameDatabaseAdapter implements GamePort {
     transmit.broadcast(`game/session/${sessionId}/user/${session.player2.id}`, {
       status: GameStatus.ERROR,
     })
+  }
+
+  async saveToGameHistory(session: GameSession): Promise<void> {
+    const word = await Word.findByOrFail('name', session.word)
+    const guesserId =
+      session.hintGiver === session.player1.id ? session.player2.id : session.player1.id
+    await GameHistory.create({
+      sessionId: session.sessionId,
+      date: DateTime.fromISO(session.startedAt!),
+      hintGiverId: session.hintGiver!,
+      guesserId,
+      wordsList: session.wordsList,
+      wordId: word.id,
+      guessed: session.guessed,
+    })
+
+    await redis.del(`game:session:${session.sessionId}`)
   }
 }

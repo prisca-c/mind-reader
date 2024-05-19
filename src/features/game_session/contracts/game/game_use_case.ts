@@ -65,12 +65,11 @@ export class GameUseCase {
             guesser: [...wordsList.guesser, answer],
           },
         }
-        await this.gameDatabaseAdapter.updateSession(updatedSession)
-        await this.gameDatabaseAdapter.broadcastAnswer(updatedSession, true)
+        await this.#handleSessionUpdate(updatedSession, true, true)
         return response.ok({ message: 'Success' })
       }
 
-      const updatedSession: GameSession = {
+      let updatedSession: GameSession = {
         ...session,
         turn: hintGiver,
         wordsList: {
@@ -78,11 +77,33 @@ export class GameUseCase {
           guesser: [...wordsList.guesser, answer],
         },
       }
-      await this.gameDatabaseAdapter.updateSession(updatedSession)
-      await this.gameDatabaseAdapter.broadcastAnswer(updatedSession, false)
+
+      if (updatedSession.wordsList.guesser.length === 5) {
+        updatedSession = {
+          ...updatedSession,
+          turn: null,
+          guessed: false,
+        }
+        await this.#handleSessionUpdate(updatedSession, true)
+        return response.ok({ message: 'Success' })
+      }
+
+      await this.#handleSessionUpdate(updatedSession, false)
       return response.ok({ message: 'Answer sent' })
     }
 
     return response.badRequest({ message: 'Invalid user' })
+  }
+
+  async #handleSessionUpdate(
+    updatedSession: GameSession,
+    saveGame: boolean,
+    win = false
+  ): Promise<void> {
+    await this.gameDatabaseAdapter.updateSession(updatedSession)
+    await this.gameDatabaseAdapter.broadcastAnswer(updatedSession, win)
+    if (saveGame) {
+      await this.gameDatabaseAdapter.saveToGameHistory(updatedSession)
+    }
   }
 }

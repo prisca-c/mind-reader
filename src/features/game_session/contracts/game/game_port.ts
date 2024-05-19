@@ -5,4 +5,5 @@ export interface GamePort {
   updateSession(session: GameSession): Promise<void>
   broadcastAnswer(session: GameSession, isCorrect: boolean): Promise<void>
   broadcastError(session: GameSession): Promise<void>
+  saveToGameHistory(session: GameSession): Promise<void>
 }
