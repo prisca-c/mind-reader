@@ -3,6 +3,7 @@ export const GameStatus = {
   PLAYING: 'playing',
   WIN: 'win',
   LOSE: 'lose',
+  ERROR: 'error',
 } as const
 
 export type GameStatusEnum = (typeof GameStatus)[keyof typeof GameStatus]
