@@ -2,6 +2,10 @@
 
 ## [UNRELEASED]
 
+### Added
+- When guesser reached 5 words, game ends
+- When game end, session is saved in database and deleted from cache (redis)
+
 ### Changed
 - Change project architecture
 
