@@ -1,9 +1,9 @@
 import scheduler from 'adonisjs-scheduler/services/main'
-import { MatchPlayerService } from '#features/matchmaking/services/match_player_service'
+import { MatchPlayerJob } from '#features/matchmaking/jobs/match_player_job'
 
 scheduler
   .call(async () => {
-    await new MatchPlayerService().handle()
+    await new MatchPlayerJob().handle()
   })
   .immediate()
   .everySeconds(2)

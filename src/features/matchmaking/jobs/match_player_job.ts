@@ -7,7 +7,7 @@ import Word from '#models/word'
 import logger from '@adonisjs/core/services/logger'
 import type { GameSession, GameSessionId } from '#features/game_session/types/game_session'
 
-export class MatchPlayerService {
+export class MatchPlayerJob {
   #players: Player[] = []
 
   async handle() {
