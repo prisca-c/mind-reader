@@ -14,18 +14,23 @@ export class MatchPlayerService {
     logger.info('Matching players')
     this.#players = await this.getPlayersFromCache()
 
-    while (this.#players.length >= 2) {
+    if (this.#players.length >= 2) {
       const players = this.#players
       const [player1, player2] = this.getRandomPlayers(players)
 
-      if (player1.id === player2.id) continue
+      if (player1.id === player2.id) return
+
+      this.#players = this.#players.filter(
+        (p: Player) => p.id !== player1.id && p.id !== player2.id
+      )
+      await this.updateCachePlayers()
 
       const sessionId = randomUUID() as GameSessionId
       this.broadcastGameInvitation(player1, player2, sessionId)
 
       const session = await this.createSession(player1, player2, sessionId)
 
-      if (!session) continue
+      if (!session) return
 
       const word = await Word.query().orderByRaw('RANDOM()').first()
       if (!word) {
@@ -80,7 +85,7 @@ export class MatchPlayerService {
 
     await redis.set(`game:session:${sessionId}`, JSON.stringify(initSession))
 
-    await new Promise((resolve) => setTimeout(resolve, 10000))
+    await new Promise((resolve) => setTimeout(resolve, 1000))
 
     const session = await redis.get(`game:session:${sessionId}`)
 
@@ -99,16 +104,23 @@ export class MatchPlayerService {
 
     if (!player1.accepted || !player2.accepted) {
       logger.info('One of the players did not accept the game')
+
       if (!player1.accepted) {
         logger.info('Player 1 not accepted')
-        this.#players = this.#players.filter((p: Player) => p.id !== player1.id)
         transmit.broadcast(`game/user/${player1.id}`, { status: 'removed' })
+      } else if (player1.accepted) {
+        logger.info('Player 1 accepted')
+        transmit.broadcast(`game/user/${player1.id}`, { status: 'removed' })
+        this.#players.push(player1)
       }
 
       if (!player2.accepted) {
         logger.info('Player 2 not accepted')
-        this.#players = this.#players.filter((p: Player) => p.id !== player2.id)
         transmit.broadcast(`game/user/${player2.id}`, { status: 'removed' })
+      } else if (player2.accepted) {
+        logger.info('Player 2 accepted')
+        transmit.broadcast(`game/user/${player2.id}`, { status: 'removed' })
+        this.#players.push(player2)
       }
 
       logger.info('Removing session:', sessionId)

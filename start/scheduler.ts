@@ -5,6 +5,5 @@ scheduler
   .call(async () => {
     await new MatchPlayerService().handle()
   })
-  .withoutOverlapping()
   .immediate()
-  .everySeconds(20)
+  .everySeconds(2)
