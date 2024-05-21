@@ -1,12 +1,10 @@
 import type { GameSessionId, WordList } from '#features/game_session/types/game_session'
-import { useTransmit } from '~/hooks/use_transmit'
 import type User from '#models/user'
-import React, { useEffect, useState } from 'react'
-import { Api } from '~/services/api'
-import { GameStatus, type GameStatusEnum } from '#features/game_session/enums/game_status'
+import { GameStatus } from '#features/game_session/enums/game_status'
 import { router } from '@inertiajs/react'
+import { useGame } from '~/features/game/use_game'
 
-interface GameSessionProps {
+export interface GameSessionProps {
   sessionId: GameSessionId
   user: User
   word?: string
@@ -15,27 +13,18 @@ interface GameSessionProps {
 }
 
 export default function GameSession(props: GameSessionProps) {
-  const { sessionId, user, word, wordsList, turn } = props
-  const [hintGiverWords, setHintGiverWords] = useState<string[]>([])
-  const [guesserWords, setGuesserWords] = useState<string[]>([])
-  const [gameState, setGameState] = useState<GameStatusEnum>(GameStatus.WAITING)
+  const { sessionId, user, word } = props
 
-  const sessionListener = useTransmit({ url: `game/session/${sessionId}/user/${user.id}` })
-
-  useEffect(() => {
-    if (turn) {
-      setGameState('playing')
-    }
-
-    if (!turn) {
-      setGameState('waiting')
-    }
-
-    if (wordsList) {
-      setHintGiverWords(wordsList.hintGiver)
-      setGuesserWords(wordsList.guesser)
-    }
-  }, [])
+  const {
+    sessionListener,
+    guesserWords,
+    hintGiverWords,
+    gameState,
+    setGameState,
+    setGuesserWords,
+    setHintGiverWords,
+    handleSubmit,
+  } = useGame(props)
 
   sessionListener.subscription?.create()
 
@@ -63,24 +52,6 @@ export default function GameSession(props: GameSessionProps) {
       }
     }
   )
-
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    const form = event.currentTarget
-    const formData = new FormData(form)
-    const answer = formData.get('answer') as string
-
-    if (
-      gameState === GameStatus.WAITING ||
-      gameState === GameStatus.WIN ||
-      gameState === GameStatus.LOSE
-    ) {
-      return
-    }
-
-    await new Api().post(`/game/session/${sessionId}/answer`, { answer })
-    form.reset()
-  }
 
   return (
     <div>
