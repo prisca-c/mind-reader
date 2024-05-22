@@ -3,6 +3,8 @@ import { GameStatus, GameStatusEnum } from '#features/game_session/enums/game_st
 import { useTransmit } from '~/hooks/use_transmit'
 import type { GameSessionProps } from '~/pages/game_session'
 import { Api } from '~/services/api'
+import type { WordList } from '#features/game_session/types/game_session'
+import type { GameResponseStatus } from '~/features/game/types/game_response_status'
 
 type Props = GameSessionProps
 export const useGame = (props: Props) => {
@@ -47,6 +49,25 @@ export const useGame = (props: Props) => {
     form.reset()
   }
 
+  const handleGameState = (message: {
+    words: WordList
+    status?: GameResponseStatus
+    turn: boolean
+  }) => {
+    if (message.words) {
+      setHintGiverWords(message.words.hintGiver)
+      setGuesserWords(message.words.guesser)
+    }
+
+    if (message.status === 'win') {
+      setGameState(GameStatus.WIN)
+    } else if (message.turn) {
+      setGameState(GameStatus.PLAYING)
+    } else {
+      setGameState(GameStatus.WAITING)
+    }
+  }
+
   return {
     hintGiverWords,
     guesserWords,
@@ -56,5 +77,6 @@ export const useGame = (props: Props) => {
     setGuesserWords,
     setHintGiverWords,
     handleSubmit,
+    handleGameState,
   }
 }

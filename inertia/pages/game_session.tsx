@@ -3,13 +3,14 @@ import type User from '#models/user'
 import { GameStatus } from '#features/game_session/enums/game_status'
 import { router } from '@inertiajs/react'
 import { useGame } from '~/features/game/use_game'
+import type { GameResponseStatus } from '~/features/game/types/game_response_status'
 
 export interface GameSessionProps {
   sessionId: GameSessionId
   user: User
   word?: string
   wordsList?: WordList
-  turn?: boolean
+  turn: boolean | null
 }
 
 export default function GameSession(props: GameSessionProps) {
@@ -20,36 +21,17 @@ export default function GameSession(props: GameSessionProps) {
     guesserWords,
     hintGiverWords,
     gameState,
-    setGameState,
-    setGuesserWords,
-    setHintGiverWords,
     handleSubmit,
+    handleGameState,
   } = useGame(props)
 
   sessionListener.subscription?.create()
 
   sessionListener.subscription?.onMessage(
-    (message: { turn: boolean; wordsList: string; status?: 'success' | 'error' | 'win' }) => {
+    (message: { turn: boolean; wordsList: string; status?: GameResponseStatus }) => {
       const words = JSON.parse(message.wordsList) as WordList
 
-      if (message.status && message.status === 'win') {
-        setGameState(GameStatus.WIN)
-        return
-      }
-
-      if (message.turn && words) {
-        setHintGiverWords(words.hintGiver)
-        setGuesserWords(words.guesser)
-        setGameState(GameStatus.PLAYING)
-        return
-      }
-
-      if (!message.turn && words) {
-        setHintGiverWords(words.hintGiver)
-        setGuesserWords(words.guesser)
-        setGameState(GameStatus.WAITING)
-        return
-      }
+      handleGameState({ words: words, status: message.status, turn: message.turn })
     }
   )
 
