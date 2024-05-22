@@ -68,6 +68,10 @@ export const useGame = (props: Props) => {
     }
   }
 
+  const handleCopySessionId = () => {
+    navigator.clipboard.writeText(sessionId).then(() => alert('Session ID copied'))
+  }
+
   return {
     hintGiverWords,
     guesserWords,
@@ -78,5 +82,6 @@ export const useGame = (props: Props) => {
     setHintGiverWords,
     handleSubmit,
     handleGameState,
+    handleCopySessionId,
   }
 }

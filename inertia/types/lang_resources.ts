@@ -22,4 +22,19 @@ export interface LangResources {
       start: string
     }
   }
+
+  gameSession: {
+    title: string
+    errors: {
+      invalidWord: string
+      invalidTurn: string
+    }
+    buttons: {
+      submit: string
+      backToMenu: string
+    }
+    player: string
+    hint: string
+    guess: string
+  }
 }

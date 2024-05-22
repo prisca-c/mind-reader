@@ -1,0 +1,14 @@
+{
+  "title": "Session",
+  "errors": {
+    "invalidWord": "Invalid word",
+    "invalidTurn": "It's not your turn"
+  },
+  "buttons": {
+    "submit": "Guess word",
+    "backToMenu": "Back to menu"
+  },
+  "player": "Player",
+  "hint": "Hint",
+  "guess": "Guess"
+}

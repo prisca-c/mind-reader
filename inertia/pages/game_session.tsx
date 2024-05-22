@@ -4,6 +4,7 @@ import { GameStatus } from '#features/game_session/enums/game_status'
 import { router } from '@inertiajs/react'
 import { useGame } from '~/features/game/use_game'
 import type { GameResponseStatus } from '~/features/game/types/game_response_status'
+import { useTranslation } from 'react-i18next'
 
 export interface GameSessionProps {
   sessionId: GameSessionId
@@ -15,7 +16,7 @@ export interface GameSessionProps {
 
 export default function GameSession(props: GameSessionProps) {
   const { sessionId, user, word } = props
-
+  const { t } = useTranslation()
   const {
     sessionListener,
     guesserWords,
@@ -23,6 +24,7 @@ export default function GameSession(props: GameSessionProps) {
     gameState,
     handleSubmit,
     handleGameState,
+    handleCopySessionId,
   } = useGame(props)
 
   sessionListener.subscription?.create()
@@ -37,15 +39,25 @@ export default function GameSession(props: GameSessionProps) {
 
   return (
     <div>
-      <h1>Game Session {sessionId}</h1>
-      <p>Player: {user.username}</p>
+      <h1 className="flex align-middle">
+        {t('gameSession.title')}{' '}
+        <img
+          src="/images/copy.svg"
+          onClick={handleCopySessionId}
+          alt={'Copy icon'}
+          className="cursor-pointer h-4 w-auto my-auto"
+        />
+      </h1>
+      <p>
+        {t('gameSession.player')}: {user.username}
+      </p>
       {word && (
         <p className={gameState === 'win' ? 'text-green-500' : 'text-red-500'}>Word: {word}</p>
       )}
       {gameState === 'win' && <p className={'text-green-500'}>'(GG)'</p>}
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <h2>Hint Giver</h2>
+          <h2>{t('gameSession.hint')}</h2>
           <ul>
             {hintGiverWords.map((item, index) => (
               <li key={index}>{item}</li>
@@ -53,7 +65,7 @@ export default function GameSession(props: GameSessionProps) {
           </ul>
         </div>
         <div>
-          <h2>Guesser</h2>
+          <h2>{t('gameSession.guess')}</h2>
           <ul>
             {guesserWords.map((item, index) => (
               <li key={index}>{item}</li>
@@ -62,11 +74,11 @@ export default function GameSession(props: GameSessionProps) {
         </div>
         <form onSubmit={handleSubmit}>
           <input type="text" name="answer" required />
-          <button>Submit</button>
+          <button>{t('gameSession.buttons.submit')}</button>
         </form>
       </div>
       {gameState === GameStatus.WIN || gameState === GameStatus.LOSE ? (
-        <button onClick={() => router.visit('/game')}>Back to menu</button>
+        <button onClick={() => router.visit('/game')}>{t('gameSession.buttons.backToMenu')}</button>
       ) : null}
     </div>
   )
