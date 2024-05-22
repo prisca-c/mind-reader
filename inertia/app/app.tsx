@@ -1,3 +1,4 @@
+import 'virtual:uno.css'
 import '../css/app.css'
 import { hydrateRoot } from 'react-dom/client'
 import { createInertiaApp } from '@inertiajs/react'
