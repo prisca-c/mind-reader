@@ -9,7 +9,7 @@ export const ChatForm = (props: ChatFormProps) => {
   const { onSubmit, setOpenChat } = props
   return (
     <form method={'post'} className={'flex w-full flex-col gap-2'} onSubmit={onSubmit}>
-      <input type={'text'} name={'message'} className={'w-full rounded p-2'} />
+      <input type={'text'} name={'message'} className={'w-auto rounded p-2'} />
       <div className={'flex w-full gap-1'}>
         <button
           type={'submit'}
