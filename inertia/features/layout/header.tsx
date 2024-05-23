@@ -1,5 +1,6 @@
 import React from 'react'
 import i18n from '~/features/i18n/i18n'
+import { Container } from '~/features/utils/components/container'
 
 export const Header = () => {
   const [language, setLanguage] = React.useState<string>('en')
@@ -22,8 +23,9 @@ export const Header = () => {
     document.cookie = `locale=${lang};path=/`
     setLanguage(lang)
   }
+
   return (
-    <div className={'absolute top-4 right-4 flex items-center'}>
+    <Container justify={'end'} direction={'row'} gap={4} className={'absolute top-4 right-4'}>
       {language === 'en' ? (
         <img
           src={'/images/flags/united-states-of-america-flag.svg'}
@@ -41,6 +43,6 @@ export const Header = () => {
         <option value={'en'}>🇺🇸</option>
         <option value={'fr'}>🇫🇷</option>
       </select>
-    </div>
+    </Container>
   )
 }
