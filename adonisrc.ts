@@ -50,6 +50,7 @@ export default defineConfig({
       file: () => import('adonisjs-scheduler/scheduler_provider'),
       environment: ['console'],
     },
+    () => import('#core/providers/port_provider'),
   ],
 
   /*
