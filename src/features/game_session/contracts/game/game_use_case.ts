@@ -1,14 +1,14 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import type { GameSession, GameSessionId } from '#features/game_session/types/game_session'
-import { GameDatabaseAdapter } from '#features/game_session/contracts/game/game_database_adapter'
 import { inject } from '@adonisjs/core'
+import { GamePort } from '#features/game_session/contracts/game/game_port'
 
 @inject()
 export class GameUseCase {
-  private gameDatabaseAdapter: GameDatabaseAdapter
+  private gamePort: GamePort
 
-  constructor(gameDatabaseAdapter: GameDatabaseAdapter) {
-    this.gameDatabaseAdapter = gameDatabaseAdapter
+  constructor(gamePort: GamePort) {
+    this.gamePort = gamePort
   }
 
   async handle(ctx: HttpContext): Promise<void> {
@@ -19,7 +19,7 @@ export class GameUseCase {
 
     const user = auth.user
     const sessionId: GameSessionId = params.sessionId
-    const session = await this.gameDatabaseAdapter.getSession(sessionId)
+    const session = await this.gamePort.getSession(sessionId)
     if (!session) {
       return response.notFound()
     }
@@ -37,7 +37,7 @@ export class GameUseCase {
 
     if (hintGiver === user.id) {
       if (word.startsWith(answer.slice(0, 3)) || word.endsWith(answer.slice(-3))) {
-        await this.gameDatabaseAdapter.broadcastError(session)
+        await this.gamePort.broadcastError(session)
         return response.ok({ message: 'Error' })
       }
 
@@ -49,8 +49,8 @@ export class GameUseCase {
           guesser: [...wordsList.guesser],
         },
       }
-      await this.gameDatabaseAdapter.updateSession(updatedSession)
-      await this.gameDatabaseAdapter.broadcastAnswer(updatedSession, false)
+      await this.gamePort.updateSession(updatedSession)
+      await this.gamePort.broadcastAnswer(updatedSession, false)
       return response.ok({ message: 'Success' })
     }
 
@@ -100,10 +100,10 @@ export class GameUseCase {
     saveGame: boolean,
     win = false
   ): Promise<void> {
-    await this.gameDatabaseAdapter.updateSession(updatedSession)
-    await this.gameDatabaseAdapter.broadcastAnswer(updatedSession, win)
+    await this.gamePort.updateSession(updatedSession)
+    await this.gamePort.broadcastAnswer(updatedSession, win)
     if (saveGame) {
-      await this.gameDatabaseAdapter.saveToGameHistory(updatedSession)
+      await this.gamePort.saveToGameHistory(updatedSession)
     }
   }
 }
