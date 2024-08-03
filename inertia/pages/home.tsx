@@ -7,7 +7,7 @@ export default function Home() {
   const [openChat, setOpenChat] = React.useState(false)
   const { t } = useTranslation()
   return (
-    <div className={'flex justify-center items-center h-screen w-screen'}>
+    <div className={'flex justify-center items-center w-screen'}>
       <Head title="Home" />
 
       <div>
