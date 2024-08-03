@@ -2,13 +2,13 @@ import type { GameRulesInterface } from '#features/game_session/contracts/game_r
 import type { GameSession } from '#features/game_session/types/game_session'
 
 export class GameRules implements GameRulesInterface {
-  validWord(session: GameSession, answer: string): boolean {
+  validWord(session: GameSession, userId: string, answer: string): boolean {
     const { word, hintGiver } = session
     if (!word) {
       return false
     }
 
-    if (hintGiver === session.player1.id) {
+    if (hintGiver === userId) {
       return !(word.startsWith(answer.slice(0, 3)) || word.endsWith(answer.slice(-3)))
     }
 
