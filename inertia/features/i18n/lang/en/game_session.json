@@ -5,7 +5,10 @@
     "invalidTurn": "It's not your turn"
   },
   "buttons": {
-    "submit": "Guess word",
+    "submit": {
+      "guesser": "Guess the word",
+      "hintGiver": "Give a hint"
+    },
     "backToMenu": "Back to menu"
   },
   "player": "Player",

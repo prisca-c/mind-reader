@@ -5,7 +5,10 @@
     "invalidTurn": "Ce n'est pas ton tour"
   },
   "buttons": {
-    "submit": "Deviner le mot",
+    "submit": {
+      "guesser": "Deviner le mot",
+      "hintGiver": "Donner un indice"
+    },
     "backToMenu": "Retour au menu"
   },
   "player": "Joueur",

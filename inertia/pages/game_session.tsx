@@ -1,4 +1,4 @@
-import type { GameSessionId, WordList } from '#features/game_session/types/game_session'
+import type { WordList } from '#features/game_session/types/game_session'
 import type User from '#models/user'
 import { GameStatus } from '#features/game_session/enums/game_status'
 import { router } from '@inertiajs/react'
@@ -7,15 +7,15 @@ import type { GameResponseStatus } from '~/features/game/types/game_response_sta
 import { useTranslation } from 'react-i18next'
 
 export interface GameSessionProps {
-  sessionId: GameSessionId
   user: User
+  role: 'hintGiver' | 'guesser'
   word?: string
   wordsList?: WordList
   turn: boolean | null
 }
 
 export default function GameSession(props: GameSessionProps) {
-  const { sessionId, user, word } = props
+  const { user, word, role } = props
   const { t } = useTranslation()
   const {
     sessionListener,
@@ -74,7 +74,7 @@ export default function GameSession(props: GameSessionProps) {
         </div>
         <form onSubmit={handleSubmit}>
           <input type="text" name="answer" required />
-          <button>{t('gameSession.buttons.submit')}</button>
+          <button>{t(`gameSession.buttons.submit.${role}`)}</button>
         </form>
       </div>
       {gameState === GameStatus.WIN || gameState === GameStatus.LOSE ? (

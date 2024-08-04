@@ -30,7 +30,10 @@ export interface LangResources {
       invalidTurn: string
     }
     buttons: {
-      submit: string
+      submit: {
+        guesser: string
+        hintGiver: string
+      }
       backToMenu: string
     }
     player: string

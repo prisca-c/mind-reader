@@ -11,26 +11,27 @@ export default class GameSessionController {
     const user = auth.user
     const sessionId = params.sessionId
     const session = await redis.get(`game:session:${sessionId}`)
+
     if (!session) {
       return response.redirect('/game')
     }
 
-    const { player1, player2, hintGiver, word, turn, wordsList } = JSON.parse(
-      session
-    ) as GameSession
+    const { player1, player2, hintGiver, word, turn, wordsList }: GameSession = JSON.parse(session)
+
     if (player1.id !== user.id && player2.id !== user.id) {
       return response.redirect('/game')
     }
 
+    const role = hintGiver === user.id ? 'hintGiver' : 'guesser'
     let guessWord = ''
 
-    if (hintGiver && hintGiver === user.id) {
+    if (role === 'hintGiver') {
       guessWord = word!
     }
 
     return inertia.render('game_session', {
-      sessionId: params.sessionId,
       user: user,
+      role: role,
       word: guessWord,
       wordsList: wordsList,
       turn: turn === user.id,
