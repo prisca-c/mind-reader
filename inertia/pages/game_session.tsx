@@ -1,6 +1,6 @@
 import type { WordList } from '#features/game_session/types/game_session'
 import type User from '#models/user'
-import { GameStatus } from '#features/game_session/enums/game_status'
+import { GameState } from '#features/game_session/enums/game_state'
 import { router } from '@inertiajs/react'
 import { useGame } from '~/features/game/use_game'
 import type { GameResponseStatus } from '~/features/game/types/game_response_status'
@@ -77,7 +77,7 @@ export default function GameSession(props: GameSessionProps) {
           <button>{t(`gameSession.buttons.submit.${role}`)}</button>
         </form>
       </div>
-      {gameState === GameStatus.WIN || gameState === GameStatus.LOSE ? (
+      {gameState === GameState.WIN || gameState === GameState.LOSE ? (
         <button onClick={() => router.visit('/game')}>{t('gameSession.buttons.backToMenu')}</button>
       ) : null}
     </div>

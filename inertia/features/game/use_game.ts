@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { GameStatus, GameStatusEnum } from '#features/game_session/enums/game_status'
+import { GameState, GameStateEnum } from '#features/game_session/enums/game_state'
 import { useTransmit } from '~/hooks/use_transmit'
 import type { GameSessionProps } from '~/pages/game_session'
 import { Api } from '~/services/api'
@@ -12,7 +12,7 @@ export const useGame = (props: Props) => {
 
   const [hintGiverWords, setHintGiverWords] = useState<string[]>([])
   const [guesserWords, setGuesserWords] = useState<string[]>([])
-  const [gameState, setGameState] = useState<GameStatusEnum>(GameStatus.WAITING)
+  const [gameState, setGameState] = useState<GameStateEnum>(GameState.WAITING)
 
   const sessionListener = useTransmit({ url: `game/session/${sessionId}/user/${user.id}` })
 
@@ -38,9 +38,9 @@ export const useGame = (props: Props) => {
     const answer = formData.get('answer') as string
 
     if (
-      gameState === GameStatus.WAITING ||
-      gameState === GameStatus.WIN ||
-      gameState === GameStatus.LOSE
+      gameState === GameState.WAITING ||
+      gameState === GameState.WIN ||
+      gameState === GameState.LOSE
     ) {
       return
     }
@@ -60,11 +60,11 @@ export const useGame = (props: Props) => {
     }
 
     if (message.status === 'win') {
-      setGameState(GameStatus.WIN)
+      setGameState(GameState.WIN)
     } else if (message.turn) {
-      setGameState(GameStatus.PLAYING)
+      setGameState(GameState.PLAYING)
     } else {
-      setGameState(GameStatus.WAITING)
+      setGameState(GameState.WAITING)
     }
   }
 

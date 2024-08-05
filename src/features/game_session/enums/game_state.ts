@@ -1,4 +1,4 @@
-export const GameStatus = {
+export const GameState = {
   WAITING: 'waiting',
   PLAYING: 'playing',
   WIN: 'win',
@@ -6,4 +6,4 @@ export const GameStatus = {
   ERROR: 'error',
 } as const
 
-export type GameStatusEnum = (typeof GameStatus)[keyof typeof GameStatus]
+export type GameStateEnum = (typeof GameState)[keyof typeof GameState]
