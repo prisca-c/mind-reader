@@ -3,7 +3,6 @@ import { GameRules } from '#features/game_session/contracts/game_rules/game_rule
 import type { GameSession, GameSessionId } from '#features/game_session/types/game_session'
 import type { UserId } from '#models/user'
 import type { Player } from '#features/game_session/types/player'
-import { DateTime } from 'luxon'
 import { ValidWordState } from '#features/game_session/enums/valid_word_state'
 
 test.group('Game Rules - Word Validation', () => {
@@ -31,27 +30,35 @@ test.group('Game Rules - Word Validation', () => {
     turn: player1.id as UserId,
     word: null,
     guessed: false,
-    startedAt: DateTime.now().toISO(),
+    startedAt: '2024-01-01T00:00:00.000Z',
     wordsList: {
       hintGiver: [],
       guesser: [],
     },
   }
 
-  test('should return NOT_DEFINED when word is not defined', async ({ assert }) => {
-    const result = gameRules.validWord(session, player1.id, 'apple')
+  test('should return NOT_DEFINED when word is not defined', ({ assert }) => {
+    const result = gameRules.validWord(session, player1.id, 'app')
     assert.equal(result.status, ValidWordState.NOT_DEFINED)
   })
 
-  test('should return MATCHES when hint giver matches the word', async ({ assert }) => {
-    session.word = 'apple'
-    const result = gameRules.validWord(session, player1.id, 'app')
+  test('should return MATCHES when hint giver matches the word', ({ assert }) => {
+    const sessionCopy: GameSession = { ...session, word: 'apple' }
+    const result = gameRules.validWord(sessionCopy, player1.id, 'app')
     assert.equal(result.status, ValidWordState.MATCHES)
   })
 
-  test('should return VALID if the word is valid', async ({ assert }) => {
-    session.word = 'apple'
-    const result = gameRules.validWord(session, player1.id, 'banana')
+  test('should return VALID if the player is the guesser and the word matches', ({ assert }) => {
+    const sessionCopy: GameSession = { ...session, word: 'apple', hintGiver: player2.id }
+    const result = gameRules.validWord(sessionCopy, player1.id, 'app')
+    assert.equal(result.status, ValidWordState.VALID)
+  })
+
+  test('should return VALID if the player is the hint giver and the word does not match', ({
+    assert,
+  }) => {
+    const sessionCopy: GameSession = { ...session, word: 'apple' }
+    const result = gameRules.validWord(sessionCopy, player1.id, 'banana')
     assert.equal(result.status, ValidWordState.VALID)
   })
 })
