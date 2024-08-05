@@ -125,4 +125,4 @@ jobs:
         TWITCH_CLIENT_ID: client_id
         TWITCH_CLIENT_SECRET: client_secret
         TWITCH_CALLBACK_URL: http://localhost:3333/auth/twitch/callback
-      run: pnpm test -r
+      run: FORCE_COLOR=1 pnpm test -r
