@@ -3,6 +3,7 @@ import type { GameSession, GameSessionId } from '#features/game_session/types/ga
 import { inject } from '@adonisjs/core'
 import { GamePort } from '#features/game_session/contracts/game/game_port'
 import { GameRules } from '#features/game_session/contracts/game_rules/game_rules'
+import { ValidWordState } from '#features/game_session/enums/valid_word_state'
 
 @inject()
 export class GameUseCase {
@@ -23,6 +24,8 @@ export class GameUseCase {
     const user = auth.user
     const sessionId: GameSessionId = params.sessionId
     const session = await this.gamePort.getSession(sessionId)
+    const answer: string = request.input('answer')
+
     if (!session) {
       return response.notFound()
     }
@@ -34,11 +37,37 @@ export class GameUseCase {
       return response.unauthorized()
     }
 
-    const answer: string = request.input('answer')
-    if (!this.gameRules.validWord(session, user.id, answer)) {
+    /**
+     * ------------------------------
+     * Word's validation section
+     * ------------------------------
+     */
+    const validWordCheck = this.gameRules.validWord(session, user.id, answer)
+
+    if (validWordCheck.status === ValidWordState.NOT_DEFINED) {
       await this.gamePort.broadcastError(session)
-      return response.ok({ message: 'Error' })
+      return response.ok({
+        status: ValidWordState.NOT_DEFINED,
+        message: 'Error',
+      })
     }
+
+    if (validWordCheck.status === ValidWordState.MATCHES) {
+      await this.gamePort.broadcastError(session)
+      return response.ok({
+        status: ValidWordState.MATCHES,
+        message: 'Error',
+      })
+    }
+
+    if (validWordCheck.status !== ValidWordState.VALID) {
+      await this.gamePort.broadcastError(session)
+      return response.ok({
+        status: 'INVALID',
+        message: 'Error',
+      })
+    }
+    // ------------------------------
 
     const isHintGiver = session.hintGiver === user.id
     const isCorrect = this.gameRules.validateAnswer(session, answer, user.id)
