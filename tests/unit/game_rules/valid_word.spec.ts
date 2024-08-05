@@ -5,7 +5,7 @@ import type { UserId } from '#models/user'
 import type { Player } from '#features/game_session/types/player'
 import { ValidWordState } from '#features/game_session/enums/valid_word_state'
 
-test.group('Game Rules - Word Validation', () => {
+test.group('GameRules - validWord', () => {
   const player1: Player & { accepted: boolean } = {
     id: '1' as UserId,
     username: 'player1',
