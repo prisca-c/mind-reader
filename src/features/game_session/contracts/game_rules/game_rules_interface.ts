@@ -4,7 +4,7 @@ import type { ValidWordEnum } from '#features/game_session/enums/valid_word_stat
 export interface GameRulesInterface {
   validWord(session: GameSession, userId: string, answer: string): { status: ValidWordEnum }
   validateAnswer(session: GameSession, answer: string, userId: string): boolean
-  isGuesser(userId: string, player1Id: string, player2Id: string): boolean
+  isAuthorizedPlayer(userId: string, player1Id: string, player2Id: string): boolean
   updateSessionForHintGiver(session: GameSession, answer: string): GameSession
   updateSessionForGuesser(session: GameSession, answer: string, isCorrect: boolean): GameSession
 }

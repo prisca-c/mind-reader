@@ -43,7 +43,7 @@ export class GameRules implements GameRulesInterface {
     return false
   }
 
-  isGuesser(userId: string, player1Id: string, player2Id: string): boolean {
+  isAuthorizedPlayer(userId: string, player1Id: string, player2Id: string): boolean {
     return userId !== player1Id && userId !== player2Id
   }
 

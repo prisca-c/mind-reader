@@ -27,7 +27,10 @@ export class GameUseCase {
       return response.notFound()
     }
 
-    if (this.gameRules.isGuesser(user.id, session.player1.id, session.player2.id)) {
+    /**
+     * Check if the user is part of the game session
+     */
+    if (this.gameRules.isAuthorizedPlayer(user.id, session.player1.id, session.player2.id)) {
       return response.unauthorized()
     }
 
