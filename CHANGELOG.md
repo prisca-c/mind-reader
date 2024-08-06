@@ -5,9 +5,14 @@
 ### Added
 - When guesser reached 5 words, game ends
 - When game end, session is saved in database and deleted from cache (redis)
+- Add `GameRules` class to handle game logic from `GameUseCase` class
+- Add tests for :
+  - `GameRules` class
+- Add CI Pipeline `.github/workflows/checks.yml` to check code quality and run tests
 
 ### Changed
 - Change project architecture
+- Update `GameRules.validWord` method by adding `ValidWordState` to have more precise return value
 
 ## [0.4.0] - 2024-05-18
 
