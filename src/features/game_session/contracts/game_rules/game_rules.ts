@@ -44,7 +44,7 @@ export class GameRules implements GameRulesInterface {
   }
 
   isAuthorizedPlayer(userId: string, player1Id: string, player2Id: string): boolean {
-    return userId !== player1Id && userId !== player2Id
+    return userId === player1Id || userId === player2Id
   }
 
   updateSessionForHintGiver(session: GameSession, answer: string): GameSession {

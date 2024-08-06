@@ -33,7 +33,7 @@ export class GameUseCase {
     /**
      * Check if the user is part of the game session
      */
-    if (this.gameRules.isAuthorizedPlayer(user.id, session.player1.id, session.player2.id)) {
+    if (!this.gameRules.isAuthorizedPlayer(user.id, session.player1.id, session.player2.id)) {
       return response.unauthorized()
     }
 
