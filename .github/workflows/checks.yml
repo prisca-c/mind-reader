@@ -116,7 +116,8 @@ jobs:
         SESSION_DRIVER: redis
         REDIS_HOST: localhost
         REDIS_PORT: 6379
-        DB_CONNECTION: sqlite
+        REDIS_DB: 0
+        DB_CONNECTION: postgres
         DB_HOST: localhost
         DB_PORT: 5432
         DB_USER: postgres
