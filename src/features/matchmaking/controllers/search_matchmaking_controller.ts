@@ -13,10 +13,8 @@ export default class SearchMatchmakingController {
 
     const user = auth.user
 
-    const playersL = await redis.get('game:queue:players')
-    logger.info(playersL)
-
     const playersCache = await redis.get('game:queue:players')
+    logger.debug('playersCache', playersCache)
     const players = playersCache ? JSON.parse(playersCache) : []
     const player = {
       id: user.id,
