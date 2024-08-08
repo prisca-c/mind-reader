@@ -110,6 +110,7 @@ jobs:
     - name: Run tests
       env:
         APP_KEY: 1234567890123456
+        NODE_ENV: test
         PORT: 3030
         HOST: localhost
         LOG_LEVEL: info
