@@ -4,6 +4,7 @@ import type { Config } from '@japa/runner/types'
 import { pluginAdonisJS } from '@japa/plugin-adonisjs'
 import testUtils from '@adonisjs/core/services/test_utils'
 import { apiClient } from '@japa/api-client'
+import { authApiClient } from '@adonisjs/auth/plugins/api_client'
 
 /**
  * This file is imported by the "bin/test.ts" entrypoint file
@@ -13,7 +14,12 @@ import { apiClient } from '@japa/api-client'
  * Configure Japa plugins in the plugins array.
  * Learn more - https://japa.dev/docs/runner-config#plugins-optional
  */
-export const plugins: Config['plugins'] = [assert(), apiClient(), pluginAdonisJS(app)]
+export const plugins: Config['plugins'] = [
+  assert(),
+  apiClient(),
+  authApiClient(app),
+  pluginAdonisJS(app),
+]
 
 /**
  * Configure lifecycle function to run before and after all the
@@ -24,7 +30,7 @@ export const plugins: Config['plugins'] = [assert(), apiClient(), pluginAdonisJS
  */
 export const runnerHooks: Required<Pick<Config, 'setup' | 'teardown'>> = {
   setup: [() => testUtils.db().migrate(), () => testUtils.db().seed()],
-  teardown: [],
+  teardown: [() => testUtils.db().truncate()],
 }
 
 /**
