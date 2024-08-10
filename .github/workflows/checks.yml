@@ -114,7 +114,7 @@ jobs:
         PORT: 3030
         HOST: localhost
         LOG_LEVEL: info
-        SESSION_DRIVER: redis
+        SESSION_DRIVER: memory
         REDIS_HOST: localhost
         REDIS_PORT: 6379
         REDIS_DB: 0
