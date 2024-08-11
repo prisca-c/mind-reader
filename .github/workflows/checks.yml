@@ -105,7 +105,6 @@ jobs:
     - name: Install dependencies
       run: |
         pnpm install
-        pnpm -r build
 
     - name: Run tests
       env:
@@ -117,7 +116,7 @@ jobs:
         SESSION_DRIVER: memory
         REDIS_HOST: localhost
         REDIS_PORT: 6379
-        REDIS_DB: 0
+        REDIS_DB: 1
         DB_CONNECTION: postgres
         DB_HOST: localhost
         DB_PORT: 5432
