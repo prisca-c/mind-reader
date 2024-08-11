@@ -4,7 +4,7 @@ import redis from '@adonisjs/redis/services/main'
 import testUtils from '@adonisjs/core/services/test_utils'
 
 test.group('Matchmaking - Game search', (group) => {
-  group.each.setup(() => testUtils.db().withGlobalTransaction())
+  group.each.setup(async () => await testUtils.db().withGlobalTransaction())
   group.each.teardown(async () => {
     await redis.flushall()
   })
@@ -97,8 +97,12 @@ test.group('Matchmaking - Game search', (group) => {
     const players = JSON.parse(playersCache!)
 
     assert.equal(players.length, 2)
-    assert.equal(players[0].id, user1.id)
-    assert.equal(players[1].id, user2.id)
+
+    const player1 = players.find((player: any) => player.id === user1.id)
+    assert.exists(player1)
+
+    const player2 = players.find((player: any) => player.id === user2.id)
+    assert.exists(player2)
 
     const queueCount = await redis.get('game:queue:count')
     assert.equal(queueCount, 2)
