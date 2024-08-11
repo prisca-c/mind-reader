@@ -21,20 +21,6 @@ const dbConfig = defineConfig({
         paths: ['src/core/database/seeders'],
       },
     },
-    sqlite: {
-      client: 'sqlite3',
-      connection: {
-        filename: 'database.sqlite',
-      },
-      useNullAsDefault: true,
-      migrations: {
-        naturalSort: true,
-        paths: ['src/core/database/migrations'],
-      },
-      seeders: {
-        paths: ['src/core/database/seeders'],
-      },
-    },
   },
 })
 
