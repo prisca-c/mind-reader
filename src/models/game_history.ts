@@ -1,9 +1,10 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column } from '@adonisjs/lucid/orm'
+import { BaseModel, beforeCreate, column } from '@adonisjs/lucid/orm'
 import { Opaque } from '@poppinss/utils/types'
 import type { UserId } from '#models/user'
 import type { WordId } from '#models/word'
 import type { WordList } from '#features/game_session/types/game_session'
+import { randomUUID } from 'node:crypto'
 
 export type GameHistoryId = Opaque<string, 'GameHistoryId'>
 
@@ -37,4 +38,9 @@ export default class GameHistory extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime
+
+  @beforeCreate()
+  static generateId(gameHistory: GameHistory) {
+    gameHistory.id = randomUUID() as GameHistoryId
+  }
 }

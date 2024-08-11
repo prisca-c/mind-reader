@@ -4,22 +4,15 @@ export default class extends BaseSchema {
   protected tableName = 'users'
 
   async up() {
-    const roleId = await this.db.from('roles').where('name', 'user').select('id').first()
     this.schema.createTable(this.tableName, (table) => {
-      table.uuid('id').defaultTo(this.raw('gen_random_uuid()')).primary()
+      table.uuid('id').primary()
       table.string('username').notNullable()
       table.string('email', 254).notNullable().unique()
       table.timestamp('email_verified_at').nullable()
       table.string('password').nullable()
       table.string('avatar_url').nullable()
       table.integer('elo').defaultTo(500)
-      table
-        .integer('role_id')
-        .unsigned()
-        .notNullable()
-        .references('id')
-        .inTable('roles')
-        .defaultTo(roleId.id)
+      table.integer('role_id').unsigned().notNullable().references('id').inTable('roles')
       table
         .smallint('provider_id')
         .unsigned()

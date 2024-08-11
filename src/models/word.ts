@@ -1,7 +1,8 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column } from '@adonisjs/lucid/orm'
+import { BaseModel, beforeCreate, column } from '@adonisjs/lucid/orm'
 import { Opaque } from '@poppinss/utils/types'
 import type { Language } from '#features/i18n/enums/language'
+import { randomUUID } from 'node:crypto'
 
 export type WordId = Opaque<string, 'WordId'>
 
@@ -29,4 +30,9 @@ export default class Word extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime
+
+  @beforeCreate()
+  static generateId(word: Word) {
+    word.id = randomUUID() as WordId
+  }
 }

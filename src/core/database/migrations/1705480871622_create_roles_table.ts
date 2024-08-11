@@ -5,15 +5,11 @@ export default class extends BaseSchema {
 
   async up() {
     this.schema.createTable(this.tableName, (table) => {
-      table.increments('id')
+      table.increments('id', { primaryKey: true })
       table.string('name').notNullable()
 
       table.timestamp('created_at')
       table.timestamp('updated_at')
-    })
-
-    this.defer(async () => {
-      await this.db.table('roles').insert([{ name: 'user' }, { name: 'admin' }])
     })
   }
 

@@ -5,7 +5,7 @@ export default class extends BaseSchema {
 
   async up() {
     this.schema.createTable(this.tableName, (table) => {
-      table.uuid('id').defaultTo(this.raw('gen_random_uuid()')).primary()
+      table.uuid('id').primary()
       table.string('name').notNullable()
       table.integer('found_count').defaultTo(0)
       table.integer('played_count').defaultTo(0)
