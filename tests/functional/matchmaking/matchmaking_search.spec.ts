@@ -4,7 +4,7 @@ import redis from '@adonisjs/redis/services/main'
 import testUtils from '@adonisjs/core/services/test_utils'
 
 test.group('Matchmaking - Game search', (group) => {
-  group.each.setup(async () => await testUtils.db().withGlobalTransaction())
+  group.each.setup(() => testUtils.db().migrate())
   group.each.teardown(async () => {
     await redis.flushall()
   })

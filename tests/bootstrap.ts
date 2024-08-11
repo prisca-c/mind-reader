@@ -7,7 +7,6 @@ import { apiClient } from '@japa/api-client'
 import { authApiClient } from '@adonisjs/auth/plugins/api_client'
 import { shieldApiClient } from '@adonisjs/shield/plugins/api_client'
 import { sessionApiClient } from '@adonisjs/session/plugins/api_client'
-import redis from '@adonisjs/redis/services/main'
 
 /**
  * This file is imported by the "bin/test.ts" entrypoint file
@@ -34,12 +33,7 @@ export const plugins: Config['plugins'] = [
  * The teardown functions are executer after all the tests
  */
 export const runnerHooks: Required<Pick<Config, 'setup' | 'teardown'>> = {
-  setup: [
-    () => testUtils.db().migrate(),
-    async () => {
-      await redis.flushall()
-    },
-  ],
+  setup: [() => testUtils.db().migrate()],
   teardown: [],
 }
 
