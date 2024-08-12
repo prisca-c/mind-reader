@@ -1,4 +1,4 @@
-import type { WordList } from '#features/game_session/types/game_session'
+import type { GameSessionId, WordList } from '#features/game_session/types/game_session'
 import type User from '#models/user'
 import { GameState } from '#features/game_session/enums/game_state'
 import { router } from '@inertiajs/react'
@@ -7,6 +7,7 @@ import type { GameResponseStatus } from '~/features/game/types/game_response_sta
 import { useTranslation } from 'react-i18next'
 
 export interface GameSessionProps {
+  sessionId: GameSessionId
   user: User
   role: 'hintGiver' | 'guesser'
   word?: string
