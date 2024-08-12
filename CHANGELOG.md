@@ -7,10 +7,13 @@
 - When game end, session is saved in database and deleted from cache (redis)
 - Add `GameRules` class to handle game logic from `GameUseCase` class
 - Add tests for :
-  - `GameRules` class
+  - `GameRules` class (unit tests)
+  - `Matchmaking - Search` Controller (functional tests)
+  - `Matchmaking - Accept` Controller (functional tests)
 - Add CI Pipeline `.github/workflows/checks.yml` to check code quality and run tests
 
 ### Changed
+- Add `Cache` service and update all Redis calls to use it
 - Change project architecture
 - Update `GameRules.validWord` method by adding `ValidWordState` to have more precise return value
 
