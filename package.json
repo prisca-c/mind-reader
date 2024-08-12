@@ -13,7 +13,7 @@
     "test": "node ace test --force-exit",
     "lint": "eslint .",
     "format": "prettier --write .",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "tsc --noEmit & tsc -p inertia --noEmit",
     "jobs:run": "node ace scheduler:run"
   },
   "imports": {
