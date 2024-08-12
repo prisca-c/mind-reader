@@ -24,6 +24,7 @@
     "#helpers/*": "./src/helpers/*.js",
     "#models/*": "./src/models/*.js",
     "#start/*": "./start/*.js",
+    "#services/*": "./src/services/*.js",
     "#tests/*": "./tests/*.js",
     "#types/*": "./src/types/*.js",
     "#validators/*": "./src/validators/*.js"
