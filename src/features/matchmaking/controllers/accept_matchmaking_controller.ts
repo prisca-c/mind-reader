@@ -1,15 +1,17 @@
 import type { HttpContext } from '@adonisjs/core/http'
-import redis from '@adonisjs/redis/services/main'
+import { Cache } from '#services/cache/cache'
 import { GameSession } from '#features/game_session/types/game_session'
+import { inject } from '@adonisjs/core'
 
 export default class AcceptMatchmakingController {
-  async handle({ auth, response, params }: HttpContext) {
+  @inject()
+  async handle({ auth, response, params }: HttpContext, cache: Cache) {
     if (!auth.user) {
       return response.unauthorized()
     }
 
     const sessionId = params.sessionId
-    const session = await redis.get(`game:session:${sessionId}`)
+    const session = await cache.get(`game:session:${sessionId}`)
     const user = auth.user
     if (!session) {
       return response.notFound()
@@ -31,7 +33,7 @@ export default class AcceptMatchmakingController {
       player2,
     }
 
-    await redis.set(`game:session:${sessionId}`, JSON.stringify(updatedSession))
+    await cache.set(`game:session:${sessionId}`, JSON.stringify(updatedSession))
 
     return response.ok({
       message: 'Accepted',

@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon'
-import redis from '@adonisjs/redis/services/main'
+import { Cache } from '#services/cache/cache'
 import transmit from '@adonisjs/transmit/services/main'
 import type { Player } from '#features/game_session/types/player'
 import { randomUUID } from 'node:crypto'
@@ -9,6 +9,8 @@ import type { GameSession, GameSessionId } from '#features/game_session/types/ga
 
 export class MatchPlayerJob {
   #players: Player[] = []
+
+  constructor(private cache: Cache) {}
 
   async handle() {
     logger.info('Matching players')
@@ -44,7 +46,7 @@ export class MatchPlayerJob {
   }
 
   async getPlayersFromCache() {
-    const playersCache = await redis.get('game:queue:players')
+    const playersCache = await this.cache.get('game:queue:players')
     return playersCache ? JSON.parse(playersCache) : []
   }
 
@@ -83,11 +85,11 @@ export class MatchPlayerJob {
       wordsList: { hintGiver: [], guesser: [] },
     }
 
-    await redis.set(`game:session:${sessionId}`, JSON.stringify(initSession))
+    await this.cache.set(`game:session:${sessionId}`, JSON.stringify(initSession))
 
     await new Promise((resolve) => setTimeout(resolve, 1000))
 
-    const session = await redis.get(`game:session:${sessionId}`)
+    const session = await this.cache.get(`game:session:${sessionId}`)
 
     const status = await this.checkPlayerStatus(sessionId)
 
@@ -98,7 +100,7 @@ export class MatchPlayerJob {
 
   async checkPlayerStatus(sessionId: string) {
     logger.info('Checking player status')
-    const session = await redis.get(`game:session:${sessionId}`)
+    const session = await this.cache.get(`game:session:${sessionId}`)
     if (!session) return
     const { player1, player2 } = JSON.parse(session) as GameSession
 
@@ -124,7 +126,7 @@ export class MatchPlayerJob {
       }
 
       logger.info('Removing session:', sessionId)
-      await redis.del(`game:session:${sessionId}`)
+      await this.cache.del(`game:session:${sessionId}`)
 
       await this.updateCachePlayers()
       return false
@@ -145,7 +147,7 @@ export class MatchPlayerJob {
     const hintGiverId = Math.random() > 0.5 ? player1.id : player2.id
     const guesserId = hintGiverId === player1.id ? player2.id : player1.id
 
-    const currentSession = await redis.get(`game:session:${sessionId}`)
+    const currentSession = await this.cache.get(`game:session:${sessionId}`)
     if (!currentSession) return
 
     const updatedSession: GameSession = {
@@ -156,7 +158,7 @@ export class MatchPlayerJob {
       startedAt: DateTime.now().toISO(),
     }
 
-    await redis.set(`game:session:${sessionId}`, JSON.stringify(updatedSession))
+    await this.cache.set(`game:session:${sessionId}`, JSON.stringify(updatedSession))
 
     const gameDataGuesser = { sessionId, turn: false }
     const gameDataHintGiver = { sessionId, word: word.name, turn: true }
@@ -175,8 +177,8 @@ export class MatchPlayerJob {
   async updateCachePlayers() {
     const players = this.#players
     await Promise.all([
-      redis.set('game:queue:players', JSON.stringify(players)),
-      redis.set('game:queue:count', players.length),
+      this.cache.set('game:queue:players', JSON.stringify(players)),
+      this.cache.set('game:queue:count', players.length.toString()),
     ])
     transmit.broadcast('game/search', { queueCount: players.length })
   }

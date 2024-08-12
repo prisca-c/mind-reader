@@ -1,5 +1,6 @@
 import type { ApplicationService } from '@adonisjs/core/types'
 import { GamePort } from '#features/game_session/contracts/game/game_port'
+import { Cache } from '#services/cache/cache'
 
 export default class PortProvider {
   constructor(protected app: ApplicationService) {}
@@ -13,7 +14,7 @@ export default class PortProvider {
     )
 
     this.app.container.singleton(GamePort, () => {
-      return new GameDatabaseAdapter()
+      return new GameDatabaseAdapter(new Cache())
     })
   }
 

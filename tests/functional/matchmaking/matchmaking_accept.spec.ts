@@ -1,17 +1,18 @@
 import { test } from '@japa/runner'
 import User from '#models/user'
-import redis from '@adonisjs/redis/services/main'
+import { Cache } from '#services/cache/cache'
 import testUtils from '@adonisjs/core/services/test_utils'
 import type { GameSession, GameSessionId } from '#features/game_session/types/game_session'
 import { randomUUID } from 'node:crypto'
 
 test.group('Matchmaking - Accept matchmaking', (group) => {
+  const cache = new Cache()
   group.each.setup(async () => {
     await testUtils.db().migrate()
   })
 
   group.each.teardown(async () => {
-    await redis.flushall()
+    await cache.flush()
   })
 
   test('only user 1 should accept matchmaking', async ({ assert, client }) => {
@@ -43,7 +44,7 @@ test.group('Matchmaking - Accept matchmaking', (group) => {
       queueCount: 2,
     })
 
-    const playersCache = await redis.get('game:queue:players')
+    const playersCache = await cache.get('game:queue:players')
     assert.exists(playersCache)
     const players = JSON.parse(playersCache!)
     assert.equal(players.length, 2)
@@ -62,7 +63,7 @@ test.group('Matchmaking - Accept matchmaking', (group) => {
       wordsList: { hintGiver: [], guesser: [] },
     }
 
-    await redis.set(`game:session:${sessionId}`, JSON.stringify(sessionData))
+    await cache.set(`game:session:${sessionId}`, JSON.stringify(sessionData))
 
     /**
      * Accept matchmaking for user 1
@@ -77,7 +78,7 @@ test.group('Matchmaking - Accept matchmaking', (group) => {
       message: 'Accepted',
     })
 
-    const session = await redis.get(`game:session:${sessionId}`)
+    const session = await cache.get(`game:session:${sessionId}`)
     const sessionParsed = JSON.parse(session!) as GameSession
 
     // User 1 should have accepted

@@ -1,16 +1,18 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import type { GameSession } from '#features/game_session/types/game_session'
-import redis from '@adonisjs/redis/services/main'
+import { inject } from '@adonisjs/core'
+import { Cache } from '#services/cache/cache'
 
 export default class GameSessionController {
-  async render({ inertia, auth, response, params }: HttpContext) {
+  @inject()
+  async render({ inertia, auth, response, params }: HttpContext, cache: Cache) {
     if (!auth.user) {
       return response.redirect('/login')
     }
 
     const user = auth.user
     const sessionId = params.sessionId
-    const session = await redis.get(`game:session:${sessionId}`)
+    const session = await cache.get(`game:session:${sessionId}`)
 
     if (!session) {
       return response.redirect('/game')
@@ -30,6 +32,7 @@ export default class GameSessionController {
     }
 
     return inertia.render('game_session', {
+      sessionId: sessionId,
       user: user,
       role: role,
       word: guessWord,

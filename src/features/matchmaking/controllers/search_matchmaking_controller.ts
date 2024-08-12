@@ -1,19 +1,23 @@
 import type { HttpContext } from '@adonisjs/core/http'
-import redis from '@adonisjs/redis/services/main'
+import { Cache } from '#services/cache/cache'
 import logger from '@adonisjs/core/services/logger'
 import { DateTime } from 'luxon'
 import type { Player } from '#features/game_session/types/player'
 import transmit from '@adonisjs/transmit/services/main'
+import { assert } from '#helpers/assert'
+import { inject } from '@adonisjs/core'
 
 export default class SearchMatchmakingController {
-  async handle({ auth, response }: HttpContext) {
-    if (!auth.user) {
+  @inject()
+  async handle({ auth, response }: HttpContext, cache: Cache) {
+    const authCheck = await auth.use('web').check()
+    if (!authCheck) {
       return response.unauthorized()
     }
-
     const user = auth.user
+    assert(user)
 
-    const playersCache = await redis.get('game:queue:players')
+    const playersCache = await cache.get('game:queue:players')
     logger.debug('playersCache', playersCache)
     const players = playersCache ? JSON.parse(playersCache) : []
     const player = {
@@ -27,7 +31,7 @@ export default class SearchMatchmakingController {
 
     if (!playerExists) {
       players.push(player)
-      await redis.set('game:queue:players', JSON.stringify(players))
+      await cache.set('game:queue:players', JSON.stringify(players))
     }
 
     if (playerExists) {
@@ -39,7 +43,7 @@ export default class SearchMatchmakingController {
     }
 
     const queueCount = players.length
-    await redis.set('game:queue:count', queueCount)
+    await cache.set('game:queue:count', queueCount)
 
     transmit.broadcast('game/search', {
       queueCount: queueCount,

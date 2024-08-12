@@ -1,4 +1,4 @@
-import redis from '@adonisjs/redis/services/main'
+import { Cache } from '#services/cache/cache'
 import transmit from '@adonisjs/transmit/services/main'
 import type { GameSession } from '#features/game_session/types/game_session'
 import { GamePort } from '#features/game_session/contracts/game/game_port'
@@ -6,10 +6,14 @@ import { GameState } from '#features/game_session/enums/game_state'
 import GameHistory from '#models/game_history'
 import { DateTime } from 'luxon'
 import Word from '#models/word'
+import { inject } from '@adonisjs/core'
 
+@inject()
 export class GameDatabaseAdapter implements GamePort {
+  constructor(private cache: Cache) {}
+
   async getSession(sessionId: string): Promise<GameSession | null> {
-    const session = await redis.get(`game:session:${sessionId}`)
+    const session = await this.cache.get(`game:session:${sessionId}`)
     if (!session) {
       return null
     }
@@ -18,7 +22,7 @@ export class GameDatabaseAdapter implements GamePort {
 
   async updateSession(session: GameSession): Promise<void> {
     const sessionId = session.sessionId
-    await redis.set(`game:session:${sessionId}`, JSON.stringify(session))
+    await this.cache.set(`game:session:${sessionId}`, JSON.stringify(session))
   }
 
   async broadcastAnswer(session: GameSession, isCorrect: boolean): Promise<void> {
@@ -62,6 +66,6 @@ export class GameDatabaseAdapter implements GamePort {
       guessed: session.guessed,
     })
 
-    await redis.del(`game:session:${session.sessionId}`)
+    await this.cache.del(`game:session:${session.sessionId}`)
   }
 }

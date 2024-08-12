@@ -1,12 +1,13 @@
 import { test } from '@japa/runner'
 import User from '#models/user'
-import redis from '@adonisjs/redis/services/main'
+import { Cache } from '#services/cache/cache'
 import testUtils from '@adonisjs/core/services/test_utils'
 
 test.group('Matchmaking - Game search', (group) => {
+  const cache = new Cache()
   group.each.setup(() => testUtils.db().migrate())
   group.each.teardown(async () => {
-    await redis.flushall()
+    await cache.flush()
   })
   test('user should be added to matchmaking queue', async ({ assert, client }) => {
     const user = await User.create({
@@ -18,7 +19,7 @@ test.group('Matchmaking - Game search', (group) => {
 
     const response = await client.post('/game/search').withCsrfToken().loginAs(user)
 
-    const playersCache = await redis.get('game:queue:players')
+    const playersCache = await cache.get('game:queue:players')
 
     assert.exists(playersCache)
 
@@ -49,7 +50,7 @@ test.group('Matchmaking - Game search', (group) => {
      * Add user to queue
      */
     await client.post('/game/search').withCsrfToken().loginAs(user)
-    const playersCache = await redis.get('game:queue:players')
+    const playersCache = await cache.get('game:queue:players')
     assert.exists(playersCache)
     const playerBefore = JSON.parse(playersCache!)[0]
     assert.equal(JSON.parse(playersCache!).length, 1)
@@ -60,7 +61,7 @@ test.group('Matchmaking - Game search', (group) => {
      * Add user to queue again
      */
     const response = await client.post('/game/search').withCsrfToken().loginAs(user)
-    const playersCacheAfter = await redis.get('game:queue:players')
+    const playersCacheAfter = await cache.get('game:queue:players')
     assert.exists(playersCacheAfter)
     const playerAfter = JSON.parse(playersCacheAfter!)[0]
     assert.equal(JSON.parse(playersCacheAfter!).length, 1)
@@ -92,7 +93,7 @@ test.group('Matchmaking - Game search', (group) => {
     await client.post('/game/search').withCsrfToken().loginAs(user1)
     await client.post('/game/search').withCsrfToken().loginAs(user2)
 
-    const playersCache = await redis.get('game:queue:players')
+    const playersCache = await cache.get('game:queue:players')
     assert.exists(playersCache)
     const players = JSON.parse(playersCache!)
 
@@ -104,7 +105,7 @@ test.group('Matchmaking - Game search', (group) => {
     const player2 = players.find((player: any) => player.id === user2.id)
     assert.exists(player2)
 
-    const queueCount = await redis.get('game:queue:count')
+    const queueCount = await cache.get('game:queue:count')
     assert.equal(queueCount, 2)
 
     const response = await client.post('/game/search').withCsrfToken().loginAs(user2)

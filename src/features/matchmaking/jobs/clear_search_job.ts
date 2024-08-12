@@ -1,4 +1,4 @@
-import redis from '@adonisjs/redis/services/main'
+import { Cache } from '#services/cache/cache'
 import { DateTime } from 'luxon'
 import type { Player } from '#features/game_session/types/player'
 import transmit from '@adonisjs/transmit/services/main'
@@ -9,7 +9,8 @@ interface ClearSearchPayload {
 
 export class ClearSearchJob {
   async handle(payload: ClearSearchPayload) {
-    const playersCache = await redis.get('game:queue:players')
+    const cache = new Cache()
+    const playersCache = await cache.get('game:queue:players')
     const players = playersCache ? JSON.parse(playersCache) : []
 
     const now = DateTime.now()
@@ -21,6 +22,6 @@ export class ClearSearchJob {
       return date > minTime
     })
 
-    await redis.set('game:queue:players', JSON.stringify(newPlayers))
+    await cache.set('game:queue:players', JSON.stringify(newPlayers))
   }
 }
