@@ -1,4 +1,4 @@
-import { Cache } from '#services/cache/cache'
+import { CacheService } from '#services/cache/cache_service'
 import transmit from '@adonisjs/transmit/services/main'
 import type { GameSession } from '#features/game_session/types/game_session'
 import { GamePort } from '#features/game_session/contracts/game/game_port'
@@ -10,7 +10,7 @@ import { inject } from '@adonisjs/core'
 
 @inject()
 export class GameDatabaseAdapter implements GamePort {
-  constructor(private cache: Cache) {}
+  constructor(private cache: CacheService) {}
 
   async getSession(sessionId: string): Promise<GameSession | null> {
     const session = await this.cache.get(`game:session:${sessionId}`)

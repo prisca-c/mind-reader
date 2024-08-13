@@ -1,12 +1,12 @@
 import { test } from '@japa/runner'
 import User from '#models/user'
-import { Cache } from '#services/cache/cache'
+import { CacheService } from '#services/cache/cache_service'
 import testUtils from '@adonisjs/core/services/test_utils'
 import type { GameSession, GameSessionId } from '#features/game_session/types/game_session'
 import { randomUUID } from 'node:crypto'
 
 test.group('Matchmaking - Accept matchmaking', (group) => {
-  const cache = new Cache()
+  const cache = new CacheService()
   group.each.setup(async () => {
     await testUtils.db().migrate()
   })

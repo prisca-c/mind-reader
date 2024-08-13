@@ -1,11 +1,11 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import type { GameSession } from '#features/game_session/types/game_session'
 import { inject } from '@adonisjs/core'
-import { Cache } from '#services/cache/cache'
+import { CacheService } from '#services/cache/cache_service'
 
 export default class GameSessionController {
   @inject()
-  async render({ inertia, auth, response, params }: HttpContext, cache: Cache) {
+  async render({ inertia, auth, response, params }: HttpContext, cache: CacheService) {
     if (!auth.user) {
       return response.redirect('/login')
     }

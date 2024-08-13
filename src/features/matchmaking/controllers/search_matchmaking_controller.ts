@@ -1,5 +1,5 @@
 import type { HttpContext } from '@adonisjs/core/http'
-import { Cache } from '#services/cache/cache'
+import { CacheService } from '#services/cache/cache_service'
 import logger from '@adonisjs/core/services/logger'
 import { DateTime } from 'luxon'
 import type { Player } from '#features/game_session/types/player'
@@ -9,7 +9,7 @@ import { inject } from '@adonisjs/core'
 
 export default class SearchMatchmakingController {
   @inject()
-  async handle({ auth, response }: HttpContext, cache: Cache) {
+  async handle({ auth, response }: HttpContext, cache: CacheService) {
     const authCheck = await auth.use('web').check()
     if (!authCheck) {
       return response.unauthorized()

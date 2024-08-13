@@ -1,7 +1,7 @@
 import { CacheInterface } from './cache_interface.js'
 import redis from '@adonisjs/redis/services/main'
 
-export class Cache implements CacheInterface {
+export class CacheService implements CacheInterface {
   async get(key: string): Promise<string | null> {
     return redis.get(key)
   }

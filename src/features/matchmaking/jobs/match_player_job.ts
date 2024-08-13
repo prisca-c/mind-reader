@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon'
-import { Cache } from '#services/cache/cache'
+import { CacheService } from '#services/cache/cache_service'
 import transmit from '@adonisjs/transmit/services/main'
 import type { Player } from '#features/game_session/types/player'
 import { randomUUID } from 'node:crypto'
@@ -10,7 +10,7 @@ import type { GameSession, GameSessionId } from '#features/game_session/types/ga
 export class MatchPlayerJob {
   #players: Player[] = []
 
-  constructor(private cache: Cache) {}
+  constructor(private cache: CacheService) {}
 
   async handle() {
     logger.info('Matching players')

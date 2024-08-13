@@ -1,11 +1,11 @@
 import type { HttpContext } from '@adonisjs/core/http'
-import { Cache } from '#services/cache/cache'
+import { CacheService } from '#services/cache/cache_service'
 import { GameSession } from '#features/game_session/types/game_session'
 import { inject } from '@adonisjs/core'
 
 export default class AcceptMatchmakingController {
   @inject()
-  async handle({ auth, response, params }: HttpContext, cache: Cache) {
+  async handle({ auth, response, params }: HttpContext, cache: CacheService) {
     if (!auth.user) {
       return response.unauthorized()
     }

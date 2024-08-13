@@ -1,10 +1,10 @@
 import { test } from '@japa/runner'
 import User from '#models/user'
-import { Cache } from '#services/cache/cache'
+import { CacheService } from '#services/cache/cache_service'
 import testUtils from '@adonisjs/core/services/test_utils'
 
 test.group('Matchmaking - Game search', (group) => {
-  const cache = new Cache()
+  const cache = new CacheService()
   group.each.setup(() => testUtils.db().migrate())
   group.each.teardown(async () => {
     await cache.flush()

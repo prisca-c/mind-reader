@@ -1,4 +1,4 @@
-import { Cache } from '#services/cache/cache'
+import { CacheService } from '#services/cache/cache_service'
 import { DateTime } from 'luxon'
 import type { Player } from '#features/game_session/types/player'
 import transmit from '@adonisjs/transmit/services/main'
@@ -9,7 +9,7 @@ interface ClearSearchPayload {
 
 export class ClearSearchJob {
   async handle(payload: ClearSearchPayload) {
-    const cache = new Cache()
+    const cache = new CacheService()
     const playersCache = await cache.get('game:queue:players')
     const players = playersCache ? JSON.parse(playersCache) : []
 

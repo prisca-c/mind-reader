@@ -1,11 +1,11 @@
 import { test } from '@japa/runner'
 import { MatchPlayerJob } from '#features/matchmaking/jobs/match_player_job'
-import { Cache } from '#services/cache/cache'
+import { CacheService } from '#services/cache/cache_service'
 import { Player } from '#features/game_session/types/player'
 import type { UserId } from '#models/user'
 
 test.group('Matchmaking - Get players from cache', (group) => {
-  const cache = new Cache()
+  const cache = new CacheService()
   group.teardown(async () => {
     await cache.flush()
   })
