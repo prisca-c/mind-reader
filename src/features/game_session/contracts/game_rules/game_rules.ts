@@ -59,11 +59,16 @@ export class GameRules implements GameRulesInterface {
     }
   }
 
-  updateSessionForGuesser(session: GameSession, answer: string, isCorrect: boolean): GameSession {
+  updateSessionForGuesser(
+    session: GameSession,
+    answer: string,
+    isOver: boolean,
+    isCorrect: boolean
+  ): GameSession {
     const { wordsList, hintGiver } = session
     return {
       ...session,
-      turn: isCorrect ? null : hintGiver,
+      turn: isOver ? null : hintGiver,
       guessed: isCorrect,
       wordsList: {
         hintGiver: [...wordsList.hintGiver],

@@ -6,5 +6,10 @@ export interface GameRulesInterface {
   validateAnswer(session: GameSession, answer: string, userId: string): boolean
   isAuthorizedPlayer(userId: string, player1Id: string, player2Id: string): boolean
   updateSessionForHintGiver(session: GameSession, answer: string): GameSession
-  updateSessionForGuesser(session: GameSession, answer: string, isCorrect: boolean): GameSession
+  updateSessionForGuesser(
+    session: GameSession,
+    answer: string,
+    isOver: boolean,
+    isCorrect: boolean
+  ): GameSession
 }

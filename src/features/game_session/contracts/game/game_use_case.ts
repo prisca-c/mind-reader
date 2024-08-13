@@ -71,22 +71,23 @@ export class GameUseCase {
 
     const isHintGiver = session.hintGiver === user.id
     const isCorrect = this.gameRules.validateAnswer(session, answer, user.id)
+    const isOver = session.wordsList.hintGiver.length > 4
     const updatedSession = isHintGiver
       ? this.gameRules.updateSessionForHintGiver(session, answer)
-      : this.gameRules.updateSessionForGuesser(session, answer, isCorrect)
+      : this.gameRules.updateSessionForGuesser(session, answer, isOver, isCorrect)
 
-    await this.handleSessionUpdate(updatedSession, isCorrect, isCorrect)
+    await this.handleSessionUpdate(updatedSession, isOver, isCorrect)
     return response.ok({ message: 'Success' })
   }
 
   private async handleSessionUpdate(
     updatedSession: GameSession,
-    saveGame: boolean,
+    isOver: boolean,
     win = false
   ): Promise<void> {
     await this.gamePort.updateSession(updatedSession)
-    await this.gamePort.broadcastAnswer(updatedSession, win)
-    if (saveGame) {
+    await this.gamePort.broadcastAnswer(updatedSession, isOver, win)
+    if (isOver) {
       await this.gamePort.saveToGameHistory(updatedSession)
     }
   }

@@ -56,6 +56,7 @@ export default function GameSession(props: GameSessionProps) {
         <p className={gameState === 'win' ? 'text-green-500' : 'text-red-500'}>Word: {word}</p>
       )}
       {gameState === 'win' && <p className={'text-green-500'}>'(GG)'</p>}
+      {gameState === 'lose' && <p className={'text-red-500'}>'(Bouh)'</p>}
       <div className="grid grid-cols-2 gap-4">
         <div>
           <h2>{t('gameSession.hint')}</h2>

@@ -59,8 +59,10 @@ export const useGame = (props: Props) => {
       setGuesserWords(message.words.guesser)
     }
 
-    if (message.status === 'win') {
+    if (message.status === GameState.WIN) {
       setGameState(GameState.WIN)
+    } else if (message.status === GameState.LOSE) {
+      setGameState(GameState.LOSE)
     } else if (message.turn) {
       setGameState(GameState.PLAYING)
     } else {

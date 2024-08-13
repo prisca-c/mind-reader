@@ -25,10 +25,10 @@ export class GameDatabaseAdapter implements GamePort {
     await this.cache.set(`game:session:${sessionId}`, JSON.stringify(session))
   }
 
-  async broadcastAnswer(session: GameSession, isCorrect: boolean): Promise<void> {
+  async broadcastAnswer(session: GameSession, isOver: boolean, isCorrect: boolean): Promise<void> {
     const sessionId = session.sessionId
-    const status = isCorrect ? GameState.WIN : GameState.LOSE
-    const turn = isCorrect ? null : session.turn
+    const status = isCorrect ? GameState.WIN : isOver ? GameState.LOSE : GameState.PLAYING
+    const turn = isOver ? null : session.turn
     const wordsList = JSON.stringify(session.wordsList)
     transmit.broadcast(`game/session/${sessionId}/user/${session.player1.id}`, {
       status,
