@@ -51,10 +51,18 @@ export class MatchPlayerJob {
   }
 
   getRandomPlayers(players: Player[]) {
-    return [
-      players[Math.floor(Math.random() * players.length)],
-      players[Math.floor(Math.random() * players.length)],
-    ]
+    if (players.length < 2) throw new Error('Not enough players')
+    const playersCopy = [...players]
+
+    const player1Index = Math.floor(Math.random() * playersCopy.length)
+    const player1 = playersCopy[player1Index]
+    playersCopy.splice(player1Index, 1)
+
+    const player2Index = Math.floor(Math.random() * playersCopy.length)
+    const player2 = playersCopy[player2Index]
+    playersCopy.splice(player2Index, 1)
+
+    return [player1, player2]
   }
 
   broadcastGameInvitation(player1: Player, player2: Player, sessionId: string) {
