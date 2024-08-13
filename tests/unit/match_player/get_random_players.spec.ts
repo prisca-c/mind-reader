@@ -4,7 +4,7 @@ import { Cache } from '#services/cache/cache'
 import { Player } from '#features/game_session/types/player'
 import type { UserId } from '#models/user'
 
-test.group('Matchmaking - Get Random Players', (group) => {
+test.group('Matchmaking - Get Random Players', () => {
   test('should return 2 different players', async ({ assert }) => {
     const cache = new Cache()
     const job = new MatchPlayerJob(cache)
