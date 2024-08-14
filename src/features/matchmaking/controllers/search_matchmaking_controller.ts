@@ -3,13 +3,17 @@ import { CacheService } from '#services/cache/cache_service'
 import logger from '@adonisjs/core/services/logger'
 import { DateTime } from 'luxon'
 import type { Player } from '#features/game_session/types/player'
-import transmit from '@adonisjs/transmit/services/main'
+import { EventStreamService } from '#services/event_stream/event_stream_service'
 import { assert } from '#helpers/assert'
 import { inject } from '@adonisjs/core'
 
 export default class SearchMatchmakingController {
   @inject()
-  async handle({ auth, response }: HttpContext, cache: CacheService) {
+  async handle(
+    { auth, response }: HttpContext,
+    cache: CacheService,
+    eventStream: EventStreamService
+  ) {
     const authCheck = await auth.use('web').check()
     if (!authCheck) {
       return response.unauthorized()
@@ -45,7 +49,7 @@ export default class SearchMatchmakingController {
     const queueCount = players.length
     await cache.set('game:queue:count', queueCount)
 
-    transmit.broadcast('game/search', {
+    eventStream.broadcast('game/search', {
       queueCount: queueCount,
     })
 

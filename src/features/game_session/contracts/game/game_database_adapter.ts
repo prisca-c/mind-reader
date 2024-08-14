@@ -1,5 +1,5 @@
 import { CacheService } from '#services/cache/cache_service'
-import transmit from '@adonisjs/transmit/services/main'
+import { EventStreamService } from '#services/event_stream/event_stream_service'
 import type { GameSession } from '#features/game_session/types/game_session'
 import { GamePort } from '#features/game_session/contracts/game/game_port'
 import { GameState } from '#features/game_session/enums/game_state'
@@ -10,7 +10,10 @@ import { inject } from '@adonisjs/core'
 
 @inject()
 export class GameDatabaseAdapter implements GamePort {
-  constructor(private cache: CacheService) {}
+  constructor(
+    private cache: CacheService,
+    private eventStream: EventStreamService
+  ) {}
 
   async getSession(sessionId: string): Promise<GameSession | null> {
     const session = await this.cache.get(`game:session:${sessionId}`)
@@ -30,12 +33,12 @@ export class GameDatabaseAdapter implements GamePort {
     const status = isCorrect ? GameState.WIN : isOver ? GameState.LOSE : GameState.PLAYING
     const turn = isOver ? null : session.turn
     const wordsList = JSON.stringify(session.wordsList)
-    transmit.broadcast(`game/session/${sessionId}/user/${session.player1.id}`, {
+    this.eventStream.broadcast(`game/session/${sessionId}/user/${session.player1.id}`, {
       status,
       wordsList,
       turn: turn ? turn === session.player1.id : null,
     })
-    transmit.broadcast(`game/session/${sessionId}/user/${session.player2.id}`, {
+    this.eventStream.broadcast(`game/session/${sessionId}/user/${session.player2.id}`, {
       status,
       wordsList,
       turn: turn ? turn === session.player2.id : null,
@@ -44,10 +47,10 @@ export class GameDatabaseAdapter implements GamePort {
 
   async broadcastError(session: GameSession): Promise<void> {
     const sessionId = session.sessionId
-    transmit.broadcast(`game/session/${sessionId}/user/${session.player1.id}`, {
+    this.eventStream.broadcast(`game/session/${sessionId}/user/${session.player1.id}`, {
       status: GameState.ERROR,
     })
-    transmit.broadcast(`game/session/${sessionId}/user/${session.player2.id}`, {
+    this.eventStream.broadcast(`game/session/${sessionId}/user/${session.player2.id}`, {
       status: GameState.ERROR,
     })
   }

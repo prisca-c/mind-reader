@@ -1,10 +1,10 @@
-import transmit from '@adonisjs/transmit/services/main'
+import { EventStreamService } from '#services/event_stream/event_stream_service'
 import type { HttpContext } from '@adonisjs/core/http'
 import { DateTime } from 'luxon'
 import { replaceURLs } from '#helpers/text'
 
 export default class ChatsController {
-  store({ request, response, auth }: HttpContext) {
+  store({ request, response, auth }: HttpContext, eventStream: EventStreamService) {
     const { message } = request.only(['message'])
 
     if (!message) {
@@ -14,7 +14,7 @@ export default class ChatsController {
     const username = auth.user!.username
     const sanitizedMessage = replaceURLs(message)
 
-    transmit.broadcast('chat', {
+    eventStream.broadcast('chat', {
       timestamp: `${DateTime.now().toFormat('MM/dd/yyyy HH:mm')}`,
       username,
       message: sanitizedMessage,

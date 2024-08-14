@@ -1,7 +1,7 @@
 import { CacheService } from '#services/cache/cache_service'
 import { DateTime } from 'luxon'
 import type { Player } from '#features/game_session/types/player'
-import transmit from '@adonisjs/transmit/services/main'
+import { EventStreamService } from '#services/event_stream/event_stream_service'
 
 interface ClearSearchPayload {
   minTime: number // in minutes
@@ -10,6 +10,7 @@ interface ClearSearchPayload {
 export class ClearSearchJob {
   async handle(payload: ClearSearchPayload) {
     const cache = new CacheService()
+    const eventStream = new EventStreamService()
     const playersCache = await cache.get('game:queue:players')
     const players = playersCache ? JSON.parse(playersCache) : []
 
@@ -18,7 +19,7 @@ export class ClearSearchJob {
 
     const newPlayers = players.filter((p: Player & { date: string }) => {
       const date = DateTime.fromISO(p.date)
-      transmit.broadcast(`game/user/${p.id}`, { message: 'Removed from queue' })
+      eventStream.broadcast(`game/user/${p.id}`, { message: 'Removed from queue' })
       return date > minTime
     })
 

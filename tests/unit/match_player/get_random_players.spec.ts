@@ -3,11 +3,14 @@ import { MatchPlayerJob } from '#features/matchmaking/jobs/match_player_job'
 import { CacheService } from '#services/cache/cache_service'
 import { Player } from '#features/game_session/types/player'
 import type { UserId } from '#models/user'
+import { EventStreamService } from '#services/event_stream/event_stream_service'
 
 test.group('Matchmaking - Get Random Players', () => {
+  const cache = new CacheService()
+  const eventStream = new EventStreamService()
+  const job = new MatchPlayerJob(cache, eventStream)
+
   test('should return 2 different players', async ({ assert }) => {
-    const cache = new CacheService()
-    const job = new MatchPlayerJob(cache)
     const players: Player[] = [
       { id: 'id1' as UserId, username: 'player1', elo: 1000 },
       { id: 'id2' as UserId, username: 'player2', elo: 1000 },
@@ -23,8 +26,6 @@ test.group('Matchmaking - Get Random Players', () => {
   })
 
   test('should throw error when not enough players', async ({ assert }) => {
-    const cache = new CacheService()
-    const job = new MatchPlayerJob(cache)
     const players: Player[] = [{ id: 'id1' as UserId, username: 'player1', elo: 1000 }]
 
     const result = () => job.getRandomPlayers(players)

@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
 import { CacheService } from '#services/cache/cache_service'
-import transmit from '@adonisjs/transmit/services/main'
+import { EventStreamService } from '#services/event_stream/event_stream_service'
 import type { Player } from '#features/game_session/types/player'
 import { randomUUID } from 'node:crypto'
 import Word from '#models/word'
@@ -10,7 +10,10 @@ import type { GameSession, GameSessionId } from '#features/game_session/types/ga
 export class MatchPlayerJob {
   #players: Player[] = []
 
-  constructor(private cache: CacheService) {}
+  constructor(
+    private cache: CacheService,
+    private eventStream: EventStreamService
+  ) {}
 
   async handle() {
     logger.info('Matching players')
@@ -67,14 +70,14 @@ export class MatchPlayerJob {
 
   broadcastGameInvitation(player1: Player, player2: Player, sessionId: string) {
     logger.info(`Broadcasting game invitation to ${player1.id} and ${player2.id}`)
-    transmit.broadcast(`game/user/${player1.id}`, { status: 'accept', sessionId })
-    transmit.broadcast(`game/user/${player2.id}`, { status: 'accept', sessionId })
+    this.eventStream.broadcast(`game/user/${player1.id}`, { status: 'accept', sessionId })
+    this.eventStream.broadcast(`game/user/${player2.id}`, { status: 'accept', sessionId })
   }
 
   broadcastGameStart(player1: Player, player2: Player, sessionId: string) {
     logger.info(`Broadcasting game start to ${player1.id} and ${player2.id}`)
-    transmit.broadcast(`game/user/${player1.id}`, { status: 'start', sessionId })
-    transmit.broadcast(`game/user/${player2.id}`, { status: 'start', sessionId })
+    this.eventStream.broadcast(`game/user/${player1.id}`, { status: 'start', sessionId })
+    this.eventStream.broadcast(`game/user/${player2.id}`, { status: 'start', sessionId })
   }
 
   async createSession(player1: Player, player2: Player, sessionId: GameSessionId) {
@@ -117,19 +120,19 @@ export class MatchPlayerJob {
 
       if (!player1.accepted) {
         logger.info('Player 1 not accepted')
-        transmit.broadcast(`game/user/${player1.id}`, { status: 'removed' })
+        this.eventStream.broadcast(`game/user/${player1.id}`, { status: 'removed' })
       } else if (player1.accepted) {
         logger.info('Player 1 accepted')
-        transmit.broadcast(`game/user/${player1.id}`, { status: 'removed' })
+        this.eventStream.broadcast(`game/user/${player1.id}`, { status: 'removed' })
         this.#players.push(player1)
       }
 
       if (!player2.accepted) {
         logger.info('Player 2 not accepted')
-        transmit.broadcast(`game/user/${player2.id}`, { status: 'removed' })
+        this.eventStream.broadcast(`game/user/${player2.id}`, { status: 'removed' })
       } else if (player2.accepted) {
         logger.info('Player 2 accepted')
-        transmit.broadcast(`game/user/${player2.id}`, { status: 'removed' })
+        this.eventStream.broadcast(`game/user/${player2.id}`, { status: 'removed' })
         this.#players.push(player2)
       }
 
@@ -174,8 +177,8 @@ export class MatchPlayerJob {
     this.broadcastGameStart(player1, player2, sessionId)
     new Promise((resolve) => setTimeout(resolve, 5000))
 
-    transmit.broadcast(`game/session/${sessionId}/user/${guesserId}`, gameDataGuesser)
-    transmit.broadcast(`game/session/${sessionId}/user/${hintGiverId}`, gameDataHintGiver)
+    this.eventStream.broadcast(`game/session/${sessionId}/user/${guesserId}`, gameDataGuesser)
+    this.eventStream.broadcast(`game/session/${sessionId}/user/${hintGiverId}`, gameDataHintGiver)
 
     this.#players = players.filter((p) => p.id !== player1.id && p.id !== player2.id)
 
@@ -188,6 +191,6 @@ export class MatchPlayerJob {
       this.cache.set('game:queue:players', JSON.stringify(players)),
       this.cache.set('game:queue:count', players.length.toString()),
     ])
-    transmit.broadcast('game/search', { queueCount: players.length })
+    this.eventStream.broadcast('game/search', { queueCount: players.length })
   }
 }
