@@ -161,7 +161,6 @@ export class MatchPlayerJob {
     logger.info(`Starting game session ${sessionId}`)
 
     const hintGiverId = Math.random() > 0.5 ? player1.id : player2.id
-    const guesserId = hintGiverId === player1.id ? player2.id : player1.id
 
     const currentSession = await this.cache.get(`game:session:${sessionId}`)
     if (!currentSession) return
@@ -176,14 +175,7 @@ export class MatchPlayerJob {
 
     await this.cache.set(`game:session:${sessionId}`, JSON.stringify(updatedSession))
 
-    const gameDataGuesser = { sessionId, turn: false }
-    const gameDataHintGiver = { sessionId, word: word.name, turn: true }
-
     this.broadcastGameStart(player1, player2, sessionId)
-    new Promise((resolve) => setTimeout(resolve, 5000))
-
-    this.eventStream.broadcast(`game/session/${sessionId}/user/${guesserId}`, gameDataGuesser)
-    this.eventStream.broadcast(`game/session/${sessionId}/user/${hintGiverId}`, gameDataHintGiver)
 
     this.#players = players.filter((p) => p.id !== player1.id && p.id !== player2.id)
 
