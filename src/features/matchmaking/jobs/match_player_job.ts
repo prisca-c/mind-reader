@@ -34,8 +34,10 @@ export class MatchPlayerJob {
       this.broadcastGameInvitation(player1, player2, sessionId)
 
       const session = await this.createSession(player1, player2, sessionId)
+      await this.sleep(1000)
+      const status = await this.validateSession(sessionId)
 
-      if (!session) return
+      if (!status || !session) return
 
       const word = await Word.query().orderByRaw('RANDOM()').first()
       if (!word) {
@@ -80,6 +82,10 @@ export class MatchPlayerJob {
     this.eventStream.broadcast(`game/user/${player2.id}`, { status: 'start', sessionId })
   }
 
+  private async sleep(delay: number) {
+    return new Promise((resolve) => setTimeout(resolve, delay))
+  }
+
   async createSession(player1: Player, player2: Player, sessionId: GameSessionId) {
     const sessionPlayer1 = { ...player1, accepted: false }
     const sessionPlayer2 = { ...player2, accepted: false }
@@ -98,21 +104,20 @@ export class MatchPlayerJob {
 
     await this.cache.set(`game:session:${sessionId}`, JSON.stringify(initSession))
 
-    await new Promise((resolve) => setTimeout(resolve, 1000))
+    return initSession
+  }
 
+  async validateSession(sessionId: string): Promise<boolean> {
     const session = await this.cache.get(`game:session:${sessionId}`)
-
+    if (!session) return false
     const status = await this.checkPlayerStatus(sessionId)
-
-    if (!status || !session) return null
-
-    return JSON.parse(session)
+    return status
   }
 
   async checkPlayerStatus(sessionId: string) {
     logger.info('Checking player status')
     const session = await this.cache.get(`game:session:${sessionId}`)
-    if (!session) return
+    if (!session) return false
     const { player1, player2 } = JSON.parse(session) as GameSession
 
     if (!player1.accepted || !player2.accepted) {
