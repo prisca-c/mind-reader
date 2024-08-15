@@ -71,7 +71,8 @@ export class GameUseCase {
 
     const isHintGiver = session.hintGiver === user.id
     const isCorrect = this.gameRules.validateAnswer(session, answer, user.id)
-    const isOver = session.wordsList.hintGiver.length > 4
+    const hasMaxAttempts = session.wordsList.hintGiver.length > 4
+    const isOver = hasMaxAttempts || isCorrect
     const updatedSession = isHintGiver
       ? this.gameRules.updateSessionForHintGiver(session, answer)
       : this.gameRules.updateSessionForGuesser(session, answer, isOver, isCorrect)
