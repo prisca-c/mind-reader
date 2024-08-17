@@ -10,10 +10,12 @@
   - `GameRules` class (unit tests)
   - `Matchmaking - Search` Controller (functional tests)
   - `Matchmaking - Accept` Controller (functional tests)
+  - `MatchPlayerJob` class job (unit tests)
 - Add CI Pipeline `.github/workflows/checks.yml` to check code quality and run tests
 
 ### Changed
 - Add `Cache` service and update all Redis calls to use it
+- Add `EventStream` service and update all Transmit calls to use it
 - Change project architecture
 - Update `GameRules.validWord` method by adding `ValidWordState` to have more precise return value
 
