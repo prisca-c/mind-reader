@@ -9,7 +9,7 @@ export default class extends BaseSchema {
       table.string('name').notNullable()
       table.integer('found_count').defaultTo(0)
       table.integer('played_count').defaultTo(0)
-      table.integer('difficulty').defaultTo(0)
+      table.integer('difficulty').defaultTo(1)
       table.string('language').notNullable()
 
       table.timestamp('created_at')

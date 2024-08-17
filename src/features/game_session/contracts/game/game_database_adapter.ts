@@ -7,6 +7,7 @@ import GameHistory from '#models/game_history'
 import { DateTime } from 'luxon'
 import Word from '#models/word'
 import { inject } from '@adonisjs/core'
+import User from '#models/user'
 
 @inject()
 export class GameDatabaseAdapter implements GamePort {
@@ -69,6 +70,43 @@ export class GameDatabaseAdapter implements GamePort {
       guessed: session.guessed,
     })
 
+    // Handle the word's played count and found count
+    word.playedCount = word.playedCount + 1
+    if (session.guessed) {
+      // Increment the found count of the word
+      word.foundCount = word.foundCount + 1
+    }
+    await word.save()
+
+    // handle player's elo
+    const hintGiver = await User.findOrFail(session.hintGiver)
+    const guesser = await User.findOrFail(guesserId)
+    const elo = this.calculateElo(hintGiver.elo, guesser.elo, session.guessed, word.difficulty)
+    hintGiver.elo = elo.hintGiverNewElo
+    guesser.elo = elo.guesserNewElo
+    await hintGiver.save()
+    await guesser.save()
+
     await this.cache.del(`game:session:${session.sessionId}`)
+  }
+
+  private calculateElo(
+    hintGiverElo: number,
+    guesserElo: number,
+    guessed: boolean,
+    wordDifficulty: number = 1
+  ): { hintGiverNewElo: number; guesserNewElo: number } {
+    const K = wordDifficulty * 32 // K-factor which is used to adjust the weight of the elo change
+    const hintGiverExpected = 1 / (1 + 10 ** ((guesserElo - hintGiverElo) / 400))
+    const guesserExpected = 1 / (1 + 10 ** ((hintGiverElo - guesserElo) / 400))
+
+    const hintGiverNewElo = Math.round(
+      hintGiverElo + K * (guessed ? 1 - hintGiverExpected : 0 - hintGiverExpected)
+    )
+    const guesserNewElo = Math.round(
+      guesserElo + K * (guessed ? 1 - guesserExpected : 0 - guesserExpected)
+    )
+
+    return { hintGiverNewElo, guesserNewElo }
   }
 }
