@@ -12,6 +12,8 @@
   - `Matchmaking - Accept` Controller (functional tests)
   - `MatchPlayerJob` class job (unit tests)
 - Add CI Pipeline `.github/workflows/checks.yml` to check code quality and run tests
+- Add an elo system to handle player ranking.
+- Word stats are updated in database when game ends
 
 ### Changed
 - Add `Cache` service and update all Redis calls to use it
