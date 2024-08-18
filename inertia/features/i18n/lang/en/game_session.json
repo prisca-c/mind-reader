@@ -1,8 +1,11 @@
 {
   "title": "Session",
   "errors": {
-    "invalidWord": "Invalid word",
-    "invalidTurn": "It's not your turn"
+    "wordInvalid": "Invalid word",
+    "empty": "The field is empty",
+    "manyWords": "It can only be one word",
+    "invalidCharacter": "Word can only contain letters",
+    "invalidTurn": "It isn't your turn yet"
   },
   "buttons": {
     "submit": {

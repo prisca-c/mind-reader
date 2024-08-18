@@ -1,8 +1,11 @@
 {
   "title": "Jeu",
   "errors": {
-    "invalidWord": "Mot invalide",
-    "invalidTurn": "Ce n'est pas ton tour"
+    "wordInvalid": "Mot invalide",
+    "empty": "Le champs est vide",
+    "manyWords": "Il ne peut y avoir qu'un seul mot",
+    "invalidCharacter": "Le mot ne peut contenir que des lettres",
+    "invalidTurn": "Ce n'est pas encore ton tour"
   },
   "buttons": {
     "submit": {

@@ -26,7 +26,10 @@ export interface LangResources {
   gameSession: {
     title: string
     errors: {
-      invalidWord: string
+      wordInvalid: string
+      empty: string
+      manyWords: string
+      invalidCharacter: string
       invalidTurn: string
     }
     buttons: {
