@@ -5,11 +5,13 @@ import { router } from '@inertiajs/react'
 import { useGame } from '~/features/game/use_game'
 import type { GameResponseStatus } from '~/features/game/types/game_response_status'
 import { useTranslation } from 'react-i18next'
+import { WordForm } from '~/features/game/word_form'
+import { Role } from '~/enums/roles'
 
 export interface GameSessionProps {
   sessionId: GameSessionId
   user: User
-  role: 'hintGiver' | 'guesser'
+  role: Role
   word?: string
   wordsList?: WordList
   turn: boolean | null
@@ -26,6 +28,8 @@ export default function GameSession(props: GameSessionProps) {
     handleSubmit,
     handleGameState,
     handleCopySessionId,
+    wordState,
+    wordOnChange,
   } = useGame(props)
 
   sessionListener.subscription?.create()
@@ -74,10 +78,12 @@ export default function GameSession(props: GameSessionProps) {
             ))}
           </ul>
         </div>
-        <form onSubmit={handleSubmit}>
-          <input type="text" name="answer" required />
-          <button>{t(`gameSession.buttons.submit.${role}`)}</button>
-        </form>
+        <WordForm
+          role={role}
+          wordOnChange={wordOnChange}
+          handleSubmit={handleSubmit}
+          wordState={wordState}
+        />
       </div>
       {gameState === GameState.WIN || gameState === GameState.LOSE ? (
         <button onClick={() => router.visit('/game')}>{t('gameSession.buttons.backToMenu')}</button>
