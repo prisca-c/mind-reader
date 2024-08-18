@@ -6,6 +6,7 @@ import type { Player } from '#features/game_session/types/player'
 import { EventStreamService } from '#services/event_stream/event_stream_service'
 import { assert } from '#helpers/assert'
 import { inject } from '@adonisjs/core'
+import { GameSession } from '#features/game_session/types/game_session'
 
 export default class SearchMatchmakingController {
   @inject()
@@ -20,6 +21,22 @@ export default class SearchMatchmakingController {
     }
     const user = auth.user
     assert(user)
+
+    const sessions = await cache.keys('game:session:*')
+
+    const existingSession = sessions.filter(async (session) => {
+      const sessionData = await cache.get(session)
+      if (sessionData) {
+        const cachedSession: GameSession = JSON.parse(sessionData)
+        return cachedSession.player1.id === user.id || cachedSession.player2.id === user.id
+      }
+    })
+
+    const sessionId = existingSession.length > 0 ? existingSession[0].split(':')[2] : null
+
+    if (sessionId) {
+      return response.redirect('game/session/' + sessionId)
+    }
 
     const playersCache = await cache.get('game:queue:players')
     logger.debug('playersCache', playersCache)
