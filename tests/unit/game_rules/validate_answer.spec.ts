@@ -1,7 +1,7 @@
 import { test } from '@japa/runner'
 import { GameRules } from '#features/game_session/contracts/game_rules/game_rules'
 import { player1, player2, session } from '#tests/utils/session_data'
-import { ValidWordState } from '#features/game_session/enums/valid_word_state'
+import { ValidWordStateEnum } from '#features/game_session/enums/valid_word_state'
 
 test.group('GameRules - validateAnswer', () => {
   const gameRules = new GameRules()
@@ -30,7 +30,7 @@ test.group('GameRules - validateAnswer', () => {
     const sessionCopy = { ...session, word: 'apple', hintGiver: player1.id }
     const answer = 'banana'
     const wordCheck = gameRules.validWord(sessionCopy, player1.id, answer)
-    if (wordCheck.status === ValidWordState.VALID) {
+    if (wordCheck.status === ValidWordStateEnum.VALID) {
       const result = gameRules.validateAnswer(sessionCopy, answer, player1.id)
       assert.isFalse(result)
     } else {
