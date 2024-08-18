@@ -3,12 +3,15 @@ import User from '#models/user'
 import { useEffect, useState } from 'react'
 import { Api } from '~/services/api'
 import { router } from '@inertiajs/react'
+import type { GameSessionId } from '#features/game_session/types/game_session'
 
 type Props = {
   user: User
+  existingSession: GameSessionId
 }
 
-export default function Search({ user }: Props) {
+export default function Search(props: Props) {
+  const { user, existingSession } = props
   const [queueCount, setQueueCount] = useState(0)
   const { subscription: userListener } = useTransmit({ url: `game/user/${user.id}` })
   const { subscription: queueListener } = useTransmit({ url: 'game/search' })
@@ -19,6 +22,10 @@ export default function Search({ user }: Props) {
   }
 
   useEffect(() => {
+    if (existingSession) {
+      router.visit(`/game/session/${existingSession}`)
+      return
+    }
     registerToQueue()
   }, [])
 
