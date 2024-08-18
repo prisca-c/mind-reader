@@ -36,11 +36,13 @@ export class GameDatabaseAdapter implements GamePort {
     const wordsList = JSON.stringify(session.wordsList)
     this.eventStream.broadcast(`game/session/${sessionId}/user/${session.player1.id}`, {
       status,
+      word: isOver ? session.word : null,
       wordsList,
       turn: turn ? turn === session.player1.id : null,
     })
     this.eventStream.broadcast(`game/session/${sessionId}/user/${session.player2.id}`, {
       status,
+      word: isOver ? session.word : null,
       wordsList,
       turn: turn ? turn === session.player2.id : null,
     })

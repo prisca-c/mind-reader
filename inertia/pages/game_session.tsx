@@ -18,7 +18,7 @@ export interface GameSessionProps {
 }
 
 export default function GameSession(props: GameSessionProps) {
-  const { user, word, role } = props
+  const { user, role } = props
   const { t } = useTranslation()
   const {
     sessionListener,
@@ -30,15 +30,26 @@ export default function GameSession(props: GameSessionProps) {
     handleCopySessionId,
     wordState,
     wordOnChange,
+    wordToGuess,
   } = useGame(props)
 
   sessionListener.subscription?.create()
 
   sessionListener.subscription?.onMessage(
-    (message: { turn: boolean; wordsList: string; status?: GameResponseStatus }) => {
+    (message: {
+      turn: boolean
+      word: string | null
+      wordsList: string
+      status?: GameResponseStatus
+    }) => {
       const words = JSON.parse(message.wordsList) as WordList
 
-      handleGameState({ words: words, status: message.status, turn: message.turn })
+      handleGameState({
+        words: words,
+        word: message.word,
+        status: message.status,
+        turn: message.turn,
+      })
     }
   )
 
@@ -56,8 +67,10 @@ export default function GameSession(props: GameSessionProps) {
       <p>
         {t('gameSession.player')}: {user.username}
       </p>
-      {word && (
-        <p className={gameState === 'win' ? 'text-green-500' : 'text-red-500'}>Word: {word}</p>
+      {wordToGuess && (
+        <p className={gameState === 'win' ? 'text-green-500' : 'text-red-500'}>
+          Word: {wordToGuess}
+        </p>
       )}
       {gameState === 'win' && <p className={'text-green-500'}>'(GG)'</p>}
       {gameState === 'lose' && <p className={'text-red-500'}>'(Bouh)'</p>}

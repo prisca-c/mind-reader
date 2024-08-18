@@ -14,8 +14,9 @@ import { ValidWordState, ValidWordStateEnum } from '#features/game_session/enums
 type Props = GameSessionProps
 export type WordStateProps = { valid: boolean; status: WordValidationState }
 export const useGame = (props: Props) => {
-  const { sessionId, user, wordsList, turn } = props
+  const { sessionId, user, wordsList, turn, word } = props
 
+  const [wordToGuess, setWordToGuess] = useState<string | null>(null)
   const [wordState, setWordState] = useState<WordStateProps>({
     valid: false,
     status: WordValidationStateEnum.INVALID,
@@ -27,6 +28,10 @@ export const useGame = (props: Props) => {
   const sessionListener = useTransmit({ url: `game/session/${sessionId}/user/${user.id}` })
 
   useEffect(() => {
+    if (word) {
+      setWordToGuess(word)
+    }
+
     if (turn) {
       setGameState('playing')
     }
@@ -72,11 +77,11 @@ export const useGame = (props: Props) => {
   }
 
   const wordOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const word = event.target.value
-    const haveOnlyLetters = /^[A-Za-zÀ-ÖØ-öø-ÿ]+$/.test(word)
-    const haveOnlyOneWord = word.split(' ').length === 1
+    const answer = event.target.value
+    const haveOnlyLetters = /^[A-Za-zÀ-ÖØ-öø-ÿ]+$/.test(answer)
+    const haveOnlyOneWord = answer.split(' ').length === 1
 
-    if (!word) {
+    if (!answer) {
       setWordState({ valid: false, status: WordValidationStateEnum.NULL })
       return
     }
@@ -96,12 +101,17 @@ export const useGame = (props: Props) => {
 
   const handleGameState = (message: {
     words: WordList
+    word: string | null
     status?: GameResponseStatus
     turn: boolean
   }) => {
     if (message.words) {
       setHintGiverWords(message.words.hintGiver)
       setGuesserWords(message.words.guesser)
+    }
+
+    if (message.word) {
+      setWordToGuess(message.word)
     }
 
     if (message.status === GameState.WIN) {
@@ -132,5 +142,7 @@ export const useGame = (props: Props) => {
     handleCopySessionId,
     wordState,
     wordOnChange,
+    wordToGuess,
+    setWordToGuess,
   }
 }
