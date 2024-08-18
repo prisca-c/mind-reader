@@ -128,7 +128,6 @@ export class MatchPlayerJob {
         this.eventStream.broadcast(`game/user/${player1.id}`, { status: 'removed' })
       } else if (player1.accepted) {
         logger.info('Player 1 accepted')
-        this.eventStream.broadcast(`game/user/${player1.id}`, { status: 'removed' })
         this.#players.push(player1)
       }
 
@@ -137,7 +136,6 @@ export class MatchPlayerJob {
         this.eventStream.broadcast(`game/user/${player2.id}`, { status: 'removed' })
       } else if (player2.accepted) {
         logger.info('Player 2 accepted')
-        this.eventStream.broadcast(`game/user/${player2.id}`, { status: 'removed' })
         this.#players.push(player2)
       }
 
