@@ -16,19 +16,18 @@ type WordFormProps = {
 }
 
 const ErrorPrompt = (status: WordValidationState, i18n: TFunction) => {
-  if (status === WordValidationStateEnum.NULL) {
-    return i18n('gameSession.errors.empty')
+  switch (status) {
+    case WordValidationStateEnum.NULL:
+      return i18n('gameSession.errors.empty')
+    case WordValidationStateEnum.MATCHES:
+      return i18n('gameSession.errors.matches')
+    case WordValidationStateEnum.MANY_WORDS:
+      return i18n('gameSession.errors.manyWords')
+    case WordValidationStateEnum.INVALID_CHARACTERS:
+      return i18n('gameSession.errors.invalidCharacter')
+    default:
+      return i18n('gameSession.errors.wordInvalid')
   }
-
-  if (status === WordValidationStateEnum.MANY_WORDS) {
-    return i18n('gameSession.errors.manyWords')
-  }
-
-  if (status === WordValidationStateEnum.INVALID_CHARACTERS) {
-    return i18n('gameSession.errors.invalidCharacter')
-  }
-
-  return i18n('gameSession.errors.wordInvalid')
 }
 
 export const WordForm = (props: WordFormProps) => {
