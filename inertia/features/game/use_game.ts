@@ -60,7 +60,7 @@ export const useGame = (props: Props) => {
 
   const wordOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const word = event.target.value
-    const haveOnlyLetters = /^[a-zA-Z]+$/.test(word)
+    const haveOnlyLetters = /^[A-Za-zÀ-ÖØ-öø-ÿ]+$/.test(word)
     const haveOnlyOneWord = word.split(' ').length === 1
 
     if (!word) {

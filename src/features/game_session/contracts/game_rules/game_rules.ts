@@ -1,6 +1,7 @@
 import type { GameRulesInterface } from '#features/game_session/contracts/game_rules/game_rules_interface'
 import type { GameSession } from '#features/game_session/types/game_session'
 import { ValidWordState, type ValidWordEnum } from '#features/game_session/enums/valid_word_state'
+import { normalizeLatin } from '#helpers/text'
 
 export class GameRules implements GameRulesInterface {
   validWord(session: GameSession, userId: string, answer: string): { status: ValidWordEnum } {
@@ -20,7 +21,14 @@ export class GameRules implements GameRulesInterface {
         status: ValidWordState.VALID,
       }
 
-      return !(word.startsWith(answer.slice(0, 3)) || word.endsWith(answer.slice(-3)))
+      // Convert words in case there's latin character to compare them
+      const normalizeAnswer = normalizeLatin(answer).toLowerCase()
+      const normalizeWord = normalizeLatin(word).toLowerCase()
+
+      return !(
+        normalizeWord.startsWith(normalizeAnswer.slice(0, 3)) ||
+        normalizeWord.endsWith(normalizeAnswer.slice(-3))
+      )
         ? validReturn
         : matchReturn
     }
@@ -37,7 +45,10 @@ export class GameRules implements GameRulesInterface {
     }
 
     if (hintGiver !== userId) {
-      return answer.toLowerCase() === word.toLowerCase()
+      // Convert words in case there's latin character to compare them
+      const normalizeAnswer = normalizeLatin(answer)
+      const normalizeWord = normalizeLatin(word)
+      return normalizeAnswer.toLowerCase() === normalizeWord.toLowerCase()
     }
 
     return false

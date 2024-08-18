@@ -4,6 +4,7 @@ import { inject } from '@adonisjs/core'
 import { GamePort } from '#features/game_session/contracts/game/game_port'
 import { GameRules } from '#features/game_session/contracts/game_rules/game_rules'
 import { ValidWordState } from '#features/game_session/enums/valid_word_state'
+import { answerValidator } from '#features/game_session/validations/answer'
 
 @inject()
 export class GameUseCase {
@@ -20,6 +21,8 @@ export class GameUseCase {
     if (!auth.user) {
       return response.unauthorized()
     }
+
+    await ctx.request.validateUsing(answerValidator)
 
     const user = auth.user
     const sessionId: GameSessionId = params.sessionId

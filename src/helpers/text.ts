@@ -22,3 +22,7 @@ export function replaceURLs(message: string, replaceMessage?: string) {
 
   return message
 }
+
+export function normalizeLatin(string: string) {
+  return string.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+}
