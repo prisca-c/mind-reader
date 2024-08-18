@@ -14,12 +14,17 @@
 - Add CI Pipeline `.github/workflows/checks.yml` to check code quality and run tests
 - Add an elo system to handle player ranking.
 - Word stats are updated in database when game ends
+- Word's form is now a single component `word.form.tsx` which handle error correctly using i18n, hooks, and WordValidationStateEnum
 
 ### Changed
 - Add `Cache` service and update all Redis calls to use it
 - Add `EventStream` service and update all Transmit calls to use it
 - Change project architecture
 - Update `GameRules.validWord` method by adding `ValidWordState` to have more precise return value
+- Switch from `Tailwind` to `UnoCSS`
+
+### Fixed
+- Fix issue from transmit listener not closing properly when unmounting a component
 
 ## [0.4.0] - 2024-05-18
 
