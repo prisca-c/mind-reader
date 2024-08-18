@@ -31,6 +31,7 @@ export interface LangResources {
       manyWords: string
       invalidCharacter: string
       invalidTurn: string
+      matches: string
     }
     buttons: {
       submit: {

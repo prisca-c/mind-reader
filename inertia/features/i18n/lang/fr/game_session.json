@@ -5,7 +5,8 @@
     "empty": "Le champs est vide",
     "manyWords": "Il ne peut y avoir qu'un seul mot",
     "invalidCharacter": "Le mot ne peut contenir que des lettres",
-    "invalidTurn": "Ce n'est pas encore ton tour"
+    "invalidTurn": "Ce n'est pas encore ton tour",
+    "matches": "Le mot se rapproche trop du mot à deviner"
   },
   "buttons": {
     "submit": {

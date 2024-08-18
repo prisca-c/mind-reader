@@ -9,6 +9,7 @@ import {
   type WordValidationState,
   WordValidationStateEnum,
 } from '~/features/game/enums/word_validation_state'
+import { ValidWordState, ValidWordStateEnum } from '#features/game_session/enums/valid_word_state'
 
 type Props = GameSessionProps
 export type WordStateProps = { valid: boolean; status: WordValidationState }
@@ -54,8 +55,20 @@ export const useGame = (props: Props) => {
       return
     }
 
-    await new Api().post(`/game/session/${sessionId}/answer`, { answer })
-    form.reset()
+    new Api()
+      .post<{
+        status: ValidWordState
+        message: string
+      }>(`/game/session/${sessionId}/answer`, { answer })
+      .then((response) => {
+        if (response.status === ValidWordStateEnum.MATCHES) {
+          setWordState({ valid: false, status: WordValidationStateEnum.MATCHES })
+          return
+        } else if (response.status === ValidWordStateEnum.VALID) {
+          form.reset()
+          return
+        }
+      })
   }
 
   const wordOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {

@@ -5,7 +5,8 @@
     "empty": "The field is empty",
     "manyWords": "It can only be one word",
     "invalidCharacter": "Word can only contain letters",
-    "invalidTurn": "It isn't your turn yet"
+    "invalidTurn": "It isn't your turn yet",
+    "matches": "The word is too close to the word to guess"
   },
   "buttons": {
     "submit": {
