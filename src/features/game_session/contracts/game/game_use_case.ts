@@ -3,7 +3,7 @@ import type { GameSession, GameSessionId } from '#features/game_session/types/ga
 import { inject } from '@adonisjs/core'
 import { GamePort } from '#features/game_session/contracts/game/game_port'
 import { GameRules } from '#features/game_session/contracts/game_rules/game_rules'
-import { ValidWordState } from '#features/game_session/enums/valid_word_state'
+import { ValidWordStateEnum } from '#features/game_session/enums/valid_word_state'
 import { answerValidator } from '#features/game_session/validations/answer'
 
 @inject()
@@ -47,23 +47,23 @@ export class GameUseCase {
      */
     const validWordCheck = this.gameRules.validWord(session, user.id, answer)
 
-    if (validWordCheck.status === ValidWordState.NOT_DEFINED) {
+    if (validWordCheck.status === ValidWordStateEnum.NOT_DEFINED) {
       await this.gamePort.broadcastError(session)
       return response.ok({
-        status: ValidWordState.NOT_DEFINED,
+        status: ValidWordStateEnum.NOT_DEFINED,
         message: 'Error',
       })
     }
 
-    if (validWordCheck.status === ValidWordState.MATCHES) {
+    if (validWordCheck.status === ValidWordStateEnum.MATCHES) {
       await this.gamePort.broadcastError(session)
       return response.ok({
-        status: ValidWordState.MATCHES,
+        status: ValidWordStateEnum.MATCHES,
         message: 'Error',
       })
     }
 
-    if (validWordCheck.status !== ValidWordState.VALID) {
+    if (validWordCheck.status !== ValidWordStateEnum.VALID) {
       await this.gamePort.broadcastError(session)
       return response.ok({
         status: 'INVALID',
@@ -81,7 +81,7 @@ export class GameUseCase {
       : this.gameRules.updateSessionForGuesser(session, answer, isOver, isCorrect)
 
     await this.handleSessionUpdate(updatedSession, isOver, isCorrect)
-    return response.ok({ message: 'Success' })
+    return response.ok({ status: ValidWordStateEnum.VALID, message: 'Success' })
   }
 
   private async handleSessionUpdate(

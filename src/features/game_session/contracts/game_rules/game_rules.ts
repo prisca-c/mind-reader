@@ -1,24 +1,27 @@
 import type { GameRulesInterface } from '#features/game_session/contracts/game_rules/game_rules_interface'
 import type { GameSession } from '#features/game_session/types/game_session'
-import { ValidWordState, type ValidWordEnum } from '#features/game_session/enums/valid_word_state'
+import {
+  type ValidWordState,
+  ValidWordStateEnum,
+} from '#features/game_session/enums/valid_word_state'
 import { normalizeLatin } from '#helpers/text'
 
 export class GameRules implements GameRulesInterface {
-  validWord(session: GameSession, userId: string, answer: string): { status: ValidWordEnum } {
+  validWord(session: GameSession, userId: string, answer: string): { status: ValidWordState } {
     const { word, hintGiver } = session
     if (!word) {
       return {
-        status: ValidWordState.NOT_DEFINED,
+        status: ValidWordStateEnum.NOT_DEFINED,
       }
     }
 
     if (hintGiver === userId) {
       const matchReturn = {
-        status: ValidWordState.MATCHES,
+        status: ValidWordStateEnum.MATCHES,
       }
 
       const validReturn = {
-        status: ValidWordState.VALID,
+        status: ValidWordStateEnum.VALID,
       }
 
       // Convert words in case there's latin character to compare them
@@ -34,7 +37,7 @@ export class GameRules implements GameRulesInterface {
     }
 
     return {
-      status: ValidWordState.VALID,
+      status: ValidWordStateEnum.VALID,
     }
   }
 
