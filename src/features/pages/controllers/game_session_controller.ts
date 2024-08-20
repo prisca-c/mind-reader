@@ -18,7 +18,8 @@ export default class GameSessionController {
       return response.redirect('/game')
     }
 
-    const { player1, player2, hintGiver, word, turn, wordsList }: GameSession = JSON.parse(session)
+    const { player1, player2, hintGiver, word, turn, wordsList, status, startedAt }: GameSession =
+      JSON.parse(session)
 
     if (player1.id !== user.id && player2.id !== user.id) {
       return response.redirect('/game')
@@ -38,6 +39,8 @@ export default class GameSessionController {
       word: guessWord,
       wordsList: wordsList,
       turn: turn === user.id,
+      sessionState: status,
+      sessionDate: startedAt,
     })
   }
 }

@@ -10,11 +10,14 @@ import {
   WordValidationStateEnum,
 } from '~/features/game/enums/word_validation_state'
 import { ValidWordState, ValidWordStateEnum } from '#features/game_session/enums/valid_word_state'
+import { SessionState, SessionStateEnum } from '#features/game_session/enums/session_state'
+import { useTimer } from '~/hooks/use_timer'
+import { DateTime } from 'luxon'
 
 type Props = GameSessionProps
 export type WordStateProps = { valid: boolean; status: WordValidationState }
 export const useGame = (props: Props) => {
-  const { sessionId, user, wordsList, turn, word } = props
+  const { sessionId, user, wordsList, turn, word, sessionState, sessionDate } = props
 
   const [wordToGuess, setWordToGuess] = useState<string | null>(null)
   const [wordState, setWordState] = useState<WordStateProps>({
@@ -23,7 +26,12 @@ export const useGame = (props: Props) => {
   })
   const [hintGiverWords, setHintGiverWords] = useState<string[]>([])
   const [guesserWords, setGuesserWords] = useState<string[]>([])
-  const [gameState, setGameState] = useState<GameStateEnum>(GameState.WAITING)
+  const [gameState, setGameState] = useState<GameStateEnum | SessionState>(GameState.WAITING)
+
+  const timeLeft: number =
+    DateTime.fromISO(sessionDate).plus({ minutes: 1, seconds: 50 }).diffNow().as('seconds')
+
+  const { timer, isActive, setIsActive } = useTimer(Number(timeLeft.toFixed(0)))
 
   const sessionListener = useTransmit({ url: `game/session/${sessionId}/user/${user.id}` })
 
@@ -43,6 +51,14 @@ export const useGame = (props: Props) => {
     if (wordsList) {
       setHintGiverWords(wordsList.hintGiver)
       setGuesserWords(wordsList.guesser)
+    }
+
+    if (sessionState === SessionStateEnum.READY) {
+      new Api().post(`/game/session/${sessionId}/ready`)
+    }
+
+    if (sessionState === SessionStateEnum.PLAYING) {
+      setIsActive(true)
     }
   }, [])
 
@@ -104,6 +120,7 @@ export const useGame = (props: Props) => {
     word: string | null
     status?: GameResponseStatus
     turn: boolean
+    sessionState?: SessionState
   }) => {
     if (message.words) {
       setHintGiverWords(message.words.hintGiver)
@@ -123,6 +140,13 @@ export const useGame = (props: Props) => {
     } else {
       setGameState(GameState.WAITING)
     }
+
+    if (message.sessionState) {
+      if (message.sessionState === SessionStateEnum.PLAYING) {
+        setGameState(SessionStateEnum.PLAYING)
+        setIsActive(true)
+      }
+    }
   }
 
   const handleCopySessionId = () => {
@@ -130,19 +154,17 @@ export const useGame = (props: Props) => {
   }
 
   return {
-    hintGiverWords,
-    guesserWords,
-    gameState,
     sessionListener,
-    setGameState,
-    setGuesserWords,
-    setHintGiverWords,
+    guesserWords,
+    hintGiverWords,
+    gameState,
     handleSubmit,
     handleGameState,
     handleCopySessionId,
     wordState,
     wordOnChange,
     wordToGuess,
-    setWordToGuess,
+    timer,
+    isActive,
   }
 }

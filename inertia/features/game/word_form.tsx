@@ -13,6 +13,7 @@ type WordFormProps = {
   wordOnChange: (event: React.ChangeEvent<HTMLInputElement>) => void
   role: Role
   wordState: WordStateProps
+  timerIsActive: boolean
 }
 
 const ErrorPrompt = (status: WordValidationState, i18n: TFunction) => {
@@ -37,7 +38,9 @@ export const WordForm = (props: WordFormProps) => {
     <form onSubmit={handleSubmit}>
       {!wordState.valid && <p className="text-red">{ErrorPrompt(wordState.status, t)}</p>}
       <input type="text" name="answer" onChange={wordOnChange} required />
-      <button disabled={!wordState.valid}>{t(`gameSession.buttons.submit.${role}`)}</button>
+      <button disabled={!wordState.valid || !props.timerIsActive}>
+        {t(`gameSession.buttons.submit.${role}`)}
+      </button>
     </form>
   )
 }

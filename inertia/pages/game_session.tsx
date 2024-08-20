@@ -17,6 +17,7 @@ export interface GameSessionProps {
   wordsList?: WordList
   turn: boolean | null
   sessionState: SessionState
+  sessionDate: string
 }
 
 export default function GameSession(props: GameSessionProps) {
@@ -33,6 +34,8 @@ export default function GameSession(props: GameSessionProps) {
     wordState,
     wordOnChange,
     wordToGuess,
+    timer,
+    isActive,
   } = useGame(props)
 
   sessionListener.subscription?.create()
@@ -72,12 +75,13 @@ export default function GameSession(props: GameSessionProps) {
         {t('gameSession.player')}: {user.username}
       </p>
       {wordToGuess && (
-        <p className={gameState === 'win' ? 'text-green-500' : 'text-red-500'}>
+        <p className={gameState === GameState.WIN ? 'text-green-500' : 'text-red-500'}>
           Word: {wordToGuess}
         </p>
       )}
-      {gameState === 'win' && <p className={'text-green-500'}>'(GG)'</p>}
-      {gameState === 'lose' && <p className={'text-red-500'}>'(Bouh)'</p>}
+      <p>{timer}</p>
+      {gameState === GameState.WIN && <p className={'text-green-500'}>'(GG)'</p>}
+      {gameState === GameState.LOSE && <p className={'text-red-500'}>'(Bouh)'</p>}
       <div className="grid grid-cols-2 gap-4">
         <div>
           <h2>{t('gameSession.hint')}</h2>
@@ -100,6 +104,7 @@ export default function GameSession(props: GameSessionProps) {
           wordOnChange={wordOnChange}
           handleSubmit={handleSubmit}
           wordState={wordState}
+          timerIsActive={isActive}
         />
       </div>
       {gameState === GameState.WIN || gameState === GameState.LOSE ? (
