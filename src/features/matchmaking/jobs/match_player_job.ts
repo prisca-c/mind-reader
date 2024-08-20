@@ -5,7 +5,11 @@ import type { Player } from '#features/game_session/types/player'
 import { randomUUID } from 'node:crypto'
 import Word from '#models/word'
 import logger from '@adonisjs/core/services/logger'
-import type { GameSession, GameSessionId } from '#features/game_session/types/game_session'
+import type {
+  GameSession,
+  GameSessionId,
+  PlayerSession,
+} from '#features/game_session/types/game_session'
 import { SessionStateEnum } from '#features/game_session/enums/session_state'
 
 export class MatchPlayerJob {
@@ -88,8 +92,8 @@ export class MatchPlayerJob {
   }
 
   async createSession(player1: Player, player2: Player, sessionId: GameSessionId) {
-    const sessionPlayer1 = { ...player1, accepted: false }
-    const sessionPlayer2 = { ...player2, accepted: false }
+    const sessionPlayer1: PlayerSession = { ...player1, accepted: false, ready: false }
+    const sessionPlayer2: PlayerSession = { ...player2, accepted: false, ready: false }
 
     const initSession: GameSession = {
       sessionId,
