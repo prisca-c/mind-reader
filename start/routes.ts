@@ -25,6 +25,7 @@ const SearchMatchmakingController = () =>
   import('#features/matchmaking/controllers/search_matchmaking_controller')
 const AcceptMatchmakingController = () =>
   import('#features/matchmaking/controllers/accept_matchmaking_controller')
+const GameReadyController = () => import('#features/game_session/controllers/game_ready_controller')
 // endregion
 
 router.get('/', [LandingPageController, 'render']).as('home')
@@ -39,6 +40,10 @@ router
     router
       .post('/game/session/:sessionId/accept', [AcceptMatchmakingController, 'handle'])
       .as('game.handleAccept')
+      .where('sessionId', router.matchers.uuid())
+    router
+      .post('/game/session/:sessionId/ready', [GameReadyController, 'handle'])
+      .as('game.handleReady')
       .where('sessionId', router.matchers.uuid())
 
     router
