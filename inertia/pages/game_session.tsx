@@ -7,6 +7,7 @@ import type { GameResponseStatus } from '~/features/game/types/game_response_sta
 import { useTranslation } from 'react-i18next'
 import { WordForm } from '~/features/game/word_form'
 import { Role } from '~/enums/roles'
+import { SessionState } from '#features/game_session/enums/session_state'
 
 export interface GameSessionProps {
   sessionId: GameSessionId
@@ -15,6 +16,7 @@ export interface GameSessionProps {
   word?: string
   wordsList?: WordList
   turn: boolean | null
+  sessionState: SessionState
 }
 
 export default function GameSession(props: GameSessionProps) {
@@ -41,6 +43,7 @@ export default function GameSession(props: GameSessionProps) {
       word: string | null
       wordsList: string
       status?: GameResponseStatus
+      sessionState: SessionState
     }) => {
       const words = JSON.parse(message.wordsList) as WordList
 
@@ -49,6 +52,7 @@ export default function GameSession(props: GameSessionProps) {
         word: message.word,
         status: message.status,
         turn: message.turn,
+        sessionState: message.sessionState,
       })
     }
   )

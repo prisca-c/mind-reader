@@ -6,6 +6,7 @@ import { randomUUID } from 'node:crypto'
 import Word from '#models/word'
 import logger from '@adonisjs/core/services/logger'
 import type { GameSession, GameSessionId } from '#features/game_session/types/game_session'
+import { SessionStateEnum } from '#features/game_session/enums/session_state'
 
 export class MatchPlayerJob {
   #players: Player[] = []
@@ -94,6 +95,7 @@ export class MatchPlayerJob {
       sessionId,
       player1: sessionPlayer1,
       player2: sessionPlayer2,
+      status: SessionStateEnum.MATCHMAKING,
       turn: null,
       guessed: false,
       hintGiver: null,
@@ -166,6 +168,7 @@ export class MatchPlayerJob {
     const updatedSession: GameSession = {
       ...JSON.parse(currentSession),
       hintGiver: hintGiverId,
+      status: SessionStateEnum.READY,
       word: word.name,
       turn: hintGiverId,
       startedAt: DateTime.now().toISO(),
