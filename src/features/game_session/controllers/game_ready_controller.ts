@@ -42,16 +42,6 @@ export default class GameReadyController {
     if (parsedSession.player2.id === user.id) {
       parsedSession.player2.ready = true
     }
-    const test = {
-      channel:
-        'game/session/88b08f38-93fe-4718-a7e2-8b7095c909b2/user/775b07e7-da2d-4c1f-a19c-c16a28849835',
-      payload: {
-        status: 'lose',
-        word: 'banane',
-        wordList: '{"hintGiver":[],"guesser":[]}',
-        turn: null,
-      },
-    }
 
     if (
       parsedSession.status === SessionStateEnum.READY &&
