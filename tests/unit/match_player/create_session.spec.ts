@@ -5,6 +5,7 @@ import { CacheService } from '#services/cache/cache_service'
 import { randomUUID } from 'node:crypto'
 import type { GameSessionId } from '#features/game_session/types/game_session'
 import { EventStreamService } from '#services/event_stream/event_stream_service'
+import { SessionStateEnum } from '#features/game_session/enums/session_state'
 
 test.group('MatchPlayer - createSession', (group) => {
   const cache = new CacheService()
@@ -28,6 +29,7 @@ test.group('MatchPlayer - createSession', (group) => {
       sessionId: sessionId,
       player1: players[0],
       player2: players[1],
+      status: SessionStateEnum.MATCHMAKING,
       turn: null,
       guessed: false,
       hintGiver: null,

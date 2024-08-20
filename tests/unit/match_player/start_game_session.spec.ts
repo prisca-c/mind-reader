@@ -6,6 +6,7 @@ import { randomUUID } from 'node:crypto'
 import type { GameSessionId } from '#features/game_session/types/game_session'
 import { EventStreamService } from '#services/event_stream/event_stream_service'
 import Word from '#models/word'
+import { SessionStateEnum } from '#features/game_session/enums/session_state'
 
 test.group('MatchPlayer - startGameSession', (group) => {
   const cache = new CacheService()
@@ -42,6 +43,7 @@ test.group('MatchPlayer - startGameSession', (group) => {
       `game:session:${newSession.sessionId}`,
       JSON.stringify({
         ...cachedSession,
+        status: SessionStateEnum.PLAYING,
         player1: { ...players[0], accepted: true },
         player2: { ...players[1], accepted: true },
         hintGiver: players[0].id,
@@ -58,6 +60,7 @@ test.group('MatchPlayer - startGameSession', (group) => {
     assert.deepEqual(result, {
       sessionId: newSession.sessionId,
       player1: players[0],
+      status: SessionStateEnum.PLAYING,
       player2: players[1],
       turn: players[0].id,
       guessed: false,

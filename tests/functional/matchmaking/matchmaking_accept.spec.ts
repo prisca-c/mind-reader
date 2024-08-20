@@ -4,6 +4,7 @@ import { CacheService } from '#services/cache/cache_service'
 import testUtils from '@adonisjs/core/services/test_utils'
 import type { GameSession, GameSessionId } from '#features/game_session/types/game_session'
 import { randomUUID } from 'node:crypto'
+import { SessionStateEnum } from '#features/game_session/enums/session_state'
 
 test.group('Matchmaking - Accept matchmaking', (group) => {
   const cache = new CacheService()
@@ -55,6 +56,7 @@ test.group('Matchmaking - Accept matchmaking', (group) => {
       sessionId,
       player1: { ...players[0], accepted: false },
       player2: { ...players[1], accepted: false },
+      status: SessionStateEnum.READY,
       turn: null,
       guessed: false,
       hintGiver: null,

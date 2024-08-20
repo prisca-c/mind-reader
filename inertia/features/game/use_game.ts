@@ -28,8 +28,10 @@ export const useGame = (props: Props) => {
   const [guesserWords, setGuesserWords] = useState<string[]>([])
   const [gameState, setGameState] = useState<GameStateEnum | SessionState>(GameState.WAITING)
 
-  const timeLeft: number =
-    DateTime.fromISO(sessionDate).plus({ minutes: 1, seconds: 50 }).diffNow().as('seconds')
+  const timeLeft: number = DateTime.fromISO(sessionDate)
+    .plus({ minutes: 1, seconds: 50 })
+    .diffNow()
+    .as('seconds')
 
   const { timer, isActive, setIsActive } = useTimer(Number(timeLeft.toFixed(0)))
 
