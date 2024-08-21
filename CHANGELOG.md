@@ -14,7 +14,12 @@
 - Add CI Pipeline `.github/workflows/checks.yml` to check code quality and run tests
 - Add an elo system to handle player ranking.
 - Word stats are updated in database when game ends
-- Word's form is now a single component `word.form.tsx` which handle error correctly using i18n, hooks, and WordValidationStateEnum
+- Word's form is now a single component `word_form.tsx` which handle error correctly using i18n, hooks, and WordValidationStateEnum
+- Game takes 1min30s to end if no one found the word , added many things to handle this :
+  - `GameSession` now have a status which takes a `SessionState` to handle the game state {MATCHMAKING, READY, PLAYING}
+  - Create `PlayerSession` which handle `Player` & `{accepted: boolean, ready: boolean}` , ready is used to know if the player is ready to play
+  - Create `GameReadyController` + route to handle player ready state, start the game and use a setTimeout to end the game if no one found the word
+  - In frontend, added a useTimer hook to handle the timer and display it
 
 ### Changed
 - Add `Cache` service and update all Redis calls to use it
@@ -25,6 +30,7 @@
 
 ### Fixed
 - Fix issue from transmit listener not closing properly when unmounting a component
+- Guesser now got the word when he found it or not
 
 ## [0.4.0] - 2024-05-18
 
