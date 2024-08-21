@@ -79,7 +79,7 @@ export default class GameReadyController {
         })
 
         await gamePort.saveToGameHistory(parsedUpdatedSession)
-      }, 110000)
+      }, 90000)
     }
   }
 }

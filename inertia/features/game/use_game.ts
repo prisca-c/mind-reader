@@ -29,7 +29,7 @@ export const useGame = (props: Props) => {
   const [gameState, setGameState] = useState<GameStateEnum | SessionState>(GameState.WAITING)
 
   const timeLeft: number = DateTime.fromISO(sessionDate)
-    .plus({ minutes: 1, seconds: 50 })
+    .plus({ minutes: 1, seconds: 30 })
     .diffNow()
     .as('seconds')
 
