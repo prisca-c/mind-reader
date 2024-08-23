@@ -60,10 +60,18 @@ export default class GameReadyController {
       logger.info('Start Game', '- Session: ' + sessionId)
       setTimeout(async () => {
         const updatedSession = await cache.get('game:session:' + sessionId)
-        if (!updatedSession) return
+        if (!updatedSession) {
+          return response.notFound({
+            message: 'Session not found',
+          })
+        }
 
         const parsedUpdatedSession: GameSession = JSON.parse(updatedSession)
-        if (parsedUpdatedSession.turn === null) return
+        if (parsedUpdatedSession.turn === null) {
+          return response.notFound({
+            message: 'Session not found',
+          })
+        }
 
         logger.info('End Game', '- Session: ' + sessionId)
         eventStream.broadcast(`game/session/${sessionId}/user/${parsedUpdatedSession.player1.id}`, {
@@ -82,5 +90,9 @@ export default class GameReadyController {
         await gamePort.saveToGameHistory(parsedUpdatedSession)
       }, 90000)
     }
+
+    return response.ok({
+      message: 'Ready',
+    })
   }
 }
