@@ -50,6 +50,7 @@ export default class GameReadyController {
       parsedSession.status = SessionStateEnum.PLAYING
       parsedSession.startedAt = DateTime.local().toISO()
       await cache.set(`game:session:${sessionId}`, JSON.stringify(parsedSession))
+      await new Promise((resolve) => setTimeout(resolve, 3000))
       eventStream.broadcast(`game/session/${sessionId}/user/${parsedSession.player1.id}`, {
         sessionState: SessionStateEnum.PLAYING,
       })
