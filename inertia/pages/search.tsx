@@ -34,7 +34,7 @@ export default function Search(props: Props) {
 
   userListener?.onMessage(async (message: { status: string; sessionId: string }) => {
     if (message.status === 'accept') {
-      await new Api().post(`/game/session/${message.sessionId}/accept`)
+      await new Api().get(`/game/session/${message.sessionId}/accept`)
       return
     }
 

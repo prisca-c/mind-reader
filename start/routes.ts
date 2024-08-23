@@ -38,11 +38,11 @@ router
     router.get('/game/search', [SearchGameController, 'render']).as('search')
     router.post('/game/search', [SearchMatchmakingController, 'handle']).as('game.searchingQueue')
     router
-      .post('/game/session/:sessionId/accept', [AcceptMatchmakingController, 'handle'])
+      .get('/game/session/:sessionId/accept', [AcceptMatchmakingController, 'handle'])
       .as('game.handleAccept')
       .where('sessionId', router.matchers.uuid())
     router
-      .post('/game/session/:sessionId/ready', [GameReadyController, 'handle'])
+      .get('/game/session/:sessionId/ready', [GameReadyController, 'handle'])
       .as('game.handleReady')
       .where('sessionId', router.matchers.uuid())
 

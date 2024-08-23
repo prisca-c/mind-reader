@@ -56,7 +56,7 @@ export const useGame = (props: Props) => {
     }
 
     if (sessionState === SessionStateEnum.READY) {
-      new Api().post(`/game/session/${sessionId}/ready`)
+      new Api().get(`/game/session/${sessionId}/ready`)
     }
 
     if (sessionState === SessionStateEnum.PLAYING) {
