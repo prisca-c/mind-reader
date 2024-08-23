@@ -71,7 +71,7 @@ test.group('Matchmaking - Accept matchmaking', (group) => {
      * Accept matchmaking for user 1
      */
     const responseAccept = await client
-      .post(`/game/session/${sessionId}/accept`)
+      .get(`/game/session/${sessionId}/accept`)
       .withCsrfToken()
       .loginAs(user1)
 
