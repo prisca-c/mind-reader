@@ -136,8 +136,10 @@ export const useGame = (props: Props) => {
 
     if (message.status === GameState.WIN) {
       setGameState(GameState.WIN)
+      setIsActive(false)
     } else if (message.status === GameState.LOSE) {
       setGameState(GameState.LOSE)
+      setIsActive(false)
     } else if (message.turn) {
       setGameState(GameState.PLAYING)
     } else {
