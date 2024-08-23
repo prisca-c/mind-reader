@@ -118,15 +118,16 @@ export const useGame = (props: Props) => {
   }
 
   const handleGameState = (message: {
-    words: WordList
-    word: string | null
-    status?: GameResponseStatus
     turn: boolean
-    sessionState?: SessionState
+    word: string | null
+    wordsList?: string
+    status?: GameResponseStatus
+    sessionState: SessionState
   }) => {
-    if (message.words) {
-      setHintGiverWords(message.words.hintGiver)
-      setGuesserWords(message.words.guesser)
+    if (message.wordsList) {
+      const words: WordList = JSON.parse(message.wordsList)
+      setHintGiverWords(words.hintGiver)
+      setGuesserWords(words.guesser)
     }
 
     if (message.word) {

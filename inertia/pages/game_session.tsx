@@ -44,19 +44,11 @@ export default function GameSession(props: GameSessionProps) {
     (message: {
       turn: boolean
       word: string | null
-      wordsList: string
+      wordsList?: string
       status?: GameResponseStatus
       sessionState: SessionState
     }) => {
-      const words = JSON.parse(message.wordsList) as WordList
-
-      handleGameState({
-        words: words,
-        word: message.word,
-        status: message.status,
-        turn: message.turn,
-        sessionState: message.sessionState,
-      })
+      handleGameState(message)
     }
   )
 
