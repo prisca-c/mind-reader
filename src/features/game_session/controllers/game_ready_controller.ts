@@ -5,7 +5,6 @@ import { inject } from '@adonisjs/core'
 import { assert } from '#helpers/assert'
 import { EventStreamService } from '#services/event_stream/event_stream_service'
 import { SessionStateEnum } from '#features/game_session/enums/session_state'
-import { GameState } from '#features/game_session/enums/game_state'
 import logger from '@adonisjs/core/services/logger'
 import { DateTime } from 'luxon'
 import { GamePort } from '#features/game_session/contracts/game/game_port'
@@ -76,24 +75,8 @@ export default class GameReadyController {
           }
 
           logger.info('End Game', '- Session: ' + sessionId)
-          eventStream.broadcast(
-            `game/session/${sessionId}/user/${parsedUpdatedSession.player1.id}`,
-            {
-              status: GameState.LOSE,
-              word: parsedUpdatedSession.word,
-              wordsList: JSON.stringify(parsedUpdatedSession.wordsList),
-              turn: null,
-            }
-          )
-          eventStream.broadcast(
-            `game/session/${sessionId}/user/${parsedUpdatedSession.player2.id}`,
-            {
-              status: GameState.LOSE,
-              word: parsedUpdatedSession.word,
-              wordsList: JSON.stringify(parsedUpdatedSession.wordsList),
-              turn: null,
-            }
-          )
+
+          await gamePort.broadcastAnswer(parsedUpdatedSession, true, false)
 
           await gamePort.saveToGameHistory(parsedUpdatedSession)
         },

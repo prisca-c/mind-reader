@@ -16,6 +16,7 @@
     "backToMenu": "Retour au menu"
   },
   "player": "Joueur",
+  "opponent": "Adversaire",
   "hint": "Indice",
   "guess": "Réponse"
 }

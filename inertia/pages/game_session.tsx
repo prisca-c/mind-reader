@@ -42,6 +42,7 @@ export default function GameSession(props: GameSessionProps) {
     handleGameState,
     handleCopySessionId,
     wordState,
+    opponent,
     wordOnChange,
     wordToGuess,
     timer,
@@ -71,6 +72,11 @@ export default function GameSession(props: GameSessionProps) {
       {wordToGuess && (
         <p className={gameState === GameState.WIN ? 'text-green-500' : 'text-red-500'}>
           Word: {wordToGuess}
+        </p>
+      )}
+      {opponent && (
+        <p>
+          {t('gameSession.opponent')}: {opponent}
         </p>
       )}
       <p>{timer}</p>

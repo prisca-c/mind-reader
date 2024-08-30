@@ -43,5 +43,6 @@ export interface LangResources {
     player: string
     hint: string
     guess: string
+    opponent: string
   }
 }

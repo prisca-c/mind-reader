@@ -4,7 +4,6 @@ import { useTransmit } from '~/hooks/use_transmit'
 import type { GameSessionProps, SessionListenerMessage } from '~/pages/game_session'
 import { Api } from '~/services/api'
 import type { WordList } from '#features/game_session/types/game_session'
-import type { GameResponseStatus } from '~/features/game/types/game_response_status'
 import {
   type WordValidationState,
   WordValidationStateEnum,
@@ -27,6 +26,8 @@ export const useGame = (props: Props) => {
   const [hintGiverWords, setHintGiverWords] = useState<string[]>([])
   const [guesserWords, setGuesserWords] = useState<string[]>([])
   const [gameState, setGameState] = useState<GameStateEnum | SessionState>(GameState.WAITING)
+
+  const [opponent, setOpponent] = useState<string | null>(null)
 
   const timeLeft: number = DateTime.fromISO(sessionDate)
     .plus({ seconds: gameLength })
@@ -128,6 +129,10 @@ export const useGame = (props: Props) => {
       setWordToGuess(message.word)
     }
 
+    if (message.opponent) {
+      setOpponent(message.opponent)
+    }
+
     if (message.status === GameState.WIN) {
       setGameState(GameState.WIN)
       setIsActive(false)
@@ -157,6 +162,7 @@ export const useGame = (props: Props) => {
     guesserWords,
     hintGiverWords,
     gameState,
+    opponent,
     handleSubmit,
     handleGameState,
     handleCopySessionId,
