@@ -40,6 +40,10 @@ export interface LangResources {
       }
       backToMenu: string
     }
+    gameState: {
+      playing: string
+      waiting: string
+    }
     player: string
     hint: string
     guess: string

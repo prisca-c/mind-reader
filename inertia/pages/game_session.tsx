@@ -45,8 +45,10 @@ export default function GameSession(props: GameSessionProps) {
     opponent,
     wordOnChange,
     wordToGuess,
+    turnState,
     timer,
     isActive,
+    isGameOver,
   } = useGame(props)
 
   sessionListener.subscription?.create()
@@ -74,10 +76,17 @@ export default function GameSession(props: GameSessionProps) {
           Word: {wordToGuess}
         </p>
       )}
-      {opponent && (
+      {opponent && isGameOver && (
         <p>
           {t('gameSession.opponent')}: {opponent}
         </p>
+      )}
+      {turnState && !isGameOver && (
+        <p className={'text-blue-500'}>{t('gameSession.gameState.playing')}</p>
+      )}
+
+      {!turnState && !isGameOver && (
+        <p className={'text-blue-500'}>{t('gameSession.gameState.waiting')}</p>
       )}
       <p>{timer}</p>
       {gameState === GameState.WIN && <p className={'text-green-500'}>'(GG)'</p>}
@@ -107,7 +116,7 @@ export default function GameSession(props: GameSessionProps) {
           timerIsActive={isActive}
         />
       </div>
-      {gameState === GameState.WIN || gameState === GameState.LOSE ? (
+      {isGameOver ? (
         <button onClick={() => router.visit('/game')}>{t('gameSession.buttons.backToMenu')}</button>
       ) : null}
     </div>

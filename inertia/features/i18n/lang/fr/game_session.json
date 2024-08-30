@@ -15,6 +15,10 @@
     },
     "backToMenu": "Retour au menu"
   },
+  "gameState": {
+    "playing": "C'est à ton tour de jouer",
+    "waiting": "Attends que l'adversaire joue"
+  },
   "player": "Joueur",
   "opponent": "Adversaire",
   "hint": "Indice",

@@ -12,11 +12,13 @@ import { ValidWordState, ValidWordStateEnum } from '#features/game_session/enums
 import { SessionState, SessionStateEnum } from '#features/game_session/enums/session_state'
 import { useTimer } from '~/hooks/use_timer'
 import { DateTime } from 'luxon'
+import { RolesEnum } from '~/enums/roles'
 
 type Props = GameSessionProps
 export type WordStateProps = { valid: boolean; status: WordValidationState }
 export const useGame = (props: Props) => {
-  const { sessionId, user, wordsList, turn, word, sessionState, sessionDate, gameLength } = props
+  const { sessionId, user, wordsList, turn, word, sessionState, sessionDate, gameLength, role } =
+    props
 
   const [wordToGuess, setWordToGuess] = useState<string | null>(null)
   const [wordState, setWordState] = useState<WordStateProps>({
@@ -26,6 +28,7 @@ export const useGame = (props: Props) => {
   const [hintGiverWords, setHintGiverWords] = useState<string[]>([])
   const [guesserWords, setGuesserWords] = useState<string[]>([])
   const [gameState, setGameState] = useState<GameStateEnum | SessionState>(GameState.WAITING)
+  const [turnState, setTurnState] = useState<boolean | null>(null)
 
   const [opponent, setOpponent] = useState<string | null>(null)
 
@@ -43,13 +46,7 @@ export const useGame = (props: Props) => {
       setWordToGuess(word)
     }
 
-    if (turn) {
-      setGameState('playing')
-    }
-
-    if (!turn) {
-      setGameState('waiting')
-    }
+    setTurnState(turn)
 
     if (wordsList) {
       setHintGiverWords(wordsList.hintGiver)
@@ -133,6 +130,10 @@ export const useGame = (props: Props) => {
       setOpponent(message.opponent)
     }
 
+    if (message.turn !== null) {
+      setTurnState(message.turn)
+    }
+
     if (message.status === GameState.WIN) {
       setGameState(GameState.WIN)
       setIsActive(false)
@@ -140,6 +141,7 @@ export const useGame = (props: Props) => {
       setGameState(GameState.LOSE)
       setIsActive(false)
     } else if (message.turn) {
+      setTurnState(message.turn)
       setGameState(GameState.PLAYING)
     } else {
       setGameState(GameState.WAITING)
@@ -147,6 +149,9 @@ export const useGame = (props: Props) => {
 
     if (message.sessionState) {
       if (message.sessionState === SessionStateEnum.PLAYING) {
+        if (role === RolesEnum.HINT_GIVER) {
+          setTurnState(true)
+        }
         setGameState(SessionStateEnum.PLAYING)
         setIsActive(true)
       }
@@ -156,6 +161,8 @@ export const useGame = (props: Props) => {
   const handleCopySessionId = () => {
     navigator.clipboard.writeText(sessionId).then(() => alert('Session ID copied'))
   }
+
+  const isGameOver = gameState === GameState.WIN || gameState === GameState.LOSE
 
   return {
     sessionListener,
@@ -169,7 +176,9 @@ export const useGame = (props: Props) => {
     wordState,
     wordOnChange,
     wordToGuess,
+    turnState,
     timer,
     isActive,
+    isGameOver,
   }
 }
