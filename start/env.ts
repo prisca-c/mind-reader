@@ -50,4 +50,11 @@ export default await Env.create(new URL('../', import.meta.url), {
   TWITCH_CLIENT_ID: Env.schema.string(),
   TWITCH_CLIENT_SECRET: Env.schema.string(),
   TWITCH_CALLBACK_URL: Env.schema.string(),
+
+  /*
+  |----------------------------------------------------------
+  | Variables for the game
+  |----------------------------------------------------------
+  */
+  GAME_LENGTH: Env.schema.number(),
 })

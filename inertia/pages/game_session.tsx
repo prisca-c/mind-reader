@@ -18,6 +18,7 @@ export interface GameSessionProps {
   turn: boolean | null
   sessionState: SessionState
   sessionDate: string
+  gameLength: number
 }
 
 export default function GameSession(props: GameSessionProps) {

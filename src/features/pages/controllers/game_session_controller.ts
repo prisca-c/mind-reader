@@ -2,6 +2,7 @@ import type { HttpContext } from '@adonisjs/core/http'
 import type { GameSession } from '#features/game_session/types/game_session'
 import { inject } from '@adonisjs/core'
 import { CacheService } from '#services/cache/cache_service'
+import env from '#start/env'
 
 export default class GameSessionController {
   @inject()
@@ -13,6 +14,7 @@ export default class GameSessionController {
     const user = auth.user
     const sessionId = params.sessionId
     const session = await cache.get(`game:session:${sessionId}`)
+    const gameLength = env.get('GAME_LENGTH')
 
     if (!session) {
       return response.redirect('/game')
@@ -41,6 +43,7 @@ export default class GameSessionController {
       turn: turn === user.id,
       sessionState: status,
       sessionDate: startedAt,
+      gameLength: gameLength,
     })
   }
 }

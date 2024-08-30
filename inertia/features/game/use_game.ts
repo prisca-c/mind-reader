@@ -17,7 +17,7 @@ import { DateTime } from 'luxon'
 type Props = GameSessionProps
 export type WordStateProps = { valid: boolean; status: WordValidationState }
 export const useGame = (props: Props) => {
-  const { sessionId, user, wordsList, turn, word, sessionState, sessionDate } = props
+  const { sessionId, user, wordsList, turn, word, sessionState, sessionDate, gameLength } = props
 
   const [wordToGuess, setWordToGuess] = useState<string | null>(null)
   const [wordState, setWordState] = useState<WordStateProps>({
@@ -29,7 +29,7 @@ export const useGame = (props: Props) => {
   const [gameState, setGameState] = useState<GameStateEnum | SessionState>(GameState.WAITING)
 
   const timeLeft: number = DateTime.fromISO(sessionDate)
-    .plus({ minutes: 1, seconds: 30 })
+    .plus({ seconds: gameLength })
     .diffNow()
     .as('seconds')
 
