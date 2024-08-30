@@ -2,6 +2,7 @@ import type { HttpContext } from '@adonisjs/core/http'
 import type { GameSession } from '#features/game_session/types/game_session'
 import { inject } from '@adonisjs/core'
 import { CacheService } from '#services/cache/cache_service'
+import { DateTime } from 'luxon'
 import env from '#start/env'
 
 export default class GameSessionController {
@@ -16,6 +17,7 @@ export default class GameSessionController {
     const session = await cache.get(`game:session:${sessionId}`)
     const gameLength = env.get('GAME_LENGTH')
 
+    // Redirect if game session does not exist
     if (!session) {
       return response.redirect('/game')
     }
@@ -23,8 +25,22 @@ export default class GameSessionController {
     const { player1, player2, hintGiver, word, turn, wordsList, status, startedAt }: GameSession =
       JSON.parse(session)
 
+    // Redirect if user is not part of the game session
     if (player1.id !== user.id && player2.id !== user.id) {
       return response.redirect('/game')
+    }
+
+    // Redirect if game session has ended
+    if (startedAt) {
+      const timeLeft: number = DateTime.fromISO(startedAt!)
+        .plus({ seconds: gameLength })
+        .diffNow()
+        .as('seconds')
+
+      if (timeLeft <= 0) {
+        await cache.del(`game:session:${sessionId}`)
+        return response.redirect('/game')
+      }
     }
 
     const role = hintGiver === user.id ? 'hintGiver' : 'guesser'
