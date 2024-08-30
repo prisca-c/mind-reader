@@ -21,6 +21,15 @@ export interface GameSessionProps {
   gameLength: number
 }
 
+export interface SessionListenerMessage {
+  turn: boolean
+  word: string | null
+  wordsList?: string
+  opponent?: string
+  status?: GameResponseStatus
+  sessionState: SessionState
+}
+
 export default function GameSession(props: GameSessionProps) {
   const { user, role } = props
   const { t } = useTranslation()
@@ -41,17 +50,9 @@ export default function GameSession(props: GameSessionProps) {
 
   sessionListener.subscription?.create()
 
-  sessionListener.subscription?.onMessage(
-    (message: {
-      turn: boolean
-      word: string | null
-      wordsList?: string
-      status?: GameResponseStatus
-      sessionState: SessionState
-    }) => {
-      handleGameState(message)
-    }
-  )
+  sessionListener.subscription?.onMessage((message: SessionListenerMessage) => {
+    handleGameState(message)
+  })
 
   return (
     <div>

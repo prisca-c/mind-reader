@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { GameState, GameStateEnum } from '#features/game_session/enums/game_state'
 import { useTransmit } from '~/hooks/use_transmit'
-import type { GameSessionProps } from '~/pages/game_session'
+import type { GameSessionProps, SessionListenerMessage } from '~/pages/game_session'
 import { Api } from '~/services/api'
 import type { WordList } from '#features/game_session/types/game_session'
 import type { GameResponseStatus } from '~/features/game/types/game_response_status'
@@ -117,13 +117,7 @@ export const useGame = (props: Props) => {
     setWordState({ valid: true, status: WordValidationStateEnum.VALID })
   }
 
-  const handleGameState = (message: {
-    turn: boolean
-    word: string | null
-    wordsList?: string
-    status?: GameResponseStatus
-    sessionState: SessionState
-  }) => {
+  const handleGameState = (message: SessionListenerMessage) => {
     if (message.wordsList) {
       const words: WordList = JSON.parse(message.wordsList)
       setHintGiverWords(words.hintGiver)
