@@ -1,13 +1,18 @@
+import { useTranslation } from 'react-i18next'
+import { useGame } from '~/features/game/use_game'
 import type { GameSessionId, WordList } from '#features/game_session/types/game_session'
 import type User from '#models/user'
-import { GameState } from '#features/game_session/enums/game_state'
-import { router } from '@inertiajs/react'
-import { useGame } from '~/features/game/use_game'
 import type { GameResponseStatus } from '~/features/game/types/game_response_status'
-import { useTranslation } from 'react-i18next'
-import { WordForm } from '~/features/game/word_form'
+import { router } from '@inertiajs/react'
 import { Role } from '~/enums/roles'
 import { SessionState } from '#features/game_session/enums/session_state'
+import { WordsList } from '~/features/game/components/words_list'
+import { TurnStatus } from '~/features/game/components/turn_status'
+import { OpponentInfo } from '~/features/game/components/opponent_info'
+import { GameStatus } from '~/features/game/components/game_status'
+import { PlayerInfo } from '~/features/game/components/player_info'
+import { GameSessionTitle } from '~/features/game/components/game_session_title'
+import { WordForm } from '~/features/game/components/word_form'
 
 export interface GameSessionProps {
   sessionId: GameSessionId
@@ -32,7 +37,6 @@ export interface SessionListenerMessage {
 
 export default function GameSession(props: GameSessionProps) {
   const { user, role } = props
-  const { t } = useTranslation()
   const {
     sessionListener,
     guesserWords,
@@ -52,64 +56,21 @@ export default function GameSession(props: GameSessionProps) {
   } = useGame(props)
 
   sessionListener.subscription?.create()
+  sessionListener.subscription?.onMessage(handleGameState)
 
-  sessionListener.subscription?.onMessage((message: SessionListenerMessage) => {
-    handleGameState(message)
-  })
+  const { t } = useTranslation()
 
   return (
     <div>
-      <h1 className="flex align-middle">
-        {t('gameSession.title')}{' '}
-        <img
-          src="/images/copy.svg"
-          onClick={handleCopySessionId}
-          alt={'Copy icon'}
-          className="cursor-pointer h-4 w-auto my-auto"
-        />
-      </h1>
-      <p>
-        {t('gameSession.player')}: {user.username}
-      </p>
-      {wordToGuess && (
-        <p className={gameState === GameState.WIN ? 'text-green-500' : 'text-red-500'}>
-          Word: {wordToGuess}
-        </p>
-      )}
-      {opponent && isGameOver && (
-        <p>
-          {t('gameSession.opponent')}: {opponent}
-        </p>
-      )}
-      {!isGameOver && (
-        <p className={'text-blue-500'}>
-          {turnState ? t('gameSession.gameState.playing') : t('gameSession.gameState.waiting')}
-        </p>
-      )}
+      <GameSessionTitle handleCopySessionId={handleCopySessionId} />
+      <PlayerInfo user={user} />
+      <GameStatus gameState={gameState} wordToGuess={wordToGuess} />
+      <OpponentInfo opponent={opponent} isGameOver={isGameOver} />
+      <TurnStatus turnState={turnState} isGameOver={isGameOver} />
       <p>{timer}</p>
-      {gameState === GameState.WIN && (
-        <p className={'text-green-500'}>{t('gameSession.gameState.win')}</p>
-      )}
-      {gameState === GameState.LOSE && (
-        <p className={'text-red-500'}>{t('gameSession.gameState.lose')}</p>
-      )}
       <div className="grid grid-cols-2 gap-4">
-        <div>
-          <h2>{t('gameSession.hint')}</h2>
-          <ul>
-            {hintGiverWords.map((item, index) => (
-              <li key={index}>{item}</li>
-            ))}
-          </ul>
-        </div>
-        <div>
-          <h2>{t('gameSession.guess')}</h2>
-          <ul>
-            {guesserWords.map((item, index) => (
-              <li key={index}>{item}</li>
-            ))}
-          </ul>
-        </div>
+        <WordsList title={'Hint Words'} words={hintGiverWords} />
+        <WordsList title={'Guesser Words'} words={guesserWords} />
         <WordForm
           role={role}
           wordOnChange={wordOnChange}
@@ -118,9 +79,9 @@ export default function GameSession(props: GameSessionProps) {
           timerIsActive={isActive}
         />
       </div>
-      {isGameOver ? (
+      {isGameOver && (
         <button onClick={() => router.visit('/game')}>{t('gameSession.buttons.backToMenu')}</button>
-      ) : null}
+      )}
     </div>
   )
 }
