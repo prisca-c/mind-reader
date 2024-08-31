@@ -23,6 +23,7 @@
     "#features/*": "./src/features/*.js",
     "#helpers/*": "./src/helpers/*.js",
     "#models/*": "./src/models/*.js",
+    "#shared/*": "./shared/*.js",
     "#start/*": "./start/*.js",
     "#services/*": "./src/services/*.js",
     "#tests/*": "./tests/*.js",
