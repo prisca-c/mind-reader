@@ -1,6 +1,7 @@
-import React, { useEffect, useReducer } from 'react'
-import { GameState, GameStateEnum } from '#features/game_session/enums/game_state'
+import React, { useEffect } from 'react'
+import { GameState } from '#features/game_session/enums/game_state'
 import { useTransmit } from '~/hooks/use_transmit'
+import { useGameReducer } from '~/features/game/use_game_reducer'
 import type { GameSessionProps, SessionListenerMessage } from '~/pages/game_session'
 import { Api } from '~/services/api'
 import {
@@ -8,7 +9,7 @@ import {
   WordValidationStateEnum,
 } from '~/features/game/enums/word_validation_state'
 import { ValidWordState, ValidWordStateEnum } from '#features/game_session/enums/valid_word_state'
-import { SessionState, SessionStateEnum } from '#features/game_session/enums/session_state'
+import { SessionStateEnum } from '#features/game_session/enums/session_state'
 import { useTimer } from '~/hooks/use_timer'
 import { DateTime } from 'luxon'
 import { RolesEnum } from '~/enums/roles'
@@ -16,61 +17,11 @@ import { WordList } from '#features/game_session/types/game_session'
 
 export type WordStateProps = { valid: boolean; status: WordValidationState }
 
-interface GameState {
-  wordToGuess: string | null
-  wordState: WordStateProps
-  hintGiverWords: string[]
-  guesserWords: string[]
-  gameState: GameStateEnum | SessionState
-  turnState: boolean | null
-  opponent: string | null
-}
-
-type GameAction =
-  | { type: 'SET_WORD_TO_GUESS'; payload: string | null }
-  | { type: 'SET_WORD_STATE'; payload: WordStateProps }
-  | { type: 'SET_HINT_GIVER_WORDS'; payload: string[] }
-  | { type: 'SET_GUESSER_WORDS'; payload: string[] }
-  | { type: 'SET_GAME_STATE'; payload: GameStateEnum | SessionState }
-  | { type: 'SET_TURN_STATE'; payload: boolean | null }
-  | { type: 'SET_OPPONENT'; payload: string | null }
-
-const initialState: GameState = {
-  wordToGuess: null,
-  wordState: { valid: false, status: WordValidationStateEnum.INVALID },
-  hintGiverWords: [],
-  guesserWords: [],
-  gameState: GameState.WAITING,
-  turnState: null,
-  opponent: null,
-}
-
-export const gameReducer = (state: GameState, action: GameAction): GameState => {
-  switch (action.type) {
-    case 'SET_WORD_TO_GUESS':
-      return { ...state, wordToGuess: action.payload }
-    case 'SET_WORD_STATE':
-      return { ...state, wordState: action.payload }
-    case 'SET_HINT_GIVER_WORDS':
-      return { ...state, hintGiverWords: action.payload }
-    case 'SET_GUESSER_WORDS':
-      return { ...state, guesserWords: action.payload }
-    case 'SET_GAME_STATE':
-      return { ...state, gameState: action.payload }
-    case 'SET_TURN_STATE':
-      return { ...state, turnState: action.payload }
-    case 'SET_OPPONENT':
-      return { ...state, opponent: action.payload }
-    default:
-      return state
-  }
-}
-
 export const useGame = (props: GameSessionProps) => {
   const { sessionId, user, wordsList, turn, word, sessionState, sessionDate, gameLength, role } =
     props
 
-  const [state, dispatch] = useReducer(gameReducer, initialState)
+  const [state, dispatch] = useGameReducer()
 
   const timeLeft: number = DateTime.fromISO(sessionDate)
     .plus({ seconds: gameLength })
