@@ -20,6 +20,10 @@
   - Create `PlayerSession` which handle `Player` & `{accepted: boolean, ready: boolean}` , ready is used to know if the player is ready to play
   - Create `GameReadyController` + route to handle player ready state, start the game and use a setTimeout to end the game if no one found the word
   - In frontend, added a useTimer hook to handle the timer and display it
+- Add in game Infos :
+  - Show opponent's infos at the end of the game
+  - Show word at the end of the game
+  - Show current turn info
 
 ### Changed
 - Add `Cache` service and update all Redis calls to use it
