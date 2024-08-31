@@ -43,6 +43,8 @@ export interface LangResources {
     gameState: {
       playing: string
       waiting: string
+      win: string
+      lose: string
     }
     player: string
     hint: string

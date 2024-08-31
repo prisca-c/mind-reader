@@ -81,16 +81,18 @@ export default function GameSession(props: GameSessionProps) {
           {t('gameSession.opponent')}: {opponent}
         </p>
       )}
-      {turnState && !isGameOver && (
-        <p className={'text-blue-500'}>{t('gameSession.gameState.playing')}</p>
-      )}
-
-      {!turnState && !isGameOver && (
-        <p className={'text-blue-500'}>{t('gameSession.gameState.waiting')}</p>
+      {!isGameOver && (
+        <p className={'text-blue-500'}>
+          {turnState ? t('gameSession.gameState.playing') : t('gameSession.gameState.waiting')}
+        </p>
       )}
       <p>{timer}</p>
-      {gameState === GameState.WIN && <p className={'text-green-500'}>'(GG)'</p>}
-      {gameState === GameState.LOSE && <p className={'text-red-500'}>'(Bouh)'</p>}
+      {gameState === GameState.WIN && (
+        <p className={'text-green-500'}>{t('gameSession.gameState.win')}</p>
+      )}
+      {gameState === GameState.LOSE && (
+        <p className={'text-red-500'}>{t('gameSession.gameState.lose')}</p>
+      )}
       <div className="grid grid-cols-2 gap-4">
         <div>
           <h2>{t('gameSession.hint')}</h2>

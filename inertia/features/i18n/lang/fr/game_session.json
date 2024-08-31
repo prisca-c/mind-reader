@@ -17,7 +17,9 @@
   },
   "gameState": {
     "playing": "C'est à ton tour de jouer",
-    "waiting": "Attends que l'adversaire joue"
+    "waiting": "Attends que l'adversaire joue",
+    "win": "Tu as trouvé le mot, GG !",
+    "lose": "Tu n'as pas trouvé le mot, dommage !"
   },
   "player": "Joueur",
   "opponent": "Adversaire",

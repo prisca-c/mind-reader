@@ -17,7 +17,9 @@
   },
   "gameState": {
     "playing": "It's your turn to play",
-    "waiting": "Wait for the opponent to play"
+    "waiting": "Wait for the opponent to play",
+      "win": "You found the word GG!",
+      "lose": "You didn't find the word"
   },
   "player": "Player",
   "opponent": "Opponent",
