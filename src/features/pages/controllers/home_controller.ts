@@ -8,6 +8,7 @@ export default class HomeController {
     const user = auth.user
 
     return inertia.render('home', {
+      username: user.username,
       avatarUrl: user.avatarUrl,
       elo: user.elo,
     })

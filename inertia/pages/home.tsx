@@ -6,12 +6,13 @@ import { Button } from '~/features/utils/components/button'
 import { Container } from '~/features/utils/components/container'
 
 export interface HomeProps {
+  username: string
   avatarUrl: string
   elo: number
 }
 
 export default function Home(props: HomeProps) {
-  const { avatarUrl, elo } = props
+  const { username, avatarUrl, elo } = props
   const [openChat, setOpenChat] = React.useState(false)
   const { t } = useTranslation()
 
@@ -52,10 +53,19 @@ export default function Home(props: HomeProps) {
               alt={'avatar'}
               className={'w-20 h-20 rounded-full border-solid border-4 border-gray-200'}
             />
-            <p className={'text-center bg-gray-200 px-3 py-2 rounded-md w-50'}>
-              {t('home.points')}
-              <span className={'block font-bold'}>{elo}</span>
-            </p>
+            <Container justify={'center'} direction={'col'} gap={2}>
+              <p
+                className={
+                  'text-center bg-gray-200 px-3 py-1rounded-md w-50 rounded-md font-bold truncate'
+                }
+              >
+                {username}
+              </p>
+              <p className={'text-center bg-gray-200 px-3 py-1 rounded-md w-50'}>
+                {t('home.points')}
+                <span className={'block font-bold'}>{elo}</span>
+              </p>
+            </Container>
           </Container>
           <Button onClick={() => router.visit('/profile')}>{t('home.buttons.profile')}</Button>
         </Container>
