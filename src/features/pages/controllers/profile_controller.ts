@@ -24,7 +24,7 @@ export default class SearchGameController {
     user.guesserGames.forEach((game) => {
       games.push({
         id: game.id,
-        date: game.createdAt.toLocaleString(),
+        date: game.date.toLocaleString(),
         guessed: game.guessed,
         role: RolesEnum.GUESSER,
         opponent: game.hintGiver.username,
@@ -35,7 +35,7 @@ export default class SearchGameController {
     user.hintGiverGames.forEach((game) => {
       games.push({
         id: game.id,
-        date: game.createdAt.toLocaleString(),
+        date: game.date.toLocaleString(),
         guessed: game.guessed,
         role: RolesEnum.HINT_GIVER,
         opponent: game.guesser.username,

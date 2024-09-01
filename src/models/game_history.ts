@@ -34,12 +34,6 @@ export default class GameHistory extends BaseModel {
   @column()
   declare wordsList: WordList
 
-  @column.dateTime({ autoCreate: true })
-  declare createdAt: DateTime
-
-  @column.dateTime({ autoCreate: true, autoUpdate: true })
-  declare updatedAt: DateTime
-
   @beforeCreate()
   static generateId(gameHistory: GameHistory) {
     gameHistory.id = randomUUID() as GameHistoryId

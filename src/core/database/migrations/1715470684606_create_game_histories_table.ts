@@ -13,9 +13,6 @@ export default class extends BaseSchema {
       table.boolean('guessed').notNullable()
       table.dateTime('date').notNullable()
       table.jsonb('words_list').notNullable()
-
-      table.timestamp('created_at')
-      table.timestamp('updated_at')
     })
   }
 
