@@ -25,7 +25,7 @@ export const Header = () => {
   }
 
   return (
-    <Container justify={'end'} direction={'row'} gap={4} className={'absolute top-4 right-4'}>
+    <Container justify={'end'} direction={'row'} gap={4} className={'absolute top-4 right-4 z-1'}>
       {language === 'en' ? (
         <img
           src={'/images/flags/united-states-of-america-flag.svg'}
