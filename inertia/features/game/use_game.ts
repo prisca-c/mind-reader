@@ -12,8 +12,8 @@ import { ValidWordState, ValidWordStateEnum } from '#features/game_session/enums
 import { SessionStateEnum } from '#features/game_session/enums/session_state'
 import { useTimer } from '~/hooks/use_timer'
 import { DateTime } from 'luxon'
-import { RolesEnum } from '~/enums/roles'
 import { WordList } from '#features/game_session/types/game_session'
+import { RolesEnum } from '#shared/types/roles'
 
 export type WordStateProps = { valid: boolean; status: WordValidationState }
 
