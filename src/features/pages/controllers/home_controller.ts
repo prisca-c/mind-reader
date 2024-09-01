@@ -5,7 +5,11 @@ export default class HomeController {
     if (!auth.user) {
       return response.redirect('/login')
     }
+    const user = auth.user
 
-    return inertia.render('home')
+    return inertia.render('home', {
+      avatarUrl: user.avatarUrl,
+      elo: user.elo,
+    })
   }
 }

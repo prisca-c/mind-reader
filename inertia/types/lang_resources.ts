@@ -20,7 +20,9 @@ export interface LangResources {
     description: string
     buttons: {
       start: string
+      profile: string
     }
+    points: string
   }
 
   gameSession: {
