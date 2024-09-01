@@ -1,5 +1,5 @@
 import React from 'react'
-import type { Role } from '~/enums/roles'
+import type { Role } from '#shared/types/roles'
 import type { WordStateProps } from '~/features/game/use_game'
 import { useTranslation } from 'react-i18next'
 import {
