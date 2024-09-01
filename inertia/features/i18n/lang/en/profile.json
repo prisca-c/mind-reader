@@ -1,0 +1,9 @@
+{
+  "title": "Profile",
+  "game": {
+    "date": "Date",
+    "role": "Role",
+    "opponent": "Opponent",
+    "word": "Word"
+  }
+}

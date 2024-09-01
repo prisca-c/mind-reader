@@ -1,10 +1,11 @@
 import { DateTime } from 'luxon'
-import { BaseModel, beforeCreate, column } from '@adonisjs/lucid/orm'
+import { BaseModel, beforeCreate, belongsTo, column } from '@adonisjs/lucid/orm'
 import { Opaque } from '@poppinss/utils/types'
-import type { UserId } from '#models/user'
-import type { WordId } from '#models/word'
+import User, { type UserId } from '#models/user'
+import Word, { type WordId } from '#models/word'
 import type { WordList } from '#features/game_session/types/game_session'
 import { randomUUID } from 'node:crypto'
+import type { BelongsTo } from '@adonisjs/lucid/types/relations'
 
 export type GameHistoryId = Opaque<string, 'GameHistoryId'>
 
@@ -43,4 +44,13 @@ export default class GameHistory extends BaseModel {
   static generateId(gameHistory: GameHistory) {
     gameHistory.id = randomUUID() as GameHistoryId
   }
+
+  @belongsTo(() => Word)
+  declare word: BelongsTo<typeof Word>
+
+  @belongsTo(() => User, { foreignKey: 'hintGiverId' })
+  declare hintGiver: BelongsTo<typeof User>
+
+  @belongsTo(() => User, { foreignKey: 'guesserId' })
+  declare guesser: BelongsTo<typeof User>
 }

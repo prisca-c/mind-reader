@@ -51,4 +51,14 @@ export interface LangResources {
     guess: string
     opponent: string
   }
+
+  profile: {
+    title: string
+    game: {
+      date: string
+      role: string
+      opponent: string
+      word: string
+    }
+  }
 }

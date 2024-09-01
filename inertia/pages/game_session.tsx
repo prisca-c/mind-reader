@@ -4,7 +4,6 @@ import type { GameSessionId, WordList } from '#features/game_session/types/game_
 import type User from '#models/user'
 import type { GameResponseStatus } from '~/features/game/types/game_response_status'
 import { router } from '@inertiajs/react'
-import { Role } from '~/enums/roles'
 import { SessionState } from '#features/game_session/enums/session_state'
 import { WordsList } from '~/features/game/components/words_list'
 import { TurnStatus } from '~/features/game/components/turn_status'
@@ -13,6 +12,7 @@ import { GameStatus } from '~/features/game/components/game_status'
 import { PlayerInfo } from '~/features/game/components/player_info'
 import { GameSessionTitle } from '~/features/game/components/game_session_title'
 import { WordForm } from '~/features/game/components/word_form'
+import type { Role } from '#shared/types/roles'
 
 export interface GameSessionProps {
   sessionId: GameSessionId
