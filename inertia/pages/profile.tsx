@@ -1,11 +1,14 @@
-import type User from '#models/user'
 import { GameNormalized } from '#shared/types/game_normalized'
 import { useTranslation } from 'react-i18next'
 import { Container } from '~/features/utils/components/container'
 import { ProfileCard } from '~/features/home/components/profile_card'
 
 interface ProfileProps {
-  user: User
+  user: {
+    username: string
+    avatarUrl: string
+    elo: number
+  }
   games: GameNormalized[]
 }
 

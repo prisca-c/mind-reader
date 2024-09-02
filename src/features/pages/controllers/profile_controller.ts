@@ -43,8 +43,14 @@ export default class SearchGameController {
       })
     })
 
+    const userData = {
+      username: user.username,
+      avatarUrl: user.avatarUrl,
+      elo: user.elo,
+    }
+
     return inertia.render('profile', {
-      user: user,
+      user: userData,
       games: games,
     })
   }
