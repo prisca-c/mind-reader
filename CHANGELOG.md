@@ -24,6 +24,8 @@
   - Show opponent's infos at the end of the game
   - Show word at the end of the game
   - Show current turn info
+- Add a Profile page to show game's history
+- Add a player card to show player's infos
 
 ### Changed
 - Add `Cache` service and update all Redis calls to use it
