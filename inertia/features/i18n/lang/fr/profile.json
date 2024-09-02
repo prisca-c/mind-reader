@@ -1,6 +1,9 @@
 {
   "title": "Profil",
   "gameHistory": "Historique des parties",
+  "buttons": {
+    "home": "Retour à l'accueil"
+  },
   "game": {
     "date": "Date",
     "role": "Rôle",

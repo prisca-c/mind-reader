@@ -57,6 +57,9 @@ export interface LangResources {
   profile: {
     title: string
     gameHistory: string
+    buttons: {
+      home: string
+    }
     game: {
       date: string
       role: string
