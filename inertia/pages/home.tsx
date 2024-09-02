@@ -42,7 +42,7 @@ export default function Home(props: HomeProps) {
           </Trans>
         </p>
         <Button onClick={() => router.visit('/game/search')}>{t('home.buttons.start')}</Button>
-        <ProfileCard username={username} avatarUrl={avatarUrl} elo={elo} />
+        <ProfileCard username={username} avatarUrl={avatarUrl} elo={elo} profileButton />
       </Container>
     </Container>
   )

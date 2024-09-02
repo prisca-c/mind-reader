@@ -7,10 +7,11 @@ export interface Props {
   username: string
   avatarUrl: string
   elo: number
+  profileButton?: boolean
 }
 
 export const ProfileCard = (props: Props) => {
-  const { username, avatarUrl, elo } = props
+  const { username, avatarUrl, elo, profileButton = false } = props
 
   const { t } = useTranslation()
 
@@ -41,7 +42,9 @@ export const ProfileCard = (props: Props) => {
           </p>
         </Container>
       </Container>
-      <Button onClick={() => router.visit('/profile')}>{t('home.buttons.profile')}</Button>
+      {profileButton && (
+        <Button onClick={() => router.visit('/profile')}>{t('home.buttons.profile')}</Button>
+      )}
     </Container>
   )
 }
