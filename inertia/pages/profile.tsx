@@ -1,6 +1,8 @@
 import type User from '#models/user'
 import { GameNormalized } from '#shared/types/game_normalized'
 import { useTranslation } from 'react-i18next'
+import { Container } from '~/features/utils/components/container'
+import { ProfileCard } from '~/features/home/components/profile_card'
 
 interface ProfileProps {
   user: User
@@ -16,9 +18,10 @@ export default function Profile(props: ProfileProps) {
   })
 
   return (
-    <div>
-      <h1>{user.username}</h1>
-      <p>{t('profile.title')}</p>
+    <Container justify={'center'} align={'center'} gap={4} className={'text-center'}>
+      <h1>{t('profile.title')}</h1>
+      <ProfileCard username={user.username} avatarUrl={user.avatarUrl!} elo={user.elo} />
+      <h2>{t('profile.gameHistory')}</h2>
       <div className="text-center border-solid border-2 border-gray-300 rounded-lg w-xs md:w-xl">
         <div className="grid grid-cols-[5fr_5fr_2fr] font-bold shadow-md py-2 w-full">
           <div>{t('profile.game.date')}</div>
@@ -35,6 +38,6 @@ export default function Profile(props: ProfileProps) {
           ))}
         </div>
       </div>
-    </div>
+    </Container>
   )
 }

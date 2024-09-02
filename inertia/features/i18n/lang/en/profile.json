@@ -1,5 +1,6 @@
 {
   "title": "Profile",
+  "gameHistory": "Game History",
   "game": {
     "date": "Date",
     "role": "Role",
