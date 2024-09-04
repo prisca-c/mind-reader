@@ -8,6 +8,7 @@
     "date": "Date",
     "role": "Role",
     "opponent": "Opponent",
-    "word": "Word"
+    "word": "Word",
+    "wordsList": "Words List"
   }
 }

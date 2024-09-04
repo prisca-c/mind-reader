@@ -1,4 +1,10 @@
 export interface LangResources {
+  global: {
+    hintGiver: string
+    guesser: string
+    you: string
+  }
+
   landingPage: {
     title: string
     description: string
@@ -65,6 +71,7 @@ export interface LangResources {
       role: string
       opponent: string
       word: string
+      wordsList: string
     }
   }
 }
