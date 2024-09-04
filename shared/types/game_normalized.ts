@@ -1,4 +1,5 @@
 import type { Role } from '#shared/types/roles'
+import type { WordList } from '#features/game_session/types/game_session'
 
 export interface GameNormalized {
   id: string
@@ -7,4 +8,5 @@ export interface GameNormalized {
   role: Role
   opponent: string
   word: string
+  wordsList: WordList
 }

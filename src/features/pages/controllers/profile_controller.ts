@@ -29,6 +29,7 @@ export default class SearchGameController {
         role: RolesEnum.GUESSER,
         opponent: game.hintGiver.username,
         word: game.word.name,
+        wordsList: game.wordsList,
       })
     })
 
@@ -40,6 +41,7 @@ export default class SearchGameController {
         role: RolesEnum.HINT_GIVER,
         opponent: game.guesser.username,
         word: game.word.name,
+        wordsList: game.wordsList,
       })
     })
 
