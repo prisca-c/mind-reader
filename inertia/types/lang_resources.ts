@@ -3,6 +3,7 @@ export interface LangResources {
     hintGiver: string
     guesser: string
     you: string
+    cancel: string
   }
 
   landingPage: {
@@ -11,6 +12,11 @@ export interface LangResources {
     buttons: {
       login: string
     }
+  }
+
+  search: {
+    search: string
+    queueCount: string
   }
 
   login: {

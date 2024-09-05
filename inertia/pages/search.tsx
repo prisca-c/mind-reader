@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react'
 import { Api } from '~/services/api'
 import { router } from '@inertiajs/react'
 import type { GameSessionId } from '#features/game_session/types/game_session'
+import { Button } from '~/features/utils/components/button'
+import { useTranslation } from 'react-i18next'
 
 type Props = {
   user: User
@@ -15,6 +17,8 @@ export default function Search(props: Props) {
   const [queueCount, setQueueCount] = useState(0)
   const { subscription: userListener } = useTransmit({ url: `game/user/${user.id}` })
   const { subscription: queueListener } = useTransmit({ url: 'game/search' })
+
+  const { t } = useTranslation()
 
   const registerToQueue = async () => {
     const response: { message: string; queueCount: number } = await new Api().post('/game/search')
@@ -53,10 +57,20 @@ export default function Search(props: Props) {
     setQueueCount(message.queueCount)
   })
 
+  const cancelQueue = async () => {
+    await new Api().delete('/game/search')
+    await queueListener?.delete()
+    await userListener?.delete()
+    return router.visit('/game')
+  }
+
   return (
-    <div>
-      <h1>Search</h1>
-      <p>Queue count: {queueCount}</p>
+    <div className={'text-center'}>
+      <h1>{t('search.search')}</h1>
+      <p>
+        {t('search.queueCount')}: <b>{queueCount}</b>
+      </p>
+      <Button onClick={cancelQueue}>{t('global.cancel')}</Button>
     </div>
   )
 }
