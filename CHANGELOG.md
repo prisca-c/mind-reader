@@ -2,6 +2,8 @@
 
 ## [UNRELEASED]
 
+## [0.5.0] - 2024-09-06
+
 ### Added
 - When guesser reached 5 words, game ends
 - When game end, session is saved in database and deleted from cache (redis)
