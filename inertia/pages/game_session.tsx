@@ -1,120 +1,87 @@
-import type { GameSessionId, WordList } from '#types/game_session'
-import { useTransmit } from '~/hooks/use_transmit'
+import { useTranslation } from 'react-i18next'
+import { useGame } from '~/features/game/use_game'
+import type { GameSessionId, WordList } from '#features/game_session/types/game_session'
 import type User from '#models/user'
-import React, { useEffect, useState } from 'react'
-import { Api } from '~/services/api'
-import { GameStatus, type GameStatusEnum } from '#enums/game_status'
+import type { GameResponseStatus } from '~/features/game/types/game_response_status'
 import { router } from '@inertiajs/react'
+import { SessionState } from '#features/game_session/enums/session_state'
+import { WordsList } from '~/features/game/components/words_list'
+import { TurnStatus } from '~/features/game/components/turn_status'
+import { OpponentInfo } from '~/features/game/components/opponent_info'
+import { GameStatus } from '~/features/game/components/game_status'
+import { PlayerInfo } from '~/features/game/components/player_info'
+import { GameSessionTitle } from '~/features/game/components/game_session_title'
+import { WordForm } from '~/features/game/components/word_form'
+import type { Role } from '#shared/types/roles'
 
-interface GameSessionProps {
+export interface GameSessionProps {
   sessionId: GameSessionId
   user: User
+  role: Role
   word?: string
   wordsList?: WordList
-  turn?: boolean
+  turn: boolean | null
+  sessionState: SessionState
+  sessionDate: string
+  gameLength: number
+}
+
+export interface SessionListenerMessage {
+  turn: boolean
+  word: string | null
+  wordsList?: string
+  opponent?: string
+  status?: GameResponseStatus
+  sessionState: SessionState
 }
 
 export default function GameSession(props: GameSessionProps) {
-  const { sessionId, user, word, wordsList, turn } = props
-  const [hintGiverWords, setHintGiverWords] = useState<string[]>([])
-  const [guesserWords, setGuesserWords] = useState<string[]>([])
-  const [gameState, setGameState] = useState<GameStatusEnum>(GameStatus.WAITING)
-
-  const sessionListener = useTransmit({ url: `game/session/${sessionId}/user/${user.id}` })
-
-  useEffect(() => {
-    if (turn) {
-      setGameState('playing')
-    }
-
-    if (!turn) {
-      setGameState('waiting')
-    }
-
-    if (wordsList) {
-      setHintGiverWords(wordsList.hintGiver)
-      setGuesserWords(wordsList.guesser)
-    }
-  }, [])
+  const { user, role } = props
+  const {
+    sessionListener,
+    guesserWords,
+    hintGiverWords,
+    gameState,
+    handleSubmit,
+    handleGameState,
+    handleCopySessionId,
+    wordState,
+    opponent,
+    wordOnChange,
+    wordToGuess,
+    turnState,
+    timer,
+    isActive,
+    isGameOver,
+  } = useGame(props)
 
   sessionListener.subscription?.create()
+  sessionListener.subscription?.onMessage(handleGameState)
 
-  sessionListener.subscription?.onMessage(
-    (message: { turn: boolean; wordsList: string; status?: 'success' | 'error' | 'win' }) => {
-      const words = JSON.parse(message.wordsList) as WordList
-
-      if (message.status && message.status === 'win') {
-        setGameState(GameStatus.WIN)
-        return
-      }
-
-      if (message.turn && words) {
-        setHintGiverWords(words.hintGiver)
-        setGuesserWords(words.guesser)
-        setGameState(GameStatus.PLAYING)
-        return
-      }
-
-      if (!message.turn && words) {
-        setHintGiverWords(words.hintGiver)
-        setGuesserWords(words.guesser)
-        setGameState(GameStatus.WAITING)
-        return
-      }
-    }
-  )
-
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    const form = event.currentTarget
-    const formData = new FormData(form)
-    const answer = formData.get('answer') as string
-
-    if (
-      gameState === GameStatus.WAITING ||
-      gameState === GameStatus.WIN ||
-      gameState === GameStatus.LOSE
-    ) {
-      return
-    }
-
-    await new Api().post(`/game/session/${sessionId}/answer`, { answer })
-    form.reset()
-  }
+  const { t } = useTranslation()
 
   return (
     <div>
-      <h1>Game Session {sessionId}</h1>
-      <p>Player: {user.username}</p>
-      {word && (
-        <p className={gameState === 'win' ? 'text-green-500' : 'text-red-500'}>Word: {word}</p>
-      )}
-      {gameState === 'win' && <p className={'text-green-500'}>'(GG)'</p>}
+      <GameSessionTitle handleCopySessionId={handleCopySessionId} />
+      <PlayerInfo user={user} />
+      <GameStatus gameState={gameState} wordToGuess={wordToGuess} />
+      <OpponentInfo opponent={opponent} isGameOver={isGameOver} />
+      <TurnStatus turnState={turnState} isGameOver={isGameOver} />
+      <p>{timer}</p>
       <div className="grid grid-cols-2 gap-4">
-        <div>
-          <h2>Hint Giver</h2>
-          <ul>
-            {hintGiverWords.map((item, index) => (
-              <li key={index}>{item}</li>
-            ))}
-          </ul>
-        </div>
-        <div>
-          <h2>Guesser</h2>
-          <ul>
-            {guesserWords.map((item, index) => (
-              <li key={index}>{item}</li>
-            ))}
-          </ul>
-        </div>
-        <form onSubmit={handleSubmit}>
-          <input type="text" name="answer" required />
-          <button>Submit</button>
-        </form>
+        <WordsList title={'Hint Words'} words={hintGiverWords} />
+        <WordsList title={'Guesser Words'} words={guesserWords} />
+        <WordForm
+          role={role}
+          wordOnChange={wordOnChange}
+          handleSubmit={handleSubmit}
+          wordState={wordState}
+          timerIsActive={isActive}
+        />
       </div>
-      {gameState === GameStatus.WIN || gameState === GameStatus.LOSE ? (
-        <button onClick={() => router.visit('/game')}>Back to menu</button>
-      ) : null}
+      {isGameOver && (
+        <button onClick={() => router.visit('/game')}>{t('gameSession.buttons.backToMenu')}</button>
+      )}
     </div>
   )
 }

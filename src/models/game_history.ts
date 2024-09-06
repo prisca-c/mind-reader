@@ -1,14 +1,20 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column } from '@adonisjs/lucid/orm'
+import { BaseModel, beforeCreate, belongsTo, column } from '@adonisjs/lucid/orm'
 import { Opaque } from '@poppinss/utils/types'
-import type { UserId } from '#models/user'
-import type { WordId } from '#models/word'
+import User, { type UserId } from '#models/user'
+import Word, { type WordId } from '#models/word'
+import type { WordList } from '#features/game_session/types/game_session'
+import { randomUUID } from 'node:crypto'
+import type { BelongsTo } from '@adonisjs/lucid/types/relations'
 
 export type GameHistoryId = Opaque<string, 'GameHistoryId'>
 
 export default class GameHistory extends BaseModel {
   @column({ isPrimary: true })
   declare id: GameHistoryId
+
+  @column()
+  declare sessionId: string
 
   @column()
   declare hintGiverId: UserId
@@ -26,11 +32,19 @@ export default class GameHistory extends BaseModel {
   declare date: DateTime
 
   @column()
-  declare rounds: string
+  declare wordsList: WordList
 
-  @column.dateTime({ autoCreate: true })
-  declare createdAt: DateTime
+  @beforeCreate()
+  static generateId(gameHistory: GameHistory) {
+    gameHistory.id = randomUUID() as GameHistoryId
+  }
 
-  @column.dateTime({ autoCreate: true, autoUpdate: true })
-  declare updatedAt: DateTime
+  @belongsTo(() => Word)
+  declare word: BelongsTo<typeof Word>
+
+  @belongsTo(() => User, { foreignKey: 'hintGiverId' })
+  declare hintGiver: BelongsTo<typeof User>
+
+  @belongsTo(() => User, { foreignKey: 'guesserId' })
+  declare guesser: BelongsTo<typeof User>
 }

@@ -19,5 +19,6 @@ export default defineConfig({
   ssr: {
     enabled: true,
     entrypoint: 'inertia/app/ssr.tsx',
+    pages: (_ctx, page) => !page.includes('game/session'),
   },
 })

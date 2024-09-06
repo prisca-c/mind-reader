@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 export default function LoginPage() {
   const { t } = useTranslation()
   return (
-    <div className={'flex justify-center items-center h-screen w-screen'}>
+    <div className={'flex justify-center items-center w-screen'}>
       <Head title="Login" />
 
       <div>

@@ -1,0 +1,28 @@
+{
+  "title": "Jeu",
+  "errors": {
+    "wordInvalid": "Mot invalide",
+    "empty": "Le champs est vide",
+    "manyWords": "Il ne peut y avoir qu'un seul mot",
+    "invalidCharacter": "Le mot ne peut contenir que des lettres",
+    "invalidTurn": "Ce n'est pas encore ton tour",
+    "matches": "Le mot se rapproche trop du mot à deviner"
+  },
+  "buttons": {
+    "submit": {
+      "guesser": "Deviner le mot",
+      "hintGiver": "Donner un indice"
+    },
+    "backToMenu": "Retour au menu"
+  },
+  "gameState": {
+    "playing": "C'est à ton tour de jouer",
+    "waiting": "Attends que l'adversaire joue",
+    "win": "Tu as trouvé le mot, GG !",
+    "lose": "Tu n'as pas trouvé le mot, dommage !"
+  },
+  "player": "Joueur",
+  "opponent": "Adversaire",
+  "hint": "Indice",
+  "guess": "Réponse"
+}

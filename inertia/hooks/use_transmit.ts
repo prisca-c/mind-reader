@@ -16,6 +16,10 @@ export const useTransmit = (props: Props) => {
       })
 
       setSubscription(transmit.subscription(url))
+
+      return () => {
+        transmit.close()
+      }
     }
   }, [])
 

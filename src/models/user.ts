@@ -1,12 +1,13 @@
 import type { DateTime } from 'luxon'
 import hash from '@adonisjs/core/services/hash'
 import { compose } from '@adonisjs/core/helpers'
-import { BaseModel, belongsTo, column, hasMany } from '@adonisjs/lucid/orm'
+import { BaseModel, beforeCreate, belongsTo, column, hasMany } from '@adonisjs/lucid/orm'
 import { withAuthFinder } from '@adonisjs/auth/mixins/lucid'
 import type { Opaque } from '@poppinss/utils/types'
 import type { BelongsTo, HasMany } from '@adonisjs/lucid/types/relations'
 import Role from '#models/role'
 import GameHistory from '#models/game_history'
+import { randomUUID } from 'node:crypto'
 
 const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
   uids: ['username', 'email'],
@@ -70,4 +71,17 @@ export default class User extends compose(BaseModel, AuthFinder) {
     foreignKey: 'guesserId',
   })
   declare guesserGames: HasMany<typeof GameHistory>
+
+  @beforeCreate()
+  static generateId(user: User) {
+    user.id = randomUUID() as UserId
+  }
+
+  @beforeCreate()
+  static async roleDefault(user: User) {
+    if (!user.roleId) {
+      const role = await Role.query().where('name', 'user').firstOrFail()
+      user.roleId = role.id
+    }
+  }
 }

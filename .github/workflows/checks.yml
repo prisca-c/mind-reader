@@ -1,0 +1,130 @@
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: 21
+
+    - name: Install pnpm
+      run: |
+        corepack enable
+        corepack prepare pnpm@latest --activate
+
+    - name: Install dependencies
+      run: pnpm install
+
+    - name: Lint
+      run: pnpm lint
+
+  typecheck:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: 21
+
+    - name: Install pnpm
+      run: |
+        corepack enable
+        corepack prepare pnpm@latest --activate
+
+    - name: Install dependencies
+      run: |
+        pnpm install
+        pnpm -r build
+
+    - name: Typecheck
+      run: pnpm typecheck
+
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: 21
+
+    - name: Install pnpm
+      run: |
+        corepack enable
+        corepack prepare pnpm@latest --activate
+
+    - name: Install dependencies
+      run: pnpm install
+
+    - name: Build
+      run: pnpm build
+
+  tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    services:
+      redis:
+        image: redis:6.2-alpine
+        ports:
+          - 6379:6379
+      postgres:
+        image: postgres:15-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
+        ports:
+          - 5432:5432
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: 21
+
+    - name: Install pnpm
+      run: |
+        corepack enable
+        corepack prepare pnpm@latest --activate
+
+    - name: Install dependencies
+      run: |
+        pnpm install
+
+    - name: Run tests
+      env:
+        APP_KEY: 1234567890123456
+        NODE_ENV: test
+        PORT: 3030
+        HOST: localhost
+        LOG_LEVEL: info
+        SESSION_DRIVER: memory
+        REDIS_HOST: localhost
+        REDIS_PORT: 6379
+        REDIS_DB: 1
+        DB_CONNECTION: postgres
+        DB_HOST: localhost
+        DB_PORT: 5432
+        DB_USER: postgres
+        DB_PASSWORD: postgres
+        DB_DATABASE: postgres
+        TWITCH_CLIENT_ID: client_id
+        TWITCH_CLIENT_SECRET: client_secret
+        TWITCH_CALLBACK_URL: http://localhost:3333/auth/twitch/callback
+        GAME_LENGTH: 90
+      run: FORCE_COLOR=1 pnpm test -r

@@ -1,8 +1,9 @@
+import 'virtual:uno.css'
 import '../css/app.css'
 import { hydrateRoot } from 'react-dom/client'
 import { createInertiaApp } from '@inertiajs/react'
-import '~/services/i18n'
-import { Layout } from '~/components/layout'
+import '~/features/i18n/i18n'
+import { Layout } from '~/features/layout/layout'
 
 const appName = import.meta.env.VITE_APP_NAME || 'AdonisJS'
 

@@ -10,7 +10,11 @@ export default defineConfig({
   | will be scanned automatically from the "./commands" directory.
   |
   */
-  commands: [() => import('@adonisjs/core/commands'), () => import('@adonisjs/lucid/commands'), () => import('adonisjs-scheduler/commands')],
+  commands: [
+    () => import('@adonisjs/core/commands'),
+    () => import('@adonisjs/lucid/commands'),
+    () => import('adonisjs-scheduler/commands'),
+  ],
 
   /*
   |--------------------------------------------------------------------------
@@ -45,8 +49,22 @@ export default defineConfig({
     {
       file: () => import('adonisjs-scheduler/scheduler_provider'),
       environment: ['console'],
-    }
+    },
+    () => import('#core/providers/port_provider'),
   ],
+
+  /*
+  |--------------------------------------------------------------------------
+  | Directories
+  |--------------------------------------------------------------------------
+  |
+  | Register custom directories paths.
+  |
+  */
+  directories: {
+    migrations: '#core/database/migrations',
+    seeders: '#core/database/seeders',
+  },
 
   /*
   |--------------------------------------------------------------------------
@@ -56,10 +74,14 @@ export default defineConfig({
   | List of modules to import before starting the application.
   |
   */
-  preloads: [() => import('#start/routes'), () => import('#start/kernel'), {
-    file: () => import('#start/scheduler'),
-    environment: ['console'],
-  }],
+  preloads: [
+    () => import('#start/routes'),
+    () => import('#start/kernel'),
+    {
+      file: () => import('#start/scheduler'),
+      environment: ['console'],
+    },
+  ],
 
   /*
   |--------------------------------------------------------------------------
@@ -111,7 +133,7 @@ export default defineConfig({
   ],
 
   assetsBundler: false,
-  unstable_assembler: {
+  hooks: {
     onBuildStarting: [() => import('@adonisjs/vite/build_hook')],
   },
 })

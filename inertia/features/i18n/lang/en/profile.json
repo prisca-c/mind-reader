@@ -1,0 +1,14 @@
+{
+  "title": "Profile",
+  "gameHistory": "Game History",
+  "buttons": {
+    "home": "Go back to home"
+  },
+  "game": {
+    "date": "Date",
+    "role": "Role",
+    "opponent": "Opponent",
+    "word": "Word",
+    "wordsList": "Words List"
+  }
+}

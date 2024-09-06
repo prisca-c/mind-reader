@@ -1,0 +1,28 @@
+{
+  "title": "Session",
+  "errors": {
+    "wordInvalid": "Invalid word",
+    "empty": "The field is empty",
+    "manyWords": "It can only be one word",
+    "invalidCharacter": "Word can only contain letters",
+    "invalidTurn": "It isn't your turn yet",
+    "matches": "The word is too close to the word to guess"
+  },
+  "buttons": {
+    "submit": {
+      "guesser": "Guess the word",
+      "hintGiver": "Give a hint"
+    },
+    "backToMenu": "Back to menu"
+  },
+  "gameState": {
+    "playing": "It's your turn to play",
+    "waiting": "Wait for the opponent to play",
+      "win": "You found the word GG!",
+      "lose": "You didn't find the word"
+  },
+  "player": "Player",
+  "opponent": "Opponent",
+  "hint": "Hint",
+  "guess": "Guess"
+}
