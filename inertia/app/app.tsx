@@ -5,7 +5,7 @@ import { createInertiaApp } from '@inertiajs/react'
 import '~/features/i18n/i18n'
 import { Layout } from '~/features/layout/layout'
 
-const appName = import.meta.env.VITE_APP_NAME || 'AdonisJS'
+const appName = import.meta.env.VITE_APP_NAME || 'Mind Reader'
 
 createInertiaApp({
   progress: { color: '#5468FF' },
