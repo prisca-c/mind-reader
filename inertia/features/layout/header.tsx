@@ -25,24 +25,26 @@ export const Header = () => {
   }
 
   return (
-    <Container justify={'end'} direction={'row'} gap={4} className={'absolute top-4 right-4 z-1'}>
-      {language === 'en' ? (
-        <img
-          src={'/images/flags/united-states-of-america-flag.svg'}
-          alt={'United States flag'}
-          className={'h-[10px] w-auto'}
-        />
-      ) : (
-        <img
-          src={'/images/flags/france-flag.svg'}
-          alt={'Drapeau français'}
-          className={'h-[10px] w-auto'}
-        />
-      )}
-      <select className={'p-2'} onChange={(e) => changeLanguage(e.target.value)} value={language}>
-        <option value={'en'}>🇺🇸</option>
-        <option value={'fr'}>🇫🇷</option>
-      </select>
-    </Container>
+    <header>
+      <Container justify={'end'} direction={'row'} gap={4} className={'absolute top-4 right-4 z-1'}>
+        {language === 'en' ? (
+          <img
+            src={'/images/flags/united-states-of-america-flag.svg'}
+            alt={'United States flag'}
+            className={'h-[10px] w-auto'}
+          />
+        ) : (
+          <img
+            src={'/images/flags/france-flag.svg'}
+            alt={'Drapeau français'}
+            className={'h-[10px] w-auto'}
+          />
+        )}
+        <select className={'p-2'} onChange={(e) => changeLanguage(e.target.value)} value={language}>
+          <option value={'en'}>🇺🇸</option>
+          <option value={'fr'}>🇫🇷</option>
+        </select>
+      </Container>
+    </header>
   )
 }
