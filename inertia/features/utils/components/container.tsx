@@ -8,6 +8,7 @@ interface Props {
   align?: 'center' | 'start' | 'end' | 'stretch' | 'baseline'
   className?: string
   gap?: number
+  containerType?: 'div' | 'section' | 'main' | 'header' | 'footer'
 }
 
 export const Container = (props: Props) => {
@@ -19,6 +20,7 @@ export const Container = (props: Props) => {
     align = 'center',
     className = '',
     gap = 0,
+    containerType = 'div',
   } = props
 
   const gapStyle = gap ? `gap-${gap}` : ''
@@ -27,5 +29,5 @@ export const Container = (props: Props) => {
   const alignStyle = `items-${align}`
   const classes = `${layout}  ${directionStyle} ${justifyStyle} ${alignStyle} ${gapStyle} ${className}`
 
-  return <div className={classes}>{children}</div>
+  return React.createElement(containerType, { className: classes }, children)
 }

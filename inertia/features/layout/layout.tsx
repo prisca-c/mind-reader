@@ -7,9 +7,12 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
     <Container className={'h-screen w-screen'}>
       <Header />
-      <main className="flex flex-col content-center justify-center flex-grow-1 w-full relative overflow-y-auto">
+      <Container
+        containerType="main"
+        className="flex flex-col content-center justify-center flex-grow-1 w-full relative overflow-y-auto"
+      >
         {children}
-      </main>
+      </Container>
       <Footer />
     </Container>
   )
