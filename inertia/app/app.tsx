@@ -1,5 +1,5 @@
 import 'virtual:uno.css'
-import '../css/app.css'
+import './app.css'
 import { hydrateRoot } from 'react-dom/client'
 import { createInertiaApp } from '@inertiajs/react'
 import '~/features/i18n/i18n'
