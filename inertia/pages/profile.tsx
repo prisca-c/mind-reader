@@ -33,7 +33,7 @@ export default function Profile(props: ProfileProps) {
     <Container justify={'center'} align={'center'} gap={4} className={'text-center'}>
       <Button onClick={() => router.visit('/game')}>{t('profile.buttons.home')}</Button>
       <h1>{t('profile.title')}</h1>
-      <ProfileCard username={user.username} avatarUrl={user.avatarUrl!} elo={user.elo} />
+      <ProfileCard username={user.username} avatarUrl={user.avatarUrl} elo={user.elo} />
       <h2>{t('profile.gameHistory')}</h2>
       <GamesTable games={sortedGames} />
     </Container>
