@@ -1,7 +1,7 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import { DateTime } from 'luxon'
 import { inject } from '@adonisjs/core'
-import { SocialAuth } from '#features/auth/contracts/socials/social_auth'
+import { SocialAuth } from '#features/auth/contracts/social_auth'
 import { SocialAuthStateEnum } from '#features/auth/enums/social_auth_state'
 
 @inject()
