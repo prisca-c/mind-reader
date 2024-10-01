@@ -43,7 +43,6 @@ export class SocialAuth {
       user = await User.firstOrCreate(
         { email: socialUser.email },
         {
-          email: socialUser.email,
           username: socialUser.nickName,
           avatarUrl: socialUser.avatarUrl,
           providerId: provider.id,
