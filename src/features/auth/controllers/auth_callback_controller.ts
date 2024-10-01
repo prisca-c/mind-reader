@@ -1,53 +1,24 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import { DateTime } from 'luxon'
-import Provider from '#models/provider'
-import User from '#models/user'
-import env from '#start/env'
+import { inject } from '@adonisjs/core'
+import { SocialAuth } from '#features/auth/contracts/socials/social_auth'
+import { SocialAuthStateEnum } from '#features/auth/enums/social_auth_state'
 
+@inject()
 export default class AuthCallbackController {
+  constructor(protected socialAuth: SocialAuth) {}
+
   async handle({ ally, auth, response, params, session }: HttpContext) {
     const providerParams = params.provider
     const socialProvider = ally.use(providerParams)
 
-    let user
+    const socialAuthResponse = await this.socialAuth.handle(socialProvider, providerParams)
 
-    const bypassLogin = env.get('BYPASS_LOGIN')
-    const nodeEnv = env.get('NODE_ENV')
-
-    if (bypassLogin && nodeEnv === `development`) {
-      user = await User.firstOrCreate(
-        { email: 'random@user.com' },
-        {
-          username: 'RandomUser',
-          avatarUrl: null,
-          providerId: 1,
-        }
-      )
-    } else if (socialProvider) {
-      if (
-        socialProvider.accessDenied() ||
-        socialProvider.stateMisMatch() ||
-        socialProvider.hasError()
-      ) {
-        return response.redirect('/login')
-      }
-
-      const socialUser = await socialProvider.user()
-
-      const provider = await Provider.findByOrFail('name', providerParams)
-      user = await User.firstOrCreate(
-        { email: socialUser.email },
-        {
-          email: socialUser.email,
-          username: socialUser.nickName,
-          avatarUrl: socialUser.avatarUrl,
-          providerId: provider.id,
-        }
-      )
-    } else {
-      // TODO: Better handling of else exception
-      return response.redirect('/')
+    if (socialAuthResponse.status !== SocialAuthStateEnum.SUCCESS || !socialAuthResponse.payload) {
+      return response.redirect('/login')
     }
+
+    const user = socialAuthResponse.payload
 
     await auth.use('web').login(user)
 
