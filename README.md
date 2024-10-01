@@ -22,4 +22,38 @@ The game is simple, one user have a word given and the other person have to gues
 6. Run `pnpm jobs:run`
 7. Access `http://localhost:3333`
 
+## Offline mode (without social login)
+
+To bypass social login, you can set the `BYPASS_LOGIN` env variable to `1` in your `.env` file. This will allow you to login with a default user.
+```ts
+await this.userRepository.findOrCreate('random@user.com', {
+  username: 'RandomUser',
+  avatarUrl: null,
+  providerId: 1,
+});
+```
+
+## Database
+
+To run the migrations, you can use the following command:
+```bash
+node ace migration:run
+```
+
+To run the seeds, you can use the following command:
+```bash
+node ace db:seed
+```
+
+If you need to rollback the migrations, you can use the following command:
+```bash
+node ace migration:rollback --batch 0
+```
+
+## Tests
+
+To run the tests, you can use the following command:
+```bash
+pnpm test
+```
 

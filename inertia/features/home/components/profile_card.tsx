@@ -5,13 +5,15 @@ import { useTranslation } from 'react-i18next'
 
 export interface Props {
   username: string
-  avatarUrl: string
+  avatarUrl: string | null
   elo: number
   profileButton?: boolean
 }
 
 export const ProfileCard = (props: Props) => {
   const { username, avatarUrl, elo, profileButton = false } = props
+
+  const avatar = avatarUrl ?? '/images/default_avatar.png'
 
   const { t } = useTranslation()
 
@@ -24,7 +26,7 @@ export const ProfileCard = (props: Props) => {
     >
       <Container justify={'center'} direction={'col'} gap={4} className={'md:flex-row'}>
         <img
-          src={avatarUrl}
+          src={avatar}
           alt={'avatar'}
           className={'w-20 h-20 rounded-full border-solid border-4 border-gray-200'}
         />

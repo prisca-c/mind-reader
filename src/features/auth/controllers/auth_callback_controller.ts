@@ -1,44 +1,31 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import { DateTime } from 'luxon'
-import Provider from '#models/provider'
-import User from '#models/user'
+import { inject } from '@adonisjs/core'
+import { SocialAuth } from '#features/auth/contracts/social_auth'
+import { SocialAuthStateEnum } from '#features/auth/enums/social_auth_state'
 
+@inject()
 export default class AuthCallbackController {
+  constructor(protected socialAuth: SocialAuth) {}
+
   async handle({ ally, auth, response, params, session }: HttpContext) {
     const providerParams = params.provider
     const socialProvider = ally.use(providerParams)
 
-    if (
-      socialProvider.accessDenied() ||
-      socialProvider.stateMisMatch() ||
-      socialProvider.hasError()
-    ) {
+    const socialAuthResponse = await this.socialAuth.handle(socialProvider, providerParams)
+
+    if (socialAuthResponse.status !== SocialAuthStateEnum.SUCCESS || !socialAuthResponse.payload) {
       return response.redirect('/login')
     }
 
-    const socialUser = await socialProvider.user()
+    const user = socialAuthResponse.payload
 
-    if (socialUser) {
-      const provider = await Provider.findByOrFail('name', providerParams)
-      await User.firstOrCreate(
-        { email: socialUser.email },
-        {
-          email: socialUser.email,
-          username: socialUser.nickName,
-          avatarUrl: socialUser.avatarUrl,
-          providerId: provider.id,
-        }
-      )
+    await auth.use('web').login(user)
 
-      const user = await User.findByOrFail('email', socialUser.email)
-      await auth.use('web').login(user)
+    user.lastSessionId = session.sessionId
+    user.lastSessionAt = DateTime.now()
+    await user.save()
 
-      user.lastSessionId = session.sessionId
-      user.lastSessionAt = DateTime.now()
-      await user.save()
-
-      return response.redirect('/game')
-    }
-    return response.redirect('/')
+    return response.redirect('/game')
   }
 }
