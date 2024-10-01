@@ -2,6 +2,9 @@
 
 ## [UNRELEASED]
 
+### Added
+- Added `BYPASS_LOGIN` env variable to bypass social login for development
+
 ## [0.5.0] - 2024-09-06
 
 ### Added
