@@ -3,6 +3,7 @@ import { GamePort } from '#features/game_session/contracts/game/game_port'
 import { CacheService } from '#services/cache/cache_service'
 import { EventStreamService } from '#services/event_stream/event_stream_service'
 import { UserPort } from '#features/user/contracts/user_port'
+import { ProviderPort } from '#features/provider/contracts/provider_port'
 
 export default class PortProvider {
   constructor(protected app: ApplicationService) {}
@@ -23,6 +24,14 @@ export default class PortProvider {
 
     this.app.container.singleton(UserPort, () => {
       return new UserDatabaseAdapter()
+    })
+
+    const { ProviderDatabaseAdapter } = await import(
+      '#features/provider/contracts/provider_database_adapter'
+    )
+
+    this.app.container.singleton(ProviderPort, () => {
+      return new ProviderDatabaseAdapter()
     })
   }
 

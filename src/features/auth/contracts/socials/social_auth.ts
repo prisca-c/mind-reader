@@ -1,16 +1,17 @@
 import env from '#start/env'
 import User from '#models/user'
-import Provider from '#models/provider'
 import { type SocialAuthState, SocialAuthStateEnum } from '#features/auth/enums/social_auth_state'
 import { ResponseService } from '#services/reponse_service'
 import { inject } from '@adonisjs/core'
 import { UserPort } from '#features/user/contracts/user_port'
+import { ProviderPort } from '#features/provider/contracts/provider_port'
 
 @inject()
 export class SocialAuth {
   constructor(
     protected responseService: ResponseService,
-    protected userRepository: UserPort
+    protected userRepository: UserPort,
+    protected providerRepository: ProviderPort
   ) {}
 
   async handle(
@@ -40,7 +41,7 @@ export class SocialAuth {
 
       const socialUser = await socialProvider.user()
 
-      const provider = await Provider.findByOrFail('name', providerParams)
+      const provider = await this.providerRepository.findByOrFail('name', providerParams)
       user = await this.userRepository.findOrCreate(socialUser.email, {
         username: socialUser.nickName,
         avatarUrl: socialUser.avatarUrl,
