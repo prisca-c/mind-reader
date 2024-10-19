@@ -11,8 +11,8 @@
     "build": "node ace build",
     "dev": "node ace serve --hmr",
     "test": "node ace test --force-exit",
-    "lint": "eslint .",
-    "format": "prettier --write .",
+    "lint": "biome check",
+    "format": "biome check --write",
     "typecheck": "tsc --noEmit & tsc -p inertia --noEmit",
     "jobs:run": "node ace scheduler:run"
   },
