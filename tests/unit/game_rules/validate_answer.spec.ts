@@ -1,7 +1,7 @@
 import { test } from '@japa/runner'
 import { GameRules } from '#features/game_session/contracts/game_rules/game_rules'
-import { player1, player2, session } from '#tests/utils/session_data'
 import { ValidWordStateEnum } from '#features/game_session/enums/valid_word_state'
+import { player1, player2, session } from '#tests/utils/session_data'
 
 test.group('GameRules - validateAnswer', () => {
   const gameRules = new GameRules()
@@ -18,9 +18,7 @@ test.group('GameRules - validateAnswer', () => {
     assert.isTrue(result)
   })
 
-  test('should return false when the player is the guesser and the word does not match', ({
-    assert,
-  }) => {
+  test('should return false when the player is the guesser and the word does not match', ({ assert }) => {
     const sessionCopy = { ...session, word: 'apple', hintGiver: player2.id }
     const result = gameRules.validateAnswer(sessionCopy, 'banana', player1.id)
     assert.isFalse(result)

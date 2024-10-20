@@ -8,7 +8,11 @@ interface ChatFormProps {
 export const ChatForm = (props: ChatFormProps) => {
   const { onSubmit, setOpenChat } = props
   return (
-    <form method={'post'} className={'flex w-full flex-col gap-2'} onSubmit={onSubmit}>
+    <form
+      method={'post'}
+      className={'flex w-full flex-col gap-2'}
+      onSubmit={onSubmit}
+    >
       <input type={'text'} name={'message'} className={'w-auto rounded p-2'} />
       <div className={'flex w-full gap-1'}>
         <button
@@ -21,7 +25,9 @@ export const ChatForm = (props: ChatFormProps) => {
         </button>
 
         <button
-          className={'border-2 border-gray-500 hover:bg-gray-500 hover:text-white rounded px-2'}
+          className={
+            'border-2 border-gray-500 hover:bg-gray-500 hover:text-white rounded px-2'
+          }
           onClick={() => setOpenChat && setOpenChat(false)}
         >
           ❌

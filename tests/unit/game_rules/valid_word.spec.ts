@@ -1,7 +1,7 @@
 import { test } from '@japa/runner'
 import { GameRules } from '#features/game_session/contracts/game_rules/game_rules'
-import type { GameSession } from '#features/game_session/types/game_session'
 import { ValidWordStateEnum } from '#features/game_session/enums/valid_word_state'
+import type { GameSession } from '#features/game_session/types/game_session'
 import { player1, player2, session } from '#tests/utils/session_data'
 
 test.group('GameRules - validWord', () => {
@@ -24,9 +24,7 @@ test.group('GameRules - validWord', () => {
     assert.equal(result.status, ValidWordStateEnum.VALID)
   })
 
-  test('should return VALID if the player is the hint giver and the word does not match', ({
-    assert,
-  }) => {
+  test('should return VALID if the player is the hint giver and the word does not match', ({ assert }) => {
     const sessionCopy: GameSession = { ...session, word: 'apple' }
     const result = gameRules.validWord(sessionCopy, player1.id, 'banana')
     assert.equal(result.status, ValidWordStateEnum.VALID)

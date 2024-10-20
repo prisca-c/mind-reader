@@ -1,13 +1,10 @@
 import type { GameRulesInterface } from '#features/game_session/contracts/game_rules/game_rules_interface'
+import { type ValidWordState, ValidWordStateEnum } from '#features/game_session/enums/valid_word_state'
 import type { GameSession } from '#features/game_session/types/game_session'
-import {
-  type ValidWordState,
-  ValidWordStateEnum,
-} from '#features/game_session/enums/valid_word_state'
 import { normalizeLatin } from '#helpers/text'
 
 export class GameRules implements GameRulesInterface {
-  validWord(session: GameSession, userId: string, answer: string): { status: ValidWordState } {
+  public validWord(session: GameSession, userId: string, answer: string): { status: ValidWordState } {
     const { word, hintGiver } = session
     if (!word) {
       return {
@@ -29,8 +26,7 @@ export class GameRules implements GameRulesInterface {
       const normalizeWord = normalizeLatin(word).toLowerCase()
 
       return !(
-        normalizeWord.startsWith(normalizeAnswer.slice(0, 3)) ||
-        normalizeWord.endsWith(normalizeAnswer.slice(-3))
+        normalizeWord.startsWith(normalizeAnswer.slice(0, 3)) || normalizeWord.endsWith(normalizeAnswer.slice(-3))
       )
         ? validReturn
         : matchReturn
@@ -41,7 +37,7 @@ export class GameRules implements GameRulesInterface {
     }
   }
 
-  validateAnswer(session: GameSession, answer: string, userId: string): boolean {
+  public validateAnswer(session: GameSession, answer: string, userId: string): boolean {
     const { word, hintGiver } = session
     if (!word) {
       return false
@@ -57,11 +53,11 @@ export class GameRules implements GameRulesInterface {
     return false
   }
 
-  isAuthorizedPlayer(userId: string, player1Id: string, player2Id: string): boolean {
+  public isAuthorizedPlayer(userId: string, player1Id: string, player2Id: string): boolean {
     return userId === player1Id || userId === player2Id
   }
 
-  updateSessionForHintGiver(session: GameSession, answer: string): GameSession {
+  public updateSessionForHintGiver(session: GameSession, answer: string): GameSession {
     const { player1, player2, hintGiver, wordsList } = session
     return {
       ...session,
@@ -73,11 +69,11 @@ export class GameRules implements GameRulesInterface {
     }
   }
 
-  updateSessionForGuesser(
+  public updateSessionForGuesser(
     session: GameSession,
     answer: string,
     isOver: boolean,
-    isCorrect: boolean
+    isCorrect: boolean,
   ): GameSession {
     const { wordsList, hintGiver } = session
     return {

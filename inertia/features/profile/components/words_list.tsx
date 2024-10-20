@@ -1,5 +1,5 @@
-import { GameNormalized } from '#shared/types/game_normalized'
 import { useTranslation } from 'react-i18next'
+import { GameNormalized } from '#shared/types/game_normalized'
 
 interface WordsListProps {
   game: GameNormalized

@@ -1,17 +1,13 @@
 import { inject } from '@adonisjs/core'
 import { HttpContext } from '@adonisjs/core/http'
+import { Player } from '#features/game_session/types/player'
+import { assert } from '#helpers/assert'
 import { CacheService } from '#services/cache/cache_service'
 import { EventStreamService } from '#services/event_stream/event_stream_service'
-import { assert } from '#helpers/assert'
-import { Player } from '#features/game_session/types/player'
 
 export default class CancelMatchmakingController {
   @inject()
-  async handle(
-    { auth, response }: HttpContext,
-    cache: CacheService,
-    eventStream: EventStreamService
-  ) {
+  public async handle({ auth, response }: HttpContext, cache: CacheService, eventStream: EventStreamService) {
     const authCheck = await auth.use('web').check()
     if (!authCheck) {
       return response.unauthorized()

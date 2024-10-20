@@ -1,8 +1,8 @@
 import { test } from '@japa/runner'
-import { MatchPlayerJob } from '#features/matchmaking/jobs/match_player_job'
-import { CacheService } from '#services/cache/cache_service'
 import { Player } from '#features/game_session/types/player'
+import { MatchPlayerJob } from '#features/matchmaking/jobs/match_player_job'
 import type { UserId } from '#models/user'
+import { CacheService } from '#services/cache/cache_service'
 import { EventStreamService } from '#services/event_stream/event_stream_service'
 
 test.group('Matchmaking - Get Random Players', () => {

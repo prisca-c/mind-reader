@@ -1,5 +1,5 @@
-import ReactDOMServer from 'react-dom/server'
 import { createInertiaApp } from '@inertiajs/react'
+import ReactDOMServer from 'react-dom/server'
 import '~/features/i18n/i18n'
 import { Layout } from '~/features/layout/layout'
 

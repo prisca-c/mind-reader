@@ -1,13 +1,13 @@
-import type { DateTime } from 'luxon'
-import hash from '@adonisjs/core/services/hash'
-import { compose } from '@adonisjs/core/helpers'
-import { BaseModel, beforeCreate, belongsTo, column, hasMany } from '@adonisjs/lucid/orm'
-import { withAuthFinder } from '@adonisjs/auth/mixins/lucid'
-import type { Opaque } from '@poppinss/utils/types'
-import type { BelongsTo, HasMany } from '@adonisjs/lucid/types/relations'
-import Role from '#models/role'
-import GameHistory from '#models/game_history'
 import { randomUUID } from 'node:crypto'
+import { withAuthFinder } from '@adonisjs/auth/mixins/lucid'
+import { compose } from '@adonisjs/core/helpers'
+import hash from '@adonisjs/core/services/hash'
+import { BaseModel, beforeCreate, belongsTo, column, hasMany } from '@adonisjs/lucid/orm'
+import type { BelongsTo, HasMany } from '@adonisjs/lucid/types/relations'
+import type { Opaque } from '@poppinss/utils/types'
+import type { DateTime } from 'luxon'
+import GameHistory from '#models/game_history'
+import Role from '#models/role'
 
 const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
   uids: ['username', 'email'],
@@ -18,67 +18,67 @@ export type UserId = Opaque<string, 'UserId'>
 
 export default class User extends compose(BaseModel, AuthFinder) {
   @column({ isPrimary: true })
-  declare id: UserId
+  public declare id: UserId
 
   @column()
-  declare username: string
+  public declare username: string
 
   @column()
-  declare email: string
+  public declare email: string
 
   @column()
-  declare emailVerifiedAt: DateTime | null
+  public declare emailVerifiedAt: DateTime | null
 
   @column()
-  declare avatarUrl: string | null
+  public declare avatarUrl: string | null
 
   @column()
-  declare roleId: number
+  public declare roleId: number
 
   @column()
-  declare providerId: number
+  public declare providerId: number
 
   @column()
-  declare password: string | null
+  public declare password: string | null
 
   @column()
-  declare elo: number
+  public declare elo: number
 
   @column()
-  declare lastSessionId: string | null
+  public declare lastSessionId: string | null
 
   @column()
-  declare lastSessionAt: DateTime | null
+  public declare lastSessionAt: DateTime | null
 
   @column.dateTime()
-  declare bannedAt: DateTime | null
+  public declare bannedAt: DateTime | null
 
   @column.dateTime({ autoCreate: true })
-  declare createdAt: DateTime
+  public declare createdAt: DateTime
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
-  declare updatedAt: DateTime | null
+  public declare updatedAt: DateTime | null
 
   @belongsTo(() => Role)
-  declare role: BelongsTo<typeof Role>
+  public declare role: BelongsTo<typeof Role>
 
   @hasMany(() => GameHistory, {
     foreignKey: 'hintGiverId',
   })
-  declare hintGiverGames: HasMany<typeof GameHistory>
+  public declare hintGiverGames: HasMany<typeof GameHistory>
 
   @hasMany(() => GameHistory, {
     foreignKey: 'guesserId',
   })
-  declare guesserGames: HasMany<typeof GameHistory>
+  public declare guesserGames: HasMany<typeof GameHistory>
 
   @beforeCreate()
-  static generateId(user: User) {
+  public static generateId(user: User) {
     user.id = randomUUID() as UserId
   }
 
   @beforeCreate()
-  static async roleDefault(user: User) {
+  public static async roleDefault(user: User) {
     if (!user.roleId) {
       const role = await Role.query().where('name', 'user').firstOrFail()
       user.roleId = role.id

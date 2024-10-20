@@ -10,8 +10,10 @@ export const TurnStatus = ({
   const { t } = useTranslation()
   return (
     !isGameOver && (
-      <p className="text-blue-500">
-        {turnState ? t('gameSession.gameState.playing') : t('gameSession.gameState.waiting')}
+      <p className='text-blue-500'>
+        {turnState
+          ? t('gameSession.gameState.playing')
+          : t('gameSession.gameState.waiting')}
       </p>
     )
   )

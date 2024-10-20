@@ -1,10 +1,10 @@
+import { randomUUID } from 'node:crypto'
 import { test } from '@japa/runner'
-import { session } from '#tests/utils/session_data'
+import type { GameSessionId } from '#features/game_session/types/game_session'
 import { MatchPlayerJob } from '#features/matchmaking/jobs/match_player_job'
 import { CacheService } from '#services/cache/cache_service'
-import { randomUUID } from 'node:crypto'
-import type { GameSessionId } from '#features/game_session/types/game_session'
 import { EventStreamService } from '#services/event_stream/event_stream_service'
+import { session } from '#tests/utils/session_data'
 
 test.group('MatchPlayer - checkPlayerStatus', () => {
   const cache = new CacheService()

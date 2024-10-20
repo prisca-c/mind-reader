@@ -1,10 +1,6 @@
-import type { UserId } from '#models/user'
-import type {
-  GameSession,
-  GameSessionId,
-  PlayerSession,
-} from '#features/game_session/types/game_session'
 import { SessionStateEnum } from '#features/game_session/enums/session_state'
+import type { GameSession, GameSessionId, PlayerSession } from '#features/game_session/types/game_session'
+import type { UserId } from '#models/user'
 
 export const player1: PlayerSession = {
   id: '1' as UserId,

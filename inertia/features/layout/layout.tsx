@@ -8,8 +8,8 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
     <Container className={'h-screen w-screen'}>
       <Header />
       <Container
-        containerType="main"
-        className="flex flex-col content-center justify-center flex-grow-1 w-full relative overflow-y-auto"
+        containerType='main'
+        className='flex flex-col content-center justify-center flex-grow-1 w-full relative overflow-y-auto'
       >
         {children}
       </Container>

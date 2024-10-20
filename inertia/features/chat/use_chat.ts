@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import { Api } from '~/services/api'
 import { useTransmit } from '~/hooks/use_transmit'
+import { Api } from '~/services/api'
 
 interface MessageProps {
   timestamp: string

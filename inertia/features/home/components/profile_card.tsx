@@ -1,7 +1,7 @@
-import { Container } from '~/features/utils/components/container'
-import { Button } from '~/features/utils/components/button'
 import { router } from '@inertiajs/react'
 import { useTranslation } from 'react-i18next'
+import { Button } from '~/features/utils/components/button'
+import { Container } from '~/features/utils/components/container'
 
 export interface Props {
   username: string
@@ -24,11 +24,18 @@ export const ProfileCard = (props: Props) => {
       gap={4}
       className={'bg-gray-100 p-4 rounded-md'}
     >
-      <Container justify={'center'} direction={'col'} gap={4} className={'md:flex-row'}>
+      <Container
+        justify={'center'}
+        direction={'col'}
+        gap={4}
+        className={'md:flex-row'}
+      >
         <img
           src={avatar}
           alt={'avatar'}
-          className={'w-20 h-20 rounded-full border-solid border-4 border-gray-200'}
+          className={
+            'w-20 h-20 rounded-full border-solid border-4 border-gray-200'
+          }
         />
         <Container justify={'center'} direction={'col'} gap={2}>
           <p
@@ -45,7 +52,9 @@ export const ProfileCard = (props: Props) => {
         </Container>
       </Container>
       {profileButton && (
-        <Button onClick={() => router.visit('/profile')}>{t('home.buttons.profile')}</Button>
+        <Button onClick={() => router.visit('/profile')}>
+          {t('home.buttons.profile')}
+        </Button>
       )}
     </Container>
   )

@@ -2,7 +2,7 @@ import { BaseSeeder } from '@adonisjs/lucid/seeders'
 import Word from '#models/word'
 
 export default class extends BaseSeeder {
-  async run() {
+  public async run() {
     const wordsEn: Partial<Word>[] = [
       {
         name: 'apple',

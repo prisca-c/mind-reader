@@ -1,7 +1,7 @@
-import { MessagesList } from '~/features/chat/messages_list'
-import { ChatForm } from '~/features/chat/chat_form'
-import { useChat } from '~/features/chat/use_chat'
 import { Dispatch, SetStateAction } from 'react'
+import { ChatForm } from '~/features/chat/chat_form'
+import { MessagesList } from '~/features/chat/messages_list'
+import { useChat } from '~/features/chat/use_chat'
 
 interface Props {
   isOpen?: boolean

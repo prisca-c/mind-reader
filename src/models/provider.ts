@@ -1,19 +1,19 @@
-import type { DateTime } from 'luxon'
 import { BaseModel, column } from '@adonisjs/lucid/orm'
 import type { Opaque } from '@poppinss/utils/types'
+import type { DateTime } from 'luxon'
 
 export type ProviderId = Opaque<number, 'ProviderId'>
 
 export default class Provider extends BaseModel {
   @column({ isPrimary: true })
-  declare id: ProviderId
+  public declare id: ProviderId
 
   @column()
-  declare name: string
+  public declare name: string
 
   @column.dateTime({ autoCreate: true })
-  declare createdAt: DateTime
+  public declare createdAt: DateTime
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
-  declare updatedAt: DateTime
+  public declare updatedAt: DateTime
 }

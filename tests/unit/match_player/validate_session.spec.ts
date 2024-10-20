@@ -1,10 +1,10 @@
+import { randomUUID } from 'node:crypto'
 import { test } from '@japa/runner'
-import { session } from '#tests/utils/session_data'
+import type { GameSessionId } from '#features/game_session/types/game_session'
 import { MatchPlayerJob } from '#features/matchmaking/jobs/match_player_job'
 import { CacheService } from '#services/cache/cache_service'
-import { randomUUID } from 'node:crypto'
-import type { GameSessionId } from '#features/game_session/types/game_session'
 import { EventStreamService } from '#services/event_stream/event_stream_service'
+import { session } from '#tests/utils/session_data'
 
 test.group('MatchPlayer - Validate Session', (group) => {
   const cache = new CacheService()
@@ -50,9 +50,7 @@ test.group('MatchPlayer - Validate Session', (group) => {
     assert.isFalse(result)
   })
 
-  test('should return false when session is invalid (one player not accepted)', async ({
-    assert,
-  }) => {
+  test('should return false when session is invalid (one player not accepted)', async ({ assert }) => {
     const sessionId = randomUUID()
     await job.createSession(players[0], players[1], sessionId as GameSessionId)
 

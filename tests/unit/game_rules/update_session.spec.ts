@@ -1,7 +1,7 @@
 import { test } from '@japa/runner'
 import { GameRules } from '#features/game_session/contracts/game_rules/game_rules'
-import { player1, player2, session } from '#tests/utils/session_data'
 import { GameSession } from '#features/game_session/types/game_session'
+import { player1, player2, session } from '#tests/utils/session_data'
 
 test.group('GameRules - updateSessionForHintGiver & updateSessionForGuesser', () => {
   const gameRules = new GameRules()

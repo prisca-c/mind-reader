@@ -19,14 +19,10 @@ const SearchGameController = () => import('#features/pages/controllers/search_ga
 const HomeController = () => import('#features/pages/controllers/home_controller')
 const LandingPageController = () => import('#features/pages/controllers/landing_page_controller')
 const LoginController = () => import('#features/pages/controllers/login_controller')
-const GameAnswerController = () =>
-  import('#features/game_session/controllers/game_answer_controller')
-const SearchMatchmakingController = () =>
-  import('#features/matchmaking/controllers/search_matchmaking_controller')
-const CancelMatchmakingController = () =>
-  import('#features/matchmaking/controllers/cancel_matchmaking_controller')
-const AcceptMatchmakingController = () =>
-  import('#features/matchmaking/controllers/accept_matchmaking_controller')
+const GameAnswerController = () => import('#features/game_session/controllers/game_answer_controller')
+const SearchMatchmakingController = () => import('#features/matchmaking/controllers/search_matchmaking_controller')
+const CancelMatchmakingController = () => import('#features/matchmaking/controllers/cancel_matchmaking_controller')
+const AcceptMatchmakingController = () => import('#features/matchmaking/controllers/accept_matchmaking_controller')
 const GameReadyController = () => import('#features/game_session/controllers/game_ready_controller')
 const ProfileController = () => import('#features/pages/controllers/profile_controller')
 // endregion
@@ -63,9 +59,5 @@ router
   })
   .use(middleware.auth())
 
-router
-  .get('/auth/:provider/redirect', [AuthRedirectController, 'handle'])
-  .where('provider', /twitch/)
-router
-  .get('/auth/:provider/callback', [AuthCallbackController, 'handle'])
-  .where('provider', /twitch/)
+router.get('/auth/:provider/redirect', [AuthRedirectController, 'handle']).where('provider', /twitch/)
+router.get('/auth/:provider/callback', [AuthCallbackController, 'handle']).where('provider', /twitch/)

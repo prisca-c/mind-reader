@@ -1,17 +1,20 @@
-import { useTranslation } from 'react-i18next'
-import { useGame } from '~/features/game/use_game'
-import type { GameSessionId, WordList } from '#features/game_session/types/game_session'
-import type User from '#models/user'
-import type { GameResponseStatus } from '~/features/game/types/game_response_status'
 import { router } from '@inertiajs/react'
-import { SessionState } from '#features/game_session/enums/session_state'
-import { WordsList } from '~/features/game/components/words_list'
-import { TurnStatus } from '~/features/game/components/turn_status'
-import { OpponentInfo } from '~/features/game/components/opponent_info'
-import { GameStatus } from '~/features/game/components/game_status'
-import { PlayerInfo } from '~/features/game/components/player_info'
+import { useTranslation } from 'react-i18next'
 import { GameSessionTitle } from '~/features/game/components/game_session_title'
+import { GameStatus } from '~/features/game/components/game_status'
+import { OpponentInfo } from '~/features/game/components/opponent_info'
+import { PlayerInfo } from '~/features/game/components/player_info'
+import { TurnStatus } from '~/features/game/components/turn_status'
 import { WordForm } from '~/features/game/components/word_form'
+import { WordsList } from '~/features/game/components/words_list'
+import type { GameResponseStatus } from '~/features/game/types/game_response_status'
+import { useGame } from '~/features/game/use_game'
+import { SessionState } from '#features/game_session/enums/session_state'
+import type {
+  GameSessionId,
+  WordList,
+} from '#features/game_session/types/game_session'
+import type User from '#models/user'
 import type { Role } from '#shared/types/roles'
 
 export interface GameSessionProps {
@@ -68,7 +71,7 @@ export default function GameSession(props: GameSessionProps) {
       <OpponentInfo opponent={opponent} isGameOver={isGameOver} />
       <TurnStatus turnState={turnState} isGameOver={isGameOver} />
       <p>{timer}</p>
-      <div className="grid grid-cols-2 gap-4">
+      <div className='grid grid-cols-2 gap-4'>
         <WordsList title={'Hint Words'} words={hintGiverWords} />
         <WordsList title={'Guesser Words'} words={guesserWords} />
         <WordForm
@@ -80,7 +83,9 @@ export default function GameSession(props: GameSessionProps) {
         />
       </div>
       {isGameOver && (
-        <button onClick={() => router.visit('/game')}>{t('gameSession.buttons.backToMenu')}</button>
+        <button onClick={() => router.visit('/game')}>
+          {t('gameSession.buttons.backToMenu')}
+        </button>
       )}
     </div>
   )

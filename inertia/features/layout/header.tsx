@@ -6,7 +6,9 @@ export const Header = () => {
   const [language, setLanguage] = React.useState<string>('en')
 
   React.useEffect(() => {
-    const locale = document.cookie.split(';').find((cookie) => cookie.includes('locale'))
+    const locale = document.cookie
+      .split(';')
+      .find((cookie) => cookie.includes('locale'))
     if (locale) {
       const cookieLang = locale.split('=')[1]
       i18n.changeLanguage(cookieLang)
@@ -26,7 +28,7 @@ export const Header = () => {
 
   return (
     <Container
-      containerType="header"
+      containerType='header'
       justify={'end'}
       direction={'row'}
       gap={4}
@@ -45,7 +47,11 @@ export const Header = () => {
           className={'h-[10px] w-auto'}
         />
       )}
-      <select className={'p-2'} onChange={(e) => changeLanguage(e.target.value)} value={language}>
+      <select
+        className={'p-2'}
+        onChange={(e) => changeLanguage(e.target.value)}
+        value={language}
+      >
         <option value={'en'}>🇺🇸</option>
         <option value={'fr'}>🇫🇷</option>
       </select>

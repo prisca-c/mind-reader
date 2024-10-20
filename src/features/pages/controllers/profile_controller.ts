@@ -3,8 +3,8 @@ import { assert } from '#helpers/assert'
 import { GameNormalized } from '#shared/types/game_normalized'
 import { RolesEnum } from '#shared/types/roles'
 
-export default class SearchGameController {
-  async render({ inertia, auth, response }: HttpContext) {
+export default class ProfileController {
+  public async render({ inertia, auth, response }: HttpContext) {
     if (!(await auth.check())) {
       return response.redirect('/login')
     }

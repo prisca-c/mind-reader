@@ -1,14 +1,14 @@
+import { inject } from '@adonisjs/core'
 import type { HttpContext } from '@adonisjs/core/http'
 import { DateTime } from 'luxon'
-import { inject } from '@adonisjs/core'
 import { SocialAuth } from '#features/auth/contracts/social_auth'
 import { SocialAuthStateEnum } from '#features/auth/enums/social_auth_state'
 
 @inject()
 export default class AuthCallbackController {
-  constructor(protected socialAuth: SocialAuth) {}
+  public constructor(protected socialAuth: SocialAuth) {}
 
-  async handle({ ally, auth, response, params, session }: HttpContext) {
+  public async handle({ ally, auth, response, params, session }: HttpContext) {
     const providerParams = params.provider
     const socialProvider = ally.use(providerParams)
 

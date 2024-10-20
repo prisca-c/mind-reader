@@ -1,6 +1,6 @@
-import { GameNormalized } from '#shared/types/game_normalized'
-import { WordsList } from '~/features/profile/components/words_list'
 import { useTranslation } from 'react-i18next'
+import { WordsList } from '~/features/profile/components/words_list'
+import { GameNormalized } from '#shared/types/game_normalized'
 
 interface GamesTableItemProps {
   game: GameNormalized
@@ -15,16 +15,16 @@ export const GamesTableItem = (props: GamesTableItemProps) => {
   return (
     <div>
       <div
-        className="grid grid-cols-[5fr_5fr_2fr] py-2 w-full cursor-pointer"
+        className='grid grid-cols-[5fr_5fr_2fr] py-2 w-full cursor-pointer'
         onClick={() => onGameClick(game.id)}
       >
         <p>{game.date}</p>
         <p>{game.word}</p>
-        <p className="text-center">{game.guessed ? '✅' : '❌'}</p>
+        <p className='text-center'>{game.guessed ? '✅' : '❌'}</p>
       </div>
       <div>
         {openedGame === game.id && (
-          <div className="bg-gray-200 py-2 w-full">
+          <div className='bg-gray-200 py-2 w-full'>
             <p>
               {t('profile.game.opponent')}: {game.opponent}
             </p>

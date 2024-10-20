@@ -1,12 +1,12 @@
-import { CacheInterface } from './cache_interface.js'
 import redis from '@adonisjs/redis/services/main'
+import { CacheInterface } from './cache_interface.js'
 
 export class CacheService implements CacheInterface {
-  async get(key: string): Promise<string | null> {
+  public async get(key: string): Promise<string | null> {
     return redis.get(key)
   }
 
-  async set(key: string, value: string): Promise<boolean> {
+  public async set(key: string, value: string): Promise<boolean> {
     try {
       await redis.set(key, value)
       return true
@@ -15,7 +15,7 @@ export class CacheService implements CacheInterface {
     }
   }
 
-  async del(key: string): Promise<boolean> {
+  public async del(key: string): Promise<boolean> {
     try {
       await redis.del(key)
       return true
@@ -24,11 +24,11 @@ export class CacheService implements CacheInterface {
     }
   }
 
-  async keys(pattern: string): Promise<string[]> {
+  public async keys(pattern: string): Promise<string[]> {
     return redis.keys(pattern)
   }
 
-  async flush(): Promise<boolean> {
+  public async flush(): Promise<boolean> {
     try {
       await redis.flushdb()
       return true
