@@ -3,7 +3,7 @@ name: Default template issue
 about: Default template issue
 title: "[TYPE] : Default Title"
 labels: ''
-assignees: prisca-c
+assignees: ''
 
 ---
 
