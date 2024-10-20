@@ -1,12 +1,12 @@
+import { TFunction } from 'i18next'
 import React from 'react'
-import type { Role } from '#shared/types/roles'
-import type { WordStateProps } from '~/features/game/use_game'
 import { useTranslation } from 'react-i18next'
 import {
   type WordValidationState,
   WordValidationStateEnum,
 } from '~/features/game/enums/word_validation_state'
-import { TFunction } from 'i18next'
+import type { WordStateProps } from '~/features/game/use_game'
+import type { Role } from '#shared/types/roles'
 
 type WordFormProps = {
   handleSubmit: (event: React.FormEvent<HTMLFormElement>) => void
@@ -36,8 +36,10 @@ export const WordForm = (props: WordFormProps) => {
   const { handleSubmit, wordOnChange, role, wordState } = props
   return (
     <form onSubmit={handleSubmit}>
-      {!wordState.valid && <p className="text-red">{ErrorPrompt(wordState.status, t)}</p>}
-      <input type="text" name="answer" onChange={wordOnChange} required />
+      {!wordState.valid && (
+        <p className='text-red'>{ErrorPrompt(wordState.status, t)}</p>
+      )}
+      <input type='text' name='answer' onChange={wordOnChange} required />
       <button disabled={!wordState.valid || !props.timerIsActive}>
         {t(`gameSession.buttons.submit.${role}`)}
       </button>

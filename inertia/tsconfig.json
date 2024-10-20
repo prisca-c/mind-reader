@@ -9,7 +9,5 @@
       "~/*": ["./*"]
     }
   },
-  "include": ["./**/*.ts", "./**/*.tsx",
-    "./features/i18n/lang/**/*.json"
-  ],
+  "include": ["./**/*.ts", "./**/*.tsx", "./features/i18n/lang/**/*.json"]
 }

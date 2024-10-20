@@ -1,9 +1,9 @@
-import type { HttpContext } from '@adonisjs/core/http'
-import type { GameSession, GameSessionId } from '#features/game_session/types/game_session'
 import { inject } from '@adonisjs/core'
+import type { HttpContext } from '@adonisjs/core/http'
 import { GamePort } from '#features/game_session/contracts/game/game_port'
 import { GameRules } from '#features/game_session/contracts/game_rules/game_rules'
 import { ValidWordStateEnum } from '#features/game_session/enums/valid_word_state'
+import type { GameSession, GameSessionId } from '#features/game_session/types/game_session'
 import { answerValidator } from '#features/game_session/validations/answer'
 
 @inject()
@@ -11,12 +11,12 @@ export class GameUseCase {
   private gamePort: GamePort
   private gameRules: GameRules
 
-  constructor(gamePort: GamePort, gameRules: GameRules) {
+  public constructor(gamePort: GamePort, gameRules: GameRules) {
     this.gamePort = gamePort
     this.gameRules = gameRules
   }
 
-  async handle(ctx: HttpContext): Promise<void> {
+  public async handle(ctx: HttpContext): Promise<void> {
     const { auth, request, response, params } = ctx
     if (!auth.user) {
       return response.unauthorized()
@@ -81,14 +81,13 @@ export class GameUseCase {
       : this.gameRules.updateSessionForGuesser(session, answer, isOver, isCorrect)
 
     await this.handleSessionUpdate(updatedSession, isOver, isCorrect)
-    return response.ok({ status: ValidWordStateEnum.VALID, message: 'Success' })
+    return response.ok({
+      status: ValidWordStateEnum.VALID,
+      message: 'Success',
+    })
   }
 
-  private async handleSessionUpdate(
-    updatedSession: GameSession,
-    isOver: boolean,
-    win = false
-  ): Promise<void> {
+  private async handleSessionUpdate(updatedSession: GameSession, isOver: boolean, win = false): Promise<void> {
     await this.gamePort.updateSession(updatedSession)
     await this.gamePort.broadcastAnswer(updatedSession, isOver, win)
     if (isOver) {

@@ -1,8 +1,11 @@
-import { WordValidationStateEnum } from '~/features/game/enums/word_validation_state'
-import { GameState, GameStateEnum } from '#features/game_session/enums/game_state'
-import { SessionState } from '#features/game_session/enums/session_state'
-import { WordStateProps } from '~/features/game/use_game'
 import { useReducer } from 'react'
+import { WordValidationStateEnum } from '~/features/game/enums/word_validation_state'
+import { WordStateProps } from '~/features/game/use_game'
+import {
+  GameState,
+  GameStateEnum,
+} from '#features/game_session/enums/game_state'
+import { SessionState } from '#features/game_session/enums/session_state'
 
 interface GameReducerState {
   wordToGuess: string | null
@@ -33,7 +36,10 @@ const initialState: GameReducerState = {
   opponent: null,
 }
 
-const gameReducer = (state: GameReducerState, action: GameAction): GameReducerState => {
+const gameReducer = (
+  state: GameReducerState,
+  action: GameAction,
+): GameReducerState => {
   switch (action.type) {
     case 'SET_WORD_TO_GUESS':
       return { ...state, wordToGuess: action.payload }

@@ -1,7 +1,7 @@
-import type { Player } from '#features/game_session/types/player'
-import type { UserId } from '#models/user'
 import type { Opaque } from '@poppinss/utils/types'
 import type { SessionState } from '#features/game_session/enums/session_state'
+import type { Player } from '#features/game_session/types/player'
+import type { UserId } from '#models/user'
 
 export type GameSessionId = Opaque<string, 'GameSessionId'>
 

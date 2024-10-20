@@ -6,5 +6,5 @@ export const answerValidator = vine.compile(
       .string()
       .trim()
       .regex(/[A-Za-zÀ-ÖØ-öø-ÿ]/),
-  })
+  }),
 )

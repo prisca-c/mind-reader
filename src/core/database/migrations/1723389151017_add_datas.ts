@@ -2,7 +2,7 @@ import { BaseSchema } from '@adonisjs/lucid/schema'
 import { DateTime } from 'luxon'
 
 export default class extends BaseSchema {
-  async up() {
+  public async up() {
     this.defer(async (db) => {
       await db.table('roles').insert([{ name: 'user' }, { name: 'admin' }])
 
@@ -17,5 +17,5 @@ export default class extends BaseSchema {
     })
   }
 
-  async down() {}
+  public async down() {}
 }

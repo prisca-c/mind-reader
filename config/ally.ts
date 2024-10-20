@@ -1,6 +1,6 @@
-import env from '#start/env'
 import { defineConfig } from '@adonisjs/ally'
 import { twitch } from '@rlanz/ally-twitch'
+import env from '#start/env'
 
 const allyConfig = defineConfig({
   twitch: twitch({

@@ -1,25 +1,40 @@
+import { DateTime } from 'luxon'
 import React, { useEffect } from 'react'
-import { GameState } from '#features/game_session/enums/game_state'
-import { useTransmit } from '~/hooks/use_transmit'
-import { useGameReducer } from '~/features/game/use_game_reducer'
-import type { GameSessionProps, SessionListenerMessage } from '~/pages/game_session'
-import { Api } from '~/services/api'
 import {
   WordValidationState,
   WordValidationStateEnum,
 } from '~/features/game/enums/word_validation_state'
-import { ValidWordState, ValidWordStateEnum } from '#features/game_session/enums/valid_word_state'
-import { SessionStateEnum } from '#features/game_session/enums/session_state'
+import { useGameReducer } from '~/features/game/use_game_reducer'
 import { useTimer } from '~/hooks/use_timer'
-import { DateTime } from 'luxon'
+import { useTransmit } from '~/hooks/use_transmit'
+import type {
+  GameSessionProps,
+  SessionListenerMessage,
+} from '~/pages/game_session'
+import { Api } from '~/services/api'
+import { GameState } from '#features/game_session/enums/game_state'
+import { SessionStateEnum } from '#features/game_session/enums/session_state'
+import {
+  ValidWordState,
+  ValidWordStateEnum,
+} from '#features/game_session/enums/valid_word_state'
 import { WordList } from '#features/game_session/types/game_session'
 import { RolesEnum } from '#shared/types/roles'
 
 export type WordStateProps = { valid: boolean; status: WordValidationState }
 
 export const useGame = (props: GameSessionProps) => {
-  const { sessionId, user, wordsList, turn, word, sessionState, sessionDate, gameLength, role } =
-    props
+  const {
+    sessionId,
+    user,
+    wordsList,
+    turn,
+    word,
+    sessionState,
+    sessionDate,
+    gameLength,
+    role,
+  } = props
 
   const [state, dispatch] = useGameReducer()
 
@@ -29,7 +44,9 @@ export const useGame = (props: GameSessionProps) => {
     .as('seconds')
 
   const { timer, isActive, setIsActive } = useTimer(Number(timeLeft.toFixed(0)))
-  const sessionListener = useTransmit({ url: `game/session/${sessionId}/user/${user.id}` })
+  const sessionListener = useTransmit({
+    url: `game/session/${sessionId}/user/${user.id}`,
+  })
 
   useEffect(() => {
     if (word) {
@@ -67,7 +84,7 @@ export const useGame = (props: GameSessionProps) => {
 
     const response: { status: ValidWordState } = await new Api().post(
       `/game/session/${sessionId}/answer`,
-      { answer }
+      { answer },
     )
 
     if (response.status === ValidWordStateEnum.MATCHES) {
@@ -104,7 +121,10 @@ export const useGame = (props: GameSessionProps) => {
     if (!haveOnlyLetters) {
       dispatch({
         type: 'SET_WORD_STATE',
-        payload: { valid: false, status: WordValidationStateEnum.INVALID_CHARACTERS },
+        payload: {
+          valid: false,
+          status: WordValidationStateEnum.INVALID_CHARACTERS,
+        },
       })
       return
     }
@@ -144,7 +164,10 @@ export const useGame = (props: GameSessionProps) => {
       dispatch({ type: 'SET_GAME_STATE', payload: GameState.WAITING })
     }
 
-    if (message.sessionState && message.sessionState === SessionStateEnum.PLAYING) {
+    if (
+      message.sessionState &&
+      message.sessionState === SessionStateEnum.PLAYING
+    ) {
       if (role === RolesEnum.HINT_GIVER) {
         dispatch({ type: 'SET_TURN_STATE', payload: true })
       }
@@ -154,10 +177,13 @@ export const useGame = (props: GameSessionProps) => {
   }
 
   const handleCopySessionId = () => {
-    navigator.clipboard.writeText(sessionId).then(() => alert('Session ID copied'))
+    navigator.clipboard
+      .writeText(sessionId)
+      .then(() => alert('Session ID copied'))
   }
 
-  const isGameOver = state.gameState === GameState.WIN || state.gameState === GameState.LOSE
+  const isGameOver =
+    state.gameState === GameState.WIN || state.gameState === GameState.LOSE
 
   return {
     sessionListener,

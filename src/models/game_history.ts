@@ -1,50 +1,50 @@
-import { DateTime } from 'luxon'
+import { randomUUID } from 'node:crypto'
 import { BaseModel, beforeCreate, belongsTo, column } from '@adonisjs/lucid/orm'
+import type { BelongsTo } from '@adonisjs/lucid/types/relations'
 import { Opaque } from '@poppinss/utils/types'
+import { DateTime } from 'luxon'
+import type { WordList } from '#features/game_session/types/game_session'
 import User, { type UserId } from '#models/user'
 import Word, { type WordId } from '#models/word'
-import type { WordList } from '#features/game_session/types/game_session'
-import { randomUUID } from 'node:crypto'
-import type { BelongsTo } from '@adonisjs/lucid/types/relations'
 
 export type GameHistoryId = Opaque<string, 'GameHistoryId'>
 
 export default class GameHistory extends BaseModel {
   @column({ isPrimary: true })
-  declare id: GameHistoryId
+  public declare id: GameHistoryId
 
   @column()
-  declare sessionId: string
+  public declare sessionId: string
 
   @column()
-  declare hintGiverId: UserId
+  public declare hintGiverId: UserId
 
   @column()
-  declare guesserId: UserId
+  public declare guesserId: UserId
 
   @column()
-  declare wordId: WordId
+  public declare wordId: WordId
 
   @column()
-  declare guessed: boolean
+  public declare guessed: boolean
 
   @column()
-  declare date: DateTime
+  public declare date: DateTime
 
   @column()
-  declare wordsList: WordList
+  public declare wordsList: WordList
 
   @beforeCreate()
-  static generateId(gameHistory: GameHistory) {
+  public static generateId(gameHistory: GameHistory) {
     gameHistory.id = randomUUID() as GameHistoryId
   }
 
   @belongsTo(() => Word)
-  declare word: BelongsTo<typeof Word>
+  public declare word: BelongsTo<typeof Word>
 
   @belongsTo(() => User, { foreignKey: 'hintGiverId' })
-  declare hintGiver: BelongsTo<typeof User>
+  public declare hintGiver: BelongsTo<typeof User>
 
   @belongsTo(() => User, { foreignKey: 'guesserId' })
-  declare guesser: BelongsTo<typeof User>
+  public declare guesser: BelongsTo<typeof User>
 }

@@ -1,23 +1,18 @@
-import type { HttpContext } from '@adonisjs/core/http'
-import type { GameSession, GameSessionId } from '#features/game_session/types/game_session'
-import { CacheService } from '#services/cache/cache_service'
 import { inject } from '@adonisjs/core'
-import { assert } from '#helpers/assert'
-import { EventStreamService } from '#services/event_stream/event_stream_service'
-import { SessionStateEnum } from '#features/game_session/enums/session_state'
+import type { HttpContext } from '@adonisjs/core/http'
 import logger from '@adonisjs/core/services/logger'
 import { DateTime } from 'luxon'
 import { GamePort } from '#features/game_session/contracts/game/game_port'
+import { SessionStateEnum } from '#features/game_session/enums/session_state'
+import type { GameSession, GameSessionId } from '#features/game_session/types/game_session'
+import { assert } from '#helpers/assert'
+import { CacheService } from '#services/cache/cache_service'
+import { EventStreamService } from '#services/event_stream/event_stream_service'
 import env from '#start/env'
 
 export default class GameReadyController {
   @inject()
-  async handle(
-    ctx: HttpContext,
-    cache: CacheService,
-    eventStream: EventStreamService,
-    gamePort: GamePort
-  ) {
+  public async handle(ctx: HttpContext, cache: CacheService, eventStream: EventStreamService, gamePort: GamePort) {
     const { auth, params, response } = ctx
 
     if (!(await auth.check())) {
@@ -58,30 +53,27 @@ export default class GameReadyController {
         sessionState: SessionStateEnum.PLAYING,
       })
       logger.info('Start Game', '- Session: ' + sessionId)
-      setTimeout(
-        async () => {
-          const updatedSession = await cache.get('game:session:' + sessionId)
-          if (!updatedSession) {
-            return response.notFound({
-              message: 'Session not found',
-            })
-          }
+      setTimeout(async () => {
+        const updatedSession = await cache.get('game:session:' + sessionId)
+        if (!updatedSession) {
+          return response.notFound({
+            message: 'Session not found',
+          })
+        }
 
-          const parsedUpdatedSession: GameSession = JSON.parse(updatedSession)
-          if (parsedUpdatedSession.turn === null) {
-            return response.notFound({
-              message: 'Session not found',
-            })
-          }
+        const parsedUpdatedSession: GameSession = JSON.parse(updatedSession)
+        if (parsedUpdatedSession.turn === null) {
+          return response.notFound({
+            message: 'Session not found',
+          })
+        }
 
-          logger.info('End Game', '- Session: ' + sessionId)
+        logger.info('End Game', '- Session: ' + sessionId)
 
-          await gamePort.broadcastAnswer(parsedUpdatedSession, true, false)
+        await gamePort.broadcastAnswer(parsedUpdatedSession, true, false)
 
-          await gamePort.saveToGameHistory(parsedUpdatedSession)
-        },
-        env.get('GAME_LENGTH') * 1000
-      )
+        await gamePort.saveToGameHistory(parsedUpdatedSession)
+      }, env.get('GAME_LENGTH') * 1000)
     }
 
     return response.ok({

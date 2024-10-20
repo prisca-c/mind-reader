@@ -1,20 +1,16 @@
+import { inject } from '@adonisjs/core'
 import type { HttpContext } from '@adonisjs/core/http'
-import { CacheService } from '#services/cache/cache_service'
 import logger from '@adonisjs/core/services/logger'
 import { DateTime } from 'luxon'
-import type { Player } from '#features/game_session/types/player'
-import { EventStreamService } from '#services/event_stream/event_stream_service'
-import { assert } from '#helpers/assert'
-import { inject } from '@adonisjs/core'
 import { GameSession } from '#features/game_session/types/game_session'
+import type { Player } from '#features/game_session/types/player'
+import { assert } from '#helpers/assert'
+import { CacheService } from '#services/cache/cache_service'
+import { EventStreamService } from '#services/event_stream/event_stream_service'
 
 export default class SearchMatchmakingController {
   @inject()
-  async handle(
-    { auth, response }: HttpContext,
-    cache: CacheService,
-    eventStream: EventStreamService
-  ) {
+  public async handle({ auth, response }: HttpContext, cache: CacheService, eventStream: EventStreamService) {
     const authCheck = await auth.use('web').check()
     if (!authCheck) {
       return response.unauthorized()

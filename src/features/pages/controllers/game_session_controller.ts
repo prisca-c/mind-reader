@@ -1,13 +1,13 @@
-import type { HttpContext } from '@adonisjs/core/http'
-import type { GameSession } from '#features/game_session/types/game_session'
 import { inject } from '@adonisjs/core'
-import { CacheService } from '#services/cache/cache_service'
+import type { HttpContext } from '@adonisjs/core/http'
 import { DateTime } from 'luxon'
+import type { GameSession } from '#features/game_session/types/game_session'
+import { CacheService } from '#services/cache/cache_service'
 import env from '#start/env'
 
 export default class GameSessionController {
   @inject()
-  async render({ inertia, auth, response, params }: HttpContext, cache: CacheService) {
+  public async render({ inertia, auth, response, params }: HttpContext, cache: CacheService) {
     if (!auth.user) {
       return response.redirect('/login')
     }
@@ -22,8 +22,7 @@ export default class GameSessionController {
       return response.redirect('/game')
     }
 
-    const { player1, player2, hintGiver, word, turn, wordsList, status, startedAt }: GameSession =
-      JSON.parse(session)
+    const { player1, player2, hintGiver, word, turn, wordsList, status, startedAt }: GameSession = JSON.parse(session)
 
     // Redirect if user is not part of the game session
     if (player1.id !== user.id && player2.id !== user.id) {
@@ -32,10 +31,7 @@ export default class GameSessionController {
 
     // Redirect if game session has ended
     if (startedAt) {
-      const timeLeft: number = DateTime.fromISO(startedAt!)
-        .plus({ seconds: gameLength })
-        .diffNow()
-        .as('seconds')
+      const timeLeft: number = DateTime.fromISO(startedAt!).plus({ seconds: gameLength }).diffNow().as('seconds')
 
       if (timeLeft <= 0) {
         await cache.del(`game:session:${sessionId}`)

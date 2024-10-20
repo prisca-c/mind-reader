@@ -1,4 +1,7 @@
-export const WordsList = ({ title, words }: { title: string; words: string[] }) => {
+export const WordsList = ({
+  title,
+  words,
+}: { title: string; words: string[] }) => {
   return (
     <div>
       <h2>{title}</h2>

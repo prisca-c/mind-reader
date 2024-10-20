@@ -1,12 +1,12 @@
-import { EventStreamService } from '#services/event_stream/event_stream_service'
+import { inject } from '@adonisjs/core'
 import type { HttpContext } from '@adonisjs/core/http'
 import { DateTime } from 'luxon'
 import { replaceURLs } from '#helpers/text'
-import { inject } from '@adonisjs/core'
+import { EventStreamService } from '#services/event_stream/event_stream_service'
 
 export default class ChatController {
   @inject()
-  store({ request, response, auth }: HttpContext, eventStream: EventStreamService) {
+  public store({ request, response, auth }: HttpContext, eventStream: EventStreamService) {
     const { message } = request.only(['message'])
 
     if (!message) {

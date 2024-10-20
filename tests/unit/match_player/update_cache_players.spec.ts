@@ -1,11 +1,11 @@
-import { test } from '@japa/runner'
-import { session } from '#tests/utils/session_data'
-import { MatchPlayerJob } from '#features/matchmaking/jobs/match_player_job'
-import { CacheService } from '#services/cache/cache_service'
 import { randomUUID } from 'node:crypto'
+import { test } from '@japa/runner'
 import type { GameSessionId } from '#features/game_session/types/game_session'
-import { EventStreamService } from '#services/event_stream/event_stream_service'
+import { MatchPlayerJob } from '#features/matchmaking/jobs/match_player_job'
 import Word from '#models/word'
+import { CacheService } from '#services/cache/cache_service'
+import { EventStreamService } from '#services/event_stream/event_stream_service'
+import { session } from '#tests/utils/session_data'
 
 test.group('MatchPlayer - updateCachePlayers', (group) => {
   const cache = new CacheService()
@@ -27,16 +27,10 @@ test.group('MatchPlayer - updateCachePlayers', (group) => {
     const cachedPlayers = await job.getPlayersFromCache()
     assert.deepEqual(cachedPlayers, players)
 
-    const newSession = await job.createSession(
-      players[0],
-      players[1],
-      randomUUID() as GameSessionId
-    )
+    const newSession = await job.createSession(players[0], players[1], randomUUID() as GameSessionId)
     assert.isNotNull(session)
 
-    const parsedSession = JSON.parse(
-      (await cache.get(`game:session:${newSession.sessionId}`)) || ''
-    )
+    const parsedSession = JSON.parse((await cache.get(`game:session:${newSession.sessionId}`)) || '')
     assert.isNotNull(parsedSession)
 
     const word = await Word.create({ name: 'test', difficulty: 1, language: 'en' })

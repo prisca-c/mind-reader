@@ -1,22 +1,22 @@
-import env from '#start/env'
-import User from '#models/user'
-import { type SocialAuthState, SocialAuthStateEnum } from '#features/auth/enums/social_auth_state'
-import { ResponseService } from '#services/reponse_service'
 import { inject } from '@adonisjs/core'
-import { UserPort } from '#features/user/contracts/user_port'
+import { type SocialAuthState, SocialAuthStateEnum } from '#features/auth/enums/social_auth_state'
 import { ProviderPort } from '#features/provider/contracts/provider_port'
+import { UserPort } from '#features/user/contracts/user_port'
+import User from '#models/user'
+import { ResponseService } from '#services/reponse_service'
+import env from '#start/env'
 
 @inject()
 export class SocialAuth {
-  constructor(
+  public constructor(
     protected responseService: ResponseService,
     protected userRepository: UserPort,
-    protected providerRepository: ProviderPort
+    protected providerRepository: ProviderPort,
   ) {}
 
-  async handle(
+  public async handle(
     socialProvider: any,
-    providerParams: string
+    providerParams: string,
   ): Promise<{ status: SocialAuthState; payload: User | null }> {
     const bypassLogin = env.get('BYPASS_LOGIN')
     const nodeEnv = env.get('NODE_ENV')

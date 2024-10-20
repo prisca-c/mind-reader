@@ -1,7 +1,7 @@
-import User from '#models/user'
-import type { GameSessionId } from '#features/game_session/types/game_session'
-import { Button } from '~/features/utils/components/button'
 import { useMatchmaking } from '~/features/matchmaking/use_matchmaking'
+import { Button } from '~/features/utils/components/button'
+import type { GameSessionId } from '#features/game_session/types/game_session'
+import User from '#models/user'
 
 export type SearchProps = {
   user: User

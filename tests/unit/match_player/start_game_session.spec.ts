@@ -1,12 +1,12 @@
-import { test } from '@japa/runner'
-import { session } from '#tests/utils/session_data'
-import { MatchPlayerJob } from '#features/matchmaking/jobs/match_player_job'
-import { CacheService } from '#services/cache/cache_service'
 import { randomUUID } from 'node:crypto'
-import type { GameSessionId } from '#features/game_session/types/game_session'
-import { EventStreamService } from '#services/event_stream/event_stream_service'
-import Word from '#models/word'
+import { test } from '@japa/runner'
 import { SessionStateEnum } from '#features/game_session/enums/session_state'
+import type { GameSessionId } from '#features/game_session/types/game_session'
+import { MatchPlayerJob } from '#features/matchmaking/jobs/match_player_job'
+import Word from '#models/word'
+import { CacheService } from '#services/cache/cache_service'
+import { EventStreamService } from '#services/event_stream/event_stream_service'
+import { session } from '#tests/utils/session_data'
 
 test.group('MatchPlayer - startGameSession', (group) => {
   const cache = new CacheService()
@@ -30,9 +30,7 @@ test.group('MatchPlayer - startGameSession', (group) => {
     await job.startGameSession(newSession.sessionId, word, players, players[0], players[1])
 
     // Get the session from cache
-    const cachedSession = JSON.parse(
-      (await cache.get(`game:session:${newSession.sessionId}`)) || ''
-    )
+    const cachedSession = JSON.parse((await cache.get(`game:session:${newSession.sessionId}`)) || '')
     assert.isNotNull(cachedSession)
 
     /**
@@ -49,7 +47,7 @@ test.group('MatchPlayer - startGameSession', (group) => {
         hintGiver: players[0].id,
         turn: players[0].id,
         startedAt: date,
-      })
+      }),
     )
 
     // Get updated session

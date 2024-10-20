@@ -1,26 +1,22 @@
+import { randomUUID } from 'node:crypto'
+import logger from '@adonisjs/core/services/logger'
 import { DateTime } from 'luxon'
+import { SessionStateEnum } from '#features/game_session/enums/session_state'
+import type { GameSession, GameSessionId, PlayerSession } from '#features/game_session/types/game_session'
+import type { Player } from '#features/game_session/types/player'
+import Word from '#models/word'
 import { CacheService } from '#services/cache/cache_service'
 import { EventStreamService } from '#services/event_stream/event_stream_service'
-import type { Player } from '#features/game_session/types/player'
-import { randomUUID } from 'node:crypto'
-import Word from '#models/word'
-import logger from '@adonisjs/core/services/logger'
-import type {
-  GameSession,
-  GameSessionId,
-  PlayerSession,
-} from '#features/game_session/types/game_session'
-import { SessionStateEnum } from '#features/game_session/enums/session_state'
 
 export class MatchPlayerJob {
   #players: Player[] = []
 
-  constructor(
+  public constructor(
     private cache: CacheService,
-    private eventStream: EventStreamService
+    private eventStream: EventStreamService,
   ) {}
 
-  async handle() {
+  public async handle() {
     logger.info('Matching players')
     this.#players = await this.getPlayersFromCache()
 
@@ -30,9 +26,7 @@ export class MatchPlayerJob {
 
       if (player1.id === player2.id) return
 
-      this.#players = this.#players.filter(
-        (p: Player) => p.id !== player1.id && p.id !== player2.id
-      )
+      this.#players = this.#players.filter((p: Player) => p.id !== player1.id && p.id !== player2.id)
       await this.updateCachePlayers()
 
       const sessionId = randomUUID() as GameSessionId
@@ -55,12 +49,12 @@ export class MatchPlayerJob {
     logger.info('End of matching players')
   }
 
-  async getPlayersFromCache() {
+  public async getPlayersFromCache() {
     const playersCache = await this.cache.get('game:queue:players')
     return playersCache ? JSON.parse(playersCache) : []
   }
 
-  getRandomPlayers(players: Player[]) {
+  public getRandomPlayers(players: Player[]) {
     if (players.length < 2) throw new Error('Not enough players')
     const playersCopy = [...players]
 
@@ -75,25 +69,45 @@ export class MatchPlayerJob {
     return [player1, player2]
   }
 
-  broadcastGameInvitation(player1: Player, player2: Player, sessionId: string) {
+  public broadcastGameInvitation(player1: Player, player2: Player, sessionId: string) {
     logger.info(`Broadcasting game invitation to ${player1.id} and ${player2.id}`)
-    this.eventStream.broadcast(`game/user/${player1.id}`, { status: 'accept', sessionId })
-    this.eventStream.broadcast(`game/user/${player2.id}`, { status: 'accept', sessionId })
+    this.eventStream.broadcast(`game/user/${player1.id}`, {
+      status: 'accept',
+      sessionId,
+    })
+    this.eventStream.broadcast(`game/user/${player2.id}`, {
+      status: 'accept',
+      sessionId,
+    })
   }
 
-  broadcastGameStart(player1: Player, player2: Player, sessionId: string) {
+  public broadcastGameStart(player1: Player, player2: Player, sessionId: string) {
     logger.info(`Broadcasting game start to ${player1.id} and ${player2.id}`)
-    this.eventStream.broadcast(`game/user/${player1.id}`, { status: 'start', sessionId })
-    this.eventStream.broadcast(`game/user/${player2.id}`, { status: 'start', sessionId })
+    this.eventStream.broadcast(`game/user/${player1.id}`, {
+      status: 'start',
+      sessionId,
+    })
+    this.eventStream.broadcast(`game/user/${player2.id}`, {
+      status: 'start',
+      sessionId,
+    })
   }
 
   private async sleep(delay: number) {
     return new Promise((resolve) => setTimeout(resolve, delay))
   }
 
-  async createSession(player1: Player, player2: Player, sessionId: GameSessionId) {
-    const sessionPlayer1: PlayerSession = { ...player1, accepted: false, ready: false }
-    const sessionPlayer2: PlayerSession = { ...player2, accepted: false, ready: false }
+  public async createSession(player1: Player, player2: Player, sessionId: GameSessionId) {
+    const sessionPlayer1: PlayerSession = {
+      ...player1,
+      accepted: false,
+      ready: false,
+    }
+    const sessionPlayer2: PlayerSession = {
+      ...player2,
+      accepted: false,
+      ready: false,
+    }
 
     const initSession: GameSession = {
       sessionId,
@@ -113,14 +127,14 @@ export class MatchPlayerJob {
     return initSession
   }
 
-  async validateSession(sessionId: string): Promise<boolean> {
+  public async validateSession(sessionId: string): Promise<boolean> {
     const session = await this.cache.get(`game:session:${sessionId}`)
     if (!session) return false
     const status = await this.checkPlayerStatus(sessionId)
     return status
   }
 
-  async checkPlayerStatus(sessionId: string) {
+  public async checkPlayerStatus(sessionId: string) {
     logger.info('Checking player status')
     const session = await this.cache.get(`game:session:${sessionId}`)
     if (!session) return false
@@ -131,7 +145,9 @@ export class MatchPlayerJob {
 
       if (!player1.accepted) {
         logger.info('Player 1 not accepted')
-        this.eventStream.broadcast(`game/user/${player1.id}`, { status: 'removed' })
+        this.eventStream.broadcast(`game/user/${player1.id}`, {
+          status: 'removed',
+        })
       } else if (player1.accepted) {
         logger.info('Player 1 accepted')
         this.#players.push(player1)
@@ -139,7 +155,9 @@ export class MatchPlayerJob {
 
       if (!player2.accepted) {
         logger.info('Player 2 not accepted')
-        this.eventStream.broadcast(`game/user/${player2.id}`, { status: 'removed' })
+        this.eventStream.broadcast(`game/user/${player2.id}`, {
+          status: 'removed',
+        })
       } else if (player2.accepted) {
         logger.info('Player 2 accepted')
         this.#players.push(player2)
@@ -155,13 +173,7 @@ export class MatchPlayerJob {
     return true
   }
 
-  async startGameSession(
-    sessionId: string,
-    word: Word,
-    players: Player[],
-    player1: Player,
-    player2: Player
-  ) {
+  public async startGameSession(sessionId: string, word: Word, players: Player[], player1: Player, player2: Player) {
     logger.info(`Starting game session ${sessionId}`)
 
     const hintGiverId = Math.random() > 0.5 ? player1.id : player2.id
@@ -187,7 +199,7 @@ export class MatchPlayerJob {
     await this.updateCachePlayers()
   }
 
-  async updateCachePlayers() {
+  public async updateCachePlayers() {
     const players = this.#players
     await Promise.all([
       this.cache.set('game:queue:players', JSON.stringify(players)),

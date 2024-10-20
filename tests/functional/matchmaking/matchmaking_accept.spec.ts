@@ -1,10 +1,10 @@
+import { randomUUID } from 'node:crypto'
+import testUtils from '@adonisjs/core/services/test_utils'
 import { test } from '@japa/runner'
+import { SessionStateEnum } from '#features/game_session/enums/session_state'
+import type { GameSession, GameSessionId } from '#features/game_session/types/game_session'
 import User from '#models/user'
 import { CacheService } from '#services/cache/cache_service'
-import testUtils from '@adonisjs/core/services/test_utils'
-import type { GameSession, GameSessionId } from '#features/game_session/types/game_session'
-import { randomUUID } from 'node:crypto'
-import { SessionStateEnum } from '#features/game_session/enums/session_state'
 
 test.group('Matchmaking - Accept matchmaking', (group) => {
   const cache = new CacheService()
@@ -70,10 +70,7 @@ test.group('Matchmaking - Accept matchmaking', (group) => {
     /**
      * Accept matchmaking for user 1
      */
-    const responseAccept = await client
-      .get(`/game/session/${sessionId}/accept`)
-      .withCsrfToken()
-      .loginAs(user1)
+    const responseAccept = await client.get(`/game/session/${sessionId}/accept`).withCsrfToken().loginAs(user1)
 
     responseAccept.assertStatus(200)
     responseAccept.assertBody({

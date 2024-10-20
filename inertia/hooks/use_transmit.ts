@@ -7,7 +7,9 @@ type Props = {
 
 export const useTransmit = (props: Props) => {
   const { url } = props
-  const [subscription, setSubscription] = React.useState<Subscription | null>(null)
+  const [subscription, setSubscription] = React.useState<Subscription | null>(
+    null,
+  )
 
   useEffect(() => {
     if (window) {
