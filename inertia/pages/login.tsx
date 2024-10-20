@@ -12,6 +12,7 @@ export default function LoginPage() {
         <p className={'text-lg'}>{t('login.description')}</p>
         <a href={'/auth/twitch/redirect'}>
           <button
+            type='button'
             className={
               'border-2 border-gray-500 hover:bg-gray-500 hover:text-white p-2 rounded-md'
             }

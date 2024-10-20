@@ -83,7 +83,7 @@ export default function GameSession(props: GameSessionProps) {
         />
       </div>
       {isGameOver && (
-        <button onClick={() => router.visit('/game')}>
+        <button type='button' onClick={() => router.visit('/game')}>
           {t('gameSession.buttons.backToMenu')}
         </button>
       )}

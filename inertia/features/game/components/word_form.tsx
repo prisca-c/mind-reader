@@ -40,7 +40,7 @@ export const WordForm = (props: WordFormProps) => {
         <p className='text-red'>{ErrorPrompt(wordState.status, t)}</p>
       )}
       <input type='text' name='answer' onChange={wordOnChange} required />
-      <button disabled={!wordState.valid || !props.timerIsActive}>
+      <button type='button' disabled={!wordState.valid || !props.timerIsActive}>
         {t(`gameSession.buttons.submit.${role}`)}
       </button>
     </form>

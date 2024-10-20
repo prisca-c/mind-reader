@@ -17,6 +17,7 @@ export const GamesTableItem = (props: GamesTableItemProps) => {
       <div
         className='grid grid-cols-[5fr_5fr_2fr] py-2 w-full cursor-pointer'
         onClick={() => onGameClick(game.id)}
+        onKeyDown={() => {}}
       >
         <p>{game.date}</p>
         <p>{game.word}</p>

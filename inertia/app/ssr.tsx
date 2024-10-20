@@ -3,7 +3,7 @@ import ReactDOMServer from 'react-dom/server'
 import '~/features/i18n/i18n'
 import { Layout } from '~/features/layout/layout'
 
-export default function render(page: any) {
+export default function render(page: string) {
   return createInertiaApp({
     page,
     render: ReactDOMServer.renderToString,

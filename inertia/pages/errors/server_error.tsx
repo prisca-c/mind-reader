@@ -1,4 +1,8 @@
-export default function ServerError(props: { error: any }) {
+interface Props {
+  error: { message: string }
+}
+
+export default function ServerError(props: Props) {
   return (
     <>
       <div className='container'>
