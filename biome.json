@@ -1,7 +1,10 @@
 {
   "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
   "vcs": { "enabled": false, "clientKind": "git", "useIgnoreFile": false },
-  "files": { "ignoreUnknown": false, "ignore": [] },
+  "files": {
+    "ignoreUnknown": false,
+    "ignore": ["node_modules", "dist", "build", "public", "resources"]
+  },
   "formatter": {
     "enabled": true,
     "useEditorconfig": true,
@@ -24,7 +27,16 @@
           "options": {
             "filenameCases": ["snake_case"]
           }
-        }
+        },
+        "useImportType": {
+          "level": "off",
+          "fix": "none"
+        },
+        "useNodejsImportProtocol": {
+          "level": "warn",
+          "fix": "safe"
+        },
+        "useSelfClosingElements": "off"
       },
       "nursery": {
         "useConsistentMemberAccessibility": {
@@ -54,6 +66,14 @@
       "include": ["inertia/"],
       "formatter": {
         "lineWidth": 80
+      },
+      "linter": {
+        "rules": {
+          "recommended": true,
+          "correctness": {
+            "useExhaustiveDependencies": "off"
+          }
+        }
       }
     }
   ]

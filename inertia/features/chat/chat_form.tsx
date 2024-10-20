@@ -7,6 +7,13 @@ interface ChatFormProps {
 
 export const ChatForm = (props: ChatFormProps) => {
   const { onSubmit, setOpenChat } = props
+  const openOnKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>) => {
+    if (event.ctrlKey && event.key === 'Enter') {
+      event.preventDefault()
+      setOpenChat?.(true)
+    }
+  }
+
   return (
     <form
       method={'post'}
@@ -25,10 +32,12 @@ export const ChatForm = (props: ChatFormProps) => {
         </button>
 
         <button
+          type='button'
           className={
             'border-2 border-gray-500 hover:bg-gray-500 hover:text-white rounded px-2'
           }
-          onClick={() => setOpenChat && setOpenChat(false)}
+          onClick={() => setOpenChat?.(false)}
+          onKeyDown={openOnKeyDown}
         >
           ❌
         </button>

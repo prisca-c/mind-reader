@@ -11,6 +11,7 @@ export default function LandingPage() {
         <h1 className={'text-4xl font-bold'}>{t('landingPage.title')}</h1>
         <p className={'text-lg'}>{t('landingPage.description')}</p>
         <button
+          type='button'
           className={
             'border-2 border-gray-500 hover:bg-gray-500 hover:text-white p-2 rounded-md'
           }
