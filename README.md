@@ -9,6 +9,7 @@ The game is simple, one user have a word given and the other person have to gues
 - AdonisJS
 - SSR with AdonisJS (InertiaJS - React)
 - UnoCSS
+- BiomeJS
 - Redis
 - PostgreSQL
 - Docker
@@ -55,5 +56,17 @@ node ace migration:rollback --batch 0
 To run the tests, you can use the following command:
 ```bash
 pnpm test
+```
+
+## Lint and format
+
+To check the lint and format, you can use the following command:
+```bash
+biome check
+```
+
+To fix the lint and format, you can use the following command:
+```bash
+biome check --write
 ```
 
